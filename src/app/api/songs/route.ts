@@ -15,35 +15,18 @@ async function openDb() {
 }
 
 export async function GET(req: NextRequest) {
-	const { searchParams } = new URL(req.url);
-	const title = searchParams.get('title');
-
-	console.log(`title: ${title}`);
-	debugger;
-	if (title) {
-		return getSongByTitle(title);
-	} else {
-		return getAllSongs();
-	}
-}
-
-export async function getAllSongs() {
 	try {
 		const db = await openDb();
-		const songs = await db.all('SELECT * FROM songs');
-		return NextResponse.json({ success: true, data: songs });
-	} catch (error: unknown) {
-		return NextResponse.json({ success: false, error: error });
-	}
-}
+		const { searchParams } = new URL(req.url);
+		const title = searchParams.get('title');
 
-export async function getSongByTitle(title: string) {
-	try {
-		const db = await openDb();
-		const song = await db.get('SELECT * FROM songs WHERE title = ?', [title]);
-		console.log(song);
-		debugger;
-		return NextResponse.json({ success: true, data: song });
+		if (title) {
+			const song = await db.get('SELECT * FROM songs WHERE title = ?', [title]);
+			return NextResponse.json({ success: true, data: song });
+		} else {
+			const songs = await db.all('SELECT * FROM songs');
+			return NextResponse.json({ success: true, data: songs });
+		}
 	} catch (error: unknown) {
 		return NextResponse.json({ success: false, error: error });
 	}
