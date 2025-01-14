@@ -1,8 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { ArrowLeft, Music, User, BarChart, Key } from 'lucide-react';
+import { Music, User, BarChart, Key } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Song } from '@/types/Song';
@@ -41,13 +40,6 @@ export default function SongDetails({ song }: SongDetailsProps) {
 
 	return (
 		<div className='container mx-auto px-4 py-8'>
-			<Link
-				href='/dashboard/'
-				className='inline-flex items-center mb-6 text-blue-500 hover:text-blue-600'
-			>
-				<ArrowLeft className='mr-2' size={20} />
-				Back to Songs
-			</Link>
 			<h1 className='text-3xl font-bold mb-6'>{song.Title}</h1>
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 				<Card>

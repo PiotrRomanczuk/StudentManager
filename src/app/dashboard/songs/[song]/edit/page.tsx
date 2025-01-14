@@ -1,22 +1,20 @@
-// import { SongEditForm } from './@components/SongEditForm';
+import ClientForm from './ClientForm';
 
 export default async function Page({ params }: { params: { song: string } }) {
 	const { song: slug } = await params;
-	const response = await fetch(
+	const songResponse = await fetch(
 		`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/songs?title=${slug}`
 	);
-	const song = await response.json();
+	const song = await songResponse.json();
+
+	if (!song) {
+		return <div>Song not found</div>;
+	}
 
 	return (
 		<div>
-			<h1 className='text-3xl font-bold mb-6'>{song.Title}</h1>
-			{/* <SongEditForm
-				song={song}
-				mode='edit'
-				// onSuccess={() => {
-				// 	console.log('success');
-				// }}
-			/> */}
+			<h1 className='text-3xl font-bold mb-6'>{song.data.Title}</h1>
+			<ClientForm song={song.data} />
 		</div>
 	);
 }

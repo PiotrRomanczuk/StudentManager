@@ -38,7 +38,7 @@ export function SongTable({
 							<TableHead>Author</TableHead>
 							<TableHead>Level</TableHead>
 							<TableHead>Key</TableHead>
-							<TableHead>Actions</TableHead>
+							<TableHead>Details</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -51,12 +51,9 @@ export function SongTable({
 								<TableCell>
 									<Button
 										variant='outline'
-										onClick={
-											() => redirect(`/dashboard/songs/${song.Title}`)
-											// console.log({ song })
-										}
+										onClick={() => redirect(`/dashboard/songs/${song.Title}`)}
 									>
-										Edit
+										More
 									</Button>
 								</TableCell>
 							</TableRow>

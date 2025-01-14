@@ -14,14 +14,32 @@ async function openDb() {
 	});
 }
 
+/**
+ * GET /api/songs
+ * Fetches all songs or a specific song by title.
+ *
+ * Query Parameters:
+ * - title (optional): The title of the song to fetch.
+ * - id (optional): The ID of the song to fetch.
+ *
+ * Response:
+ * - success: boolean
+ * - data: array of songs or a single song object
+ */
 export async function GET(req: NextRequest) {
 	try {
 		const db = await openDb();
 		const { searchParams } = new URL(req.url);
 		const title = searchParams.get('title');
+		const id = searchParams.get('id');
 
 		if (title) {
 			const song = await db.get('SELECT * FROM songs WHERE title = ?', [title]);
+			console.log(title, song);
+			return NextResponse.json({ success: true, data: song });
+		} else if (id) {
+			const song = await db.get('SELECT * FROM songs WHERE id = ?', [id]);
+			console.log(id, song);
 			return NextResponse.json({ success: true, data: song });
 		} else {
 			const songs = await db.all('SELECT * FROM songs');
@@ -32,6 +50,18 @@ export async function GET(req: NextRequest) {
 	}
 }
 
+/**
+ * POST /api/songs
+ * Adds a new song to the database.
+ *
+ * Request Body (application/json):
+ * - title: string (required)
+ * - artist: string (required)
+ *
+ * Response:
+ * - success: boolean
+ * - data: object containing the ID of the newly created song
+ */
 export async function POST(req: NextRequest) {
 	try {
 		const db = await openDb();
@@ -54,22 +84,86 @@ export async function POST(req: NextRequest) {
 	}
 }
 
+/**
+ * PUT /api/songs
+ * Updates an existing song in the database.
+ *
+ * Request Body (application/json):
+ * - id: string (required)
+ * - title: string (required)
+ * - author: string (optional)
+ * - level: string (optional)
+ * - songKey: string (optional)
+ * - chords: string (optional)
+ * - audioFiles: string (optional)
+ * - createdAt: string (required)
+ * - ultimateGuitarLink: string (optional)
+ * - shortTitle: string (optional)
+ *
+ * Response:
+ * - success: boolean
+ */
 export async function PUT(req: NextRequest) {
 	try {
 		const db = await openDb();
 		const body = await req.json();
-		const { id, title, artist } = body;
-		await db.run('UPDATE songs SET title = ?, artist = ? WHERE id = ?', [
-			title,
-			artist,
+		const {
 			id,
-		]);
+			title,
+			author,
+			level,
+			songKey,
+			chords,
+			audioFiles,
+			createdAt,
+			ultimateGuitarLink,
+			shortTitle,
+		} = body;
+
+		console.log({ body });
+		console.log('Route PUT');
+		console.log({ id, title });
+		await db.run(
+			`UPDATE songs SET 
+				title = ?, 
+				author = ?, 
+				level = ?, 
+				songKey = ?, 
+				chords = ?, 
+				audioFiles = ?, 
+				createdAt = ?, 
+				ultimateGuitarLink = ?, 
+				shortTitle = ? 
+			WHERE id = ?`,
+			[
+				title,
+				author,
+				level,
+				songKey,
+				chords,
+				audioFiles,
+				createdAt,
+				ultimateGuitarLink,
+				shortTitle,
+				id,
+			]
+		);
 		return NextResponse.json({ success: true });
 	} catch (error: unknown) {
 		return NextResponse.json({ success: false, error: error });
 	}
 }
 
+/**
+ * DELETE /api/songs
+ * Deletes a song from the database.
+ *
+ * Query Parameters:
+ * - id: string (required): The ID of the song to delete.
+ *
+ * Response:
+ * - success: boolean
+ */
 export async function DELETE(req: NextRequest) {
 	try {
 		const db = await openDb();

@@ -2,96 +2,83 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Song } from '@/types/Song';
-import RenderInput from './RenderInput';
+import { AlertCircle, Loader2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { SongFormProps, FORM_FIELDS } from '@/interfaces/ISongForm';
 
-interface SongFormProps {
-	song?: Partial<Song>;
-	mode: 'create' | 'edit';
-	songId?: number;
-}
-
-export function SongEditForm({ song, mode, songId }: SongFormProps) {
-	const [formData, setFormData] = useState<Partial<Song>>({
-		Title: song?.Title || '',
-		Author: song?.Author || '',
-		Level: song?.Level || '',
-		SongKey: song?.SongKey || '',
-		Chords: song?.Chords || '',
-		AudioFiles: song?.AudioFiles || '',
-		CreatedAt: song?.CreatedAt || '',
-		UltimateGuitarLink: song?.UltimateGuitarLink || '',
-		ShortTitle: song?.ShortTitle || '',
-	});
-
-	const [error, setError] = useState<string | null>(null);
-	const [loading, setLoading] = useState(false);
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setLoading(true);
-		setError(null);
-
-		try {
-			const url = mode === 'create' ? '/api/songs' : `/api/songs/${songId}`;
-			const method = mode === 'create' ? 'POST' : 'PUT';
-
-			await fetch(url, {
-				method,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(formData),
-			});
-		} catch (err) {
-			setError('Failed to save song');
-			console.error(err);
-		} finally {
-			setLoading(false);
-		}
-	};
+export function SongEditForm({
+	mode,
+	song,
+	loading,
+	error,
+	onSubmit,
+	onCancel,
+}: SongFormProps) {
+	const [formData, setFormData] = useState<Partial<Song>>(song || {});
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { id, value } = e.target;
 		setFormData((prev) => ({ ...prev, [id]: value }));
 	};
 
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		onSubmit(formData);
+	};
+
 	return (
-		<form onSubmit={handleSubmit} className='space-y-6'>
-			<div className='grid grid-cols-2 gap-4'>
-				{[
-					{ id: 'Title', label: 'Title', required: true },
-					{ id: 'Author', label: 'Author' },
-					{ id: 'Level', label: 'Level' },
-					{ id: 'SongKey', label: 'Song Key' },
-					{ id: 'Chords', label: 'Chords' },
-					{ id: 'AudioFiles', label: 'Audio Files' },
-					{ id: 'CreatedAt', label: 'Created At', required: true },
-					{ id: 'UltimateGuitarLink', label: 'Ultimate Guitar Link' },
-					{ id: 'ShortTitle', label: 'Short Title' },
-				].map((input) => (
-					<RenderInput
-						key={input.id}
-						id={input.id as keyof Song}
-						label={input.label}
-						required={input.required}
-						value={formData[input.id as keyof Song] || ''}
-						handleInputChange={handleInputChange}
-					/>
-				))}
-			</div>
-
-			{error && <p className='text-red-500 text-sm'>{error}</p>}
-
-			<div className='flex justify-end'>
-				<Button type='submit' disabled={loading}>
-					{loading
-						? 'Saving...'
-						: mode === 'create'
-						? 'Create Song'
-						: 'Update Song'}
-				</Button>
-			</div>
-		</form>
+		<Card className='w-full max-w-2xl mx-auto'>
+			<CardHeader>
+				<CardTitle>
+					{mode === 'create' ? 'Create New Song' : 'Edit Song'}
+				</CardTitle>
+			</CardHeader>
+			<form onSubmit={handleSubmit}>
+				<CardContent className='space-y-4'>
+					<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+						{FORM_FIELDS.map((field) => (
+							<div key={field.id} className='space-y-2'>
+								<Label htmlFor={field.id}>{field.label}</Label>
+								<Input
+									id={field.id}
+									value={formData[field.id as keyof Song] || ''}
+									onChange={handleInputChange}
+								/>
+							</div>
+						))}
+					</div>
+					{error && (
+						<Alert variant='destructive'>
+							<AlertCircle className='h-4 w-4' />
+							<AlertTitle>Error</AlertTitle>
+							<AlertDescription>{error}</AlertDescription>
+						</Alert>
+					)}
+				</CardContent>
+				<CardFooter className='flex justify-between'>
+					<Button type='button' variant='outline' onClick={onCancel}>
+						{mode === 'create' ? 'Back to Songs' : 'Back to Song'}
+					</Button>
+					<Button type='submit' disabled={loading}>
+						{loading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+						{loading
+							? 'Saving...'
+							: mode === 'create'
+							? 'Create Song'
+							: 'Update Song'}
+					</Button>
+				</CardFooter>
+			</form>
+		</Card>
 	);
 }

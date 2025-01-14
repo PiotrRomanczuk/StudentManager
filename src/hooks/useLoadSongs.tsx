@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Song } from '@/types/Song';
 
-const useLoadSongs = () => {
+const useLoadSongs = (id?: string, title?: string) => {
 	const [loading, setLoading] = useState(false);
 	const [songs, setSongs] = useState<Song[]>([]);
 	const [error, setError] = useState<string | null>(null);
@@ -11,11 +11,16 @@ const useLoadSongs = () => {
 			try {
 				setLoading(true);
 				console.log('Fetching songs...');
-				const response = await fetch('/api/songs');
+				let url = '/api/songs';
+				if (id) {
+					url += `?id=${id}`;
+				} else if (title) {
+					url += `?title=${title}`;
+				}
+				const response = await fetch(url);
 				const data = await response.json();
-				// debugger;
 				console.log('Fetched songs:', data);
-				// write a check if array is empty
+
 				if (data.data.length === 0) {
 					setError('No songs found');
 					setSongs([]);
@@ -26,7 +31,6 @@ const useLoadSongs = () => {
 					setSongs(
 						data.data.map((song: Song) => ({
 							...song,
-							// author: song.author || '',
 						}))
 					);
 					setError(null);
@@ -43,7 +47,7 @@ const useLoadSongs = () => {
 		};
 
 		fetchSongs();
-	}, []);
+	}, [id, title]);
 
 	return { loading, songs, error };
 };

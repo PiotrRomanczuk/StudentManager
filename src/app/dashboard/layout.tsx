@@ -1,10 +1,10 @@
-import NavBar from '@/components/NavBar';
+import NavBar from '@/components/NavBar/NavBar';
 
-export default function RootLayout({
-	children,
-}: Readonly<{
+interface LayoutProps {
 	children: React.ReactNode;
-}>) {
+}
+
+export default function RootLayout({ children }: LayoutProps) {
 	return (
 		<div>
 			<NavBar />

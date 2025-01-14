@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { Container } from '@/components/ui/container';
 
-import { LoadingComponent } from './@components/LoadingComponent';
-import { ErrorComponent } from './@components/ErrorComponent';
+import { LoadingComponent } from '../@components/LoadingComponent';
+import { ErrorComponent } from '../@components/ErrorComponent';
 
-import { SongTable } from './@components/SongTable';
-import { PaginationComponent } from './@components/PaginationComponent';
+import { SongTable } from '../@components/SongTable';
+import { PaginationComponent } from '../@components/PaginationComponent';
 
 import useLoadSongs from '@/hooks/useLoadSongs';
 
