@@ -19,14 +19,31 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
 	});
 	return (
 		<div>
-			<h1 className='text-3xl font-bold mb-6'>{song.Title}</h1>
+			<h1 className='text-3xl font-bold pl-6 pt-4 mb-6'>{song.Title}</h1>
 			<SongEditForm
 				song={song}
 				mode='edit'
 				songId={song.Id}
 				loading={formLoading}
 				error={formError}
-				onSubmit={handleSubmit}
+				onSubmit={(normalizedData) => {
+					// Create a synthetic event with the form data
+					const formEvent = {
+						preventDefault: () => {},
+						target: {
+							title: { value: normalizedData.Title },
+							artist: { value: normalizedData.Author },
+							level: { value: normalizedData.Level },
+							songKey: { value: normalizedData.SongKey },
+							chords: { value: normalizedData.Chords || '' },
+							audioFiles: { value: normalizedData.AudioFiles || '' },
+							shortTitle: { value: normalizedData.ShortTitle || '' },
+						},
+					};
+					handleSubmit(
+						formEvent as unknown as React.FormEvent<HTMLFormElement>
+					);
+				}}
 				onCancel={() => redirect(`/dashboard/songs/${song.Title}`)}
 			/>
 		</div>

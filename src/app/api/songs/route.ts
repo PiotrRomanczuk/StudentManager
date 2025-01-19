@@ -4,6 +4,10 @@ import { open } from 'sqlite';
 import path from 'path';
 import type { NextRequest } from 'next/server';
 import { createGuid } from '@/utils/createGuid';
+import { getDb } from '@/lib/db';
+import { z } from 'zod';
+import { APIError } from '@/utils/api-helpers';
+import { songInputSchema } from './songInputSchema';
 
 const DB_Path = '../../../../../../app_new.db';
 const pathDB = path.resolve(__dirname, DB_Path);
@@ -73,15 +77,16 @@ export async function GET(req: NextRequest) {
  * Response:
  * - success: boolean
  * - data: object containing the ID of the newly created song
- */
+//  */
 export async function POST(req: NextRequest) {
 	try {
-		const db = await openDb();
-		debugger;
+		const body = await req.json();
+		const validatedData = songInputSchema.parse(body);
+
+		const db = await getDb();
 		const contentType = req.headers.get('content-type') || '';
 		console.log(contentType);
 		if (contentType.includes('application/json')) {
-			const body = await req.json();
 			const {
 				Title,
 				Author,
@@ -91,7 +96,7 @@ export async function POST(req: NextRequest) {
 				AudioFiles,
 				UltimateGuitarLink,
 				ShortTitle,
-			} = body;
+			} = validatedData;
 
 			const Id = createGuid();
 			const CreatedAt = new Date().toISOString();
@@ -103,14 +108,14 @@ export async function POST(req: NextRequest) {
 				SongKey,
 				Chords,
 				AudioFiles,
-				CreatedAt,
 				UltimateGuitarLink,
 				ShortTitle,
+				CreatedAt,
 			});
 
 			const result = await db.run(
-				`INSERT INTO songs (id, title, author, level, songKey, chords, audioFiles, createdAt, ultimateGuitarLink, shortTitle) 
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				`INSERT INTO songs (id, title, author, level, songKey, chords, audioFiles, createdAt, ultimateGuitarLink, shortTitle)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 				[
 					Id,
 					Title,
@@ -119,7 +124,6 @@ export async function POST(req: NextRequest) {
 					SongKey,
 					Chords,
 					AudioFiles,
-					CreatedAt,
 					UltimateGuitarLink,
 					ShortTitle,
 				]
@@ -132,8 +136,25 @@ export async function POST(req: NextRequest) {
 			// Handle file import logic here
 			return NextResponse.json({ success: true });
 		}
-	} catch (error: unknown) {
-		return NextResponse.json({ success: false, error: error });
+	} catch (error) {
+		if (error instanceof z.ZodError) {
+			return NextResponse.json(
+				{ error: 'Validation error', details: error.errors },
+				{ status: 400 }
+			);
+		}
+
+		if (error instanceof APIError) {
+			return NextResponse.json(
+				{ error: error.message },
+				{ status: error.status }
+			);
+		}
+
+		return NextResponse.json(
+			{ error: 'Internal server error' },
+			{ status: 500 }
+		);
 	}
 }
 
@@ -145,26 +166,29 @@ export async function PUT(req: NextRequest) {
 		console.log('PUT request body:', body);
 
 		if (!body.id) {
-			console.error('Missing required id field');
-			return NextResponse.json({
-				success: false,
-				error: 'Missing required id field',
-			});
+			return NextResponse.json(
+				{
+					success: false,
+					error: 'Missing required id field',
+				},
+				{ status: 400 }
+			);
 		}
 
-		// Updated query with correct column name including hyphen
 		const query = `
             UPDATE songs SET 
                 title = ?, 
                 author = ?, 
                 level = ?, 
-                songKey = ?,
+                key = ?,
                 chords = ?, 
                 audiofiles = ?,
-                createdat = ?,
+                updatedat = ?,
                 shorttitle = ?
             WHERE id = ?
         `;
+
+		const updatedAt = new Date().toISOString();
 
 		const values = [
 			body.title,
@@ -172,39 +196,42 @@ export async function PUT(req: NextRequest) {
 			body.level,
 			body.songKey,
 			body.chords,
-			body.audiofiles,
-			body.createdat,
-			// body.ul,
-			body.shorttitle,
+			body.audioFiles,
+			updatedAt,
+			body.shortTitle,
 			body.id,
 		];
 
-		console.log('Executing query with values:', {
-			query,
-			values,
-		});
-
 		const result = await db.run(query, values);
-		console.log('Update result:', result);
 
 		if (result.changes === 0) {
-			console.warn('No rows were updated');
-			return NextResponse.json({
-				success: false,
-				error: 'No song found with the provided id',
-			});
+			return NextResponse.json(
+				{
+					success: false,
+					error: 'No song found with the provided id',
+				},
+				{ status: 404 }
+			);
 		}
 
-		return NextResponse.json({
-			success: true,
-			data: { message: 'Song updated successfully' },
-		});
+		return NextResponse.json(
+			{
+				success: true,
+				data: { message: 'Song updated successfully' },
+			},
+			{ status: 200 }
+		);
 	} catch (error: unknown) {
 		console.error('Error updating song:', error);
-		return NextResponse.json({
-			success: false,
-			error: error instanceof Error ? error.message : 'Unknown error occurred',
-		});
+		return NextResponse.json(
+			{
+				success: false,
+				error:
+					error instanceof Error ? error.message : 'Unknown error occurred',
+				details: error,
+			},
+			{ status: 500 }
+		);
 	}
 }
 

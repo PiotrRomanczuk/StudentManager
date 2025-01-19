@@ -35,16 +35,17 @@ export function SongEditForm({
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		const normalizedData = {
-			Id: formData.Id,
-			Title: formData.Title,
-			Author: formData.Author,
-			Level: formData.Level,
-			SongKey: formData.SongKey,
-			Chords: formData.Chords,
-			AudioFiles: formData.AudioFiles,
-			ShortTitle: formData.ShortTitle,
-		};
+		// Convert the form data to lowercase property names to match backend
+		const normalizedData = Object.entries(formData).reduce(
+			(acc, [key, value]) => {
+				return {
+					...acc,
+					[key.toLowerCase()]: value,
+				};
+			},
+			{}
+		);
+
 		console.log({ normalizedData });
 		onSubmit(normalizedData);
 	};

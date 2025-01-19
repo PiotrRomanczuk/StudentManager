@@ -1,0 +1,1101 @@
+{
+    "type": "database",
+    "name": "StudentManager_NextJS",
+    "objects": [
+        {
+            "type": "table",
+            "database": null,
+            "name": "Lessons",
+            "withoutRowId": false,
+            "strict": false,
+            "ddl": "CREATE TABLE \"Lessons\" (\r\n    \"Id\" INTEGER NOT NULL CONSTRAINT \"PK_Lessons\" PRIMARY KEY AUTOINCREMENT,\r\n    \"Title\" TEXT NOT NULL,\r\n    \"DateTime\" TEXT NOT NULL,\r\n    \"Description\" TEXT NOT NULL,\r\n    \"TeacherId\" INTEGER NOT NULL,\r\n    CONSTRAINT \"FK_Lessons_Teachers_TeacherId\" FOREIGN KEY (\"TeacherId\") REFERENCES \"Teachers\" (\"Id\") ON DELETE CASCADE\r\n)",
+            "columns": [
+                {
+                    "name": "Id",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL "
+                        },
+                        {
+                            "type": "PRIMARY KEY",
+                            "definition": "PRIMARY KEY AUTOINCREMENT"
+                        }
+                    ]
+                },
+                {
+                    "name": "Title",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "DateTime",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "Description",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "TeacherId",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "FOREIGN KEY",
+                    "definition": "FOREIGN KEY (\"TeacherId\") REFERENCES \"Teachers\" (\"Id\") ON DELETE CASCADE\r\n"
+                }
+            ],
+            "rows": [
+            ]
+        },
+        {
+            "type": "table",
+            "database": null,
+            "name": "LessonSongs",
+            "withoutRowId": false,
+            "strict": false,
+            "ddl": "CREATE TABLE \"LessonSongs\" (\r\n    \"LessonsId\" INTEGER NOT NULL,\r\n    \"SongsId\" TEXT NOT NULL,\r\n    CONSTRAINT \"PK_LessonSongs\" PRIMARY KEY (\"LessonsId\", \"SongsId\"),\r\n    CONSTRAINT \"FK_LessonSongs_Lessons_LessonsId\" FOREIGN KEY (\"LessonsId\") REFERENCES \"Lessons\" (\"Id\") ON DELETE CASCADE,\r\n    CONSTRAINT \"FK_LessonSongs_Songs_SongsId\" FOREIGN KEY (\"SongsId\") REFERENCES \"Songs\" (\"Id\") ON DELETE CASCADE\r\n)",
+            "columns": [
+                {
+                    "name": "LessonsId",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "SongsId",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "PRIMARY KEY",
+                    "definition": "PRIMARY KEY (\"LessonsId\", \"SongsId\")"
+                },
+                {
+                    "type": "FOREIGN KEY",
+                    "definition": "FOREIGN KEY (\"LessonsId\") REFERENCES \"Lessons\" (\"Id\") ON DELETE CASCADE"
+                },
+                {
+                    "type": "FOREIGN KEY",
+                    "definition": "FOREIGN KEY (\"SongsId\") REFERENCES \"Songs\" (\"Id\") ON DELETE CASCADE\r\n"
+                }
+            ],
+            "rows": [
+            ]
+        },
+        {
+            "type": "table",
+            "database": null,
+            "name": "Songs",
+            "withoutRowId": false,
+            "strict": false,
+            "ddl": "CREATE TABLE Songs (Id TEXT NOT NULL CONSTRAINT PK_Songs PRIMARY KEY, AudioFiles TEXT NULL, Author TEXT NULL, Chords TEXT NULL, CreatedAt TEXT NOT NULL, Key TEXT NULL, Level TEXT NULL, ShortTitle TEXT NULL, TeacherId INTEGER NULL, Title TEXT NOT NULL, \"Ultimate-Guitar Link\" TEXT NULL, UpdatedAt TEXT, CONSTRAINT FK_Songs_Teachers_TeacherId FOREIGN KEY (TeacherId) REFERENCES Teachers (Id))",
+            "columns": [
+                {
+                    "name": "Id",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL "
+                        },
+                        {
+                            "type": "PRIMARY KEY",
+                            "definition": "PRIMARY KEY"
+                        }
+                    ]
+                },
+                {
+                    "name": "AudioFiles",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "Author",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "Chords",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "CreatedAt",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "Key",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "Level",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "ShortTitle",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "TeacherId",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "Title",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "Ultimate-Guitar Link",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "UpdatedAt",
+                    "type": "TEXT"
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "FOREIGN KEY",
+                    "definition": "FOREIGN KEY (TeacherId) REFERENCES Teachers (Id)"
+                }
+            ],
+            "rows": [
+                [
+                    "00469467-BD4D-4350-8DCC-C938F3EF60DA",
+                    null,
+                    "Myslovitz",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Chcialbym umrzec z milosci",
+                    "",
+                    null
+                ],
+                [
+                    "03EAA195-0F18-483D-B73B-05CF3F576694",
+                    null,
+                    "PF",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Money",
+                    "",
+                    null
+                ],
+                [
+                    "0DE4CEA1-7D13-43CA-8139-0067FB5F6FAD",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Oprocz blekitnego nieba",
+                    "",
+                    null
+                ],
+                [
+                    "0F4554EE-DB88-497E-A168-C5526291093A",
+                    null,
+                    "Ed Sheeran",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Shape of you",
+                    "",
+                    null
+                ],
+                [
+                    "14E9DDBA-4CCC-4669-935F-CDD0295125EA",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Nazywam sie niebo'",
+                    "",
+                    null
+                ],
+                [
+                    "160D5C91-CF3F-4902-A39B-462B19360FB5",
+                    null,
+                    "Spi",
+                    "a E a E",
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Gdzie ta keja",
+                    "",
+                    null
+                ],
+                [
+                    "2473BEA9-797F-474B-AEB0-5881754CBF50",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Teksanski",
+                    "",
+                    null
+                ],
+                [
+                    "26ED9A10-EEF6-4325-9B20-45C356F1376B",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Whisky",
+                    "",
+                    null
+                ],
+                [
+                    "290C8775-3654-45A7-9F72-3B3E458B09A6",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Zawsze tam gdzie Ty",
+                    "",
+                    null
+                ],
+                [
+                    "32B98A71-9A31-4D29-A258-2B4BBE07E241",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Autobiografia",
+                    "",
+                    null
+                ],
+                [
+                    "33C2DA5C-1D05-497B-9ED3-49C6B08AF246",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Are you gonna be my girl",
+                    "",
+                    null
+                ],
+                [
+                    "5058A20B-0031-4FEC-AC51-339897E9D238",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Ho Hey",
+                    "",
+                    null
+                ],
+                [
+                    "55E351F6-A8CB-46B6-A77D-72D60C83620D",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Seven nation army",
+                    "",
+                    null
+                ],
+                [
+                    "5E948B7F-36EB-4E62-8D77-58FFD8AA2CA9",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Smoke on the water",
+                    "",
+                    null
+                ],
+                [
+                    "610C102C-766B-49D2-AC19-432A8FBCED30",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "House of the rising sun",
+                    "",
+                    null
+                ],
+                [
+                    "675E7AED-2B95-4F3E-99F5-8CBCFE95F33F",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Baska",
+                    "",
+                    null
+                ],
+                [
+                    "8C0D7AB6-C032-4AE6-BDC8-B62A81275737",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Dani California",
+                    "",
+                    null
+                ],
+                [
+                    "9A53EBF1-4787-417E-8226-E6FFAB6E461C",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Behind blue eyes",
+                    "",
+                    null
+                ],
+                [
+                    "9B5E9C50-C178-4853-B6CB-D34EB3C711D2",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Layla",
+                    "",
+                    null
+                ],
+                [
+                    "A276EFAB-223F-4E44-B9E2-1FC9F64976CC",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "People are strange",
+                    "",
+                    null
+                ],
+                [
+                    "B048944A-928F-4624-9A87-C3F00AA498AC",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Yellow Submarine",
+                    "",
+                    null
+                ],
+                [
+                    "B0B2FD6E-5F9F-4469-AFC3-E3687EE48D4C",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Crazy little thing called love",
+                    "",
+                    null
+                ],
+                [
+                    "B36E1AF1-EC93-4837-AC2C-E06269BB88B7",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Hallelujah",
+                    "",
+                    null
+                ],
+                [
+                    "BB9FF5D6-DEC3-4538-8F75-19B1C9084FC2",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Na co komu dzis",
+                    "",
+                    null
+                ],
+                [
+                    "BD608BAC-4A74-46F3-A4EC-F09B3E9D6D99",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Miec czy byc",
+                    "",
+                    null
+                ],
+                [
+                    "BEC19D4C-8417-43FF-976F-6BCBDE59298D",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Dust in the wind",
+                    "",
+                    null
+                ],
+                [
+                    "CBA6DA4C-2F7F-480D-BF2F-7F2CFE0C8ECB",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "If I aint got you",
+                    "",
+                    null
+                ],
+                [
+                    "D0CDB03A-CA3B-44AB-BD78-24C9F6258E98",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Knocking on Heavens Door",
+                    "",
+                    null
+                ],
+                [
+                    "D2254F21-D577-4C58-80C2-10285A7DFA9C",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Moja i Twoja Nadzieja",
+                    "",
+                    null
+                ],
+                [
+                    "D671EBC4-9FED-4C83-9A3B-B703FF0E691E",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Tears in heaven",
+                    "",
+                    null
+                ],
+                [
+                    "DAD855C5-2C74-46DA-95D7-33B5B3382914",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Nie placz Ewka",
+                    "",
+                    null
+                ],
+                [
+                    "E92A9D01-3B18-4482-8A29-85A781EADF68",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Hit the road jack",
+                    "",
+                    null
+                ],
+                [
+                    "E92C4E5E-DB16-40CA-B8DF-F9342A668961",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Wonderwall",
+                    "",
+                    null
+                ],
+                [
+                    "F32A265B-29AA-48D8-89BE-F8FEF26903C6",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Stand by me",
+                    "",
+                    null
+                ],
+                [
+                    "F44EC49A-E858-49E3-BC63-067B07C49076",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "G",
+                    "beginner",
+                    null,
+                    null,
+                    "Son of the blue sky",
+                    "",
+                    null
+                ],
+                [
+                    "F5631A4E-84C5-4CE4-9C54-19E2E2C2689D",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Everlong",
+                    "",
+                    null
+                ],
+                [
+                    "F76AAB61-2E65-4425-B443-ABEA5671F066",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Sweet Home Alabama",
+                    "",
+                    null
+                ],
+                [
+                    "FE905A33-B717-4C07-82F7-8F010273ECA9",
+                    null,
+                    "",
+                    null,
+                    "2024-07-19 11:43:22.310661",
+                    "",
+                    "",
+                    null,
+                    null,
+                    "Tolerancja",
+                    "",
+                    null
+                ]
+            ]
+        },
+        {
+            "type": "table",
+            "database": null,
+            "name": "StudentLessons",
+            "withoutRowId": false,
+            "strict": false,
+            "ddl": "CREATE TABLE \"StudentLessons\" (\r\n    \"LessonsId\" INTEGER NOT NULL,\r\n    \"StudentsId\" TEXT NOT NULL,\r\n    CONSTRAINT \"PK_StudentLessons\" PRIMARY KEY (\"LessonsId\", \"StudentsId\"),\r\n    CONSTRAINT \"FK_StudentLessons_AspNetUsers_StudentsId\" FOREIGN KEY (\"StudentsId\") REFERENCES \"AspNetUsers\" (\"Id\") ON DELETE CASCADE,\r\n    CONSTRAINT \"FK_StudentLessons_Lessons_LessonsId\" FOREIGN KEY (\"LessonsId\") REFERENCES \"Lessons\" (\"Id\") ON DELETE CASCADE\r\n)",
+            "columns": [
+                {
+                    "name": "LessonsId",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "StudentsId",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "PRIMARY KEY",
+                    "definition": "PRIMARY KEY (\"LessonsId\", \"StudentsId\")"
+                },
+                {
+                    "type": "FOREIGN KEY",
+                    "definition": "FOREIGN KEY (\"StudentsId\") REFERENCES \"AspNetUsers\" (\"Id\") ON DELETE CASCADE"
+                },
+                {
+                    "type": "FOREIGN KEY",
+                    "definition": "FOREIGN KEY (\"LessonsId\") REFERENCES \"Lessons\" (\"Id\") ON DELETE CASCADE\r\n"
+                }
+            ],
+            "rows": [
+            ]
+        },
+        {
+            "type": "table",
+            "database": null,
+            "name": "StudentSongs",
+            "withoutRowId": false,
+            "strict": false,
+            "ddl": "CREATE TABLE \"StudentSongs\" (\r\n    \"FavoriteByStudentsId\" TEXT NOT NULL,\r\n    \"FavoriteSongsId\" TEXT NOT NULL,\r\n    CONSTRAINT \"PK_StudentSongs\" PRIMARY KEY (\"FavoriteByStudentsId\", \"FavoriteSongsId\"),\r\n    CONSTRAINT \"FK_StudentSongs_AspNetUsers_FavoriteByStudentsId\" FOREIGN KEY (\"FavoriteByStudentsId\") REFERENCES \"AspNetUsers\" (\"Id\") ON DELETE CASCADE,\r\n    CONSTRAINT \"FK_StudentSongs_Songs_FavoriteSongsId\" FOREIGN KEY (\"FavoriteSongsId\") REFERENCES \"Songs\" (\"Id\") ON DELETE CASCADE\r\n)",
+            "columns": [
+                {
+                    "name": "FavoriteByStudentsId",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "FavoriteSongsId",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "PRIMARY KEY",
+                    "definition": "PRIMARY KEY (\"FavoriteByStudentsId\", \"FavoriteSongsId\")"
+                },
+                {
+                    "type": "FOREIGN KEY",
+                    "definition": "FOREIGN KEY (\"FavoriteByStudentsId\") REFERENCES \"AspNetUsers\" (\"Id\") ON DELETE CASCADE"
+                },
+                {
+                    "type": "FOREIGN KEY",
+                    "definition": "FOREIGN KEY (\"FavoriteSongsId\") REFERENCES \"Songs\" (\"Id\") ON DELETE CASCADE\r\n"
+                }
+            ],
+            "rows": [
+            ]
+        },
+        {
+            "type": "table",
+            "database": null,
+            "name": "Teachers",
+            "withoutRowId": false,
+            "strict": false,
+            "ddl": "CREATE TABLE \"Teachers\" (\r\n    \"Id\" INTEGER NOT NULL CONSTRAINT \"PK_Teachers\" PRIMARY KEY AUTOINCREMENT,\r\n    \"Name\" TEXT NOT NULL,\r\n    \"Email\" TEXT NOT NULL\r\n, \"AccessFailedCount\" INTEGER NOT NULL DEFAULT 0, \"ConcurrencyStamp\" TEXT NULL, \"EmailConfirmed\" INTEGER NOT NULL DEFAULT 0, \"LockoutEnabled\" INTEGER NOT NULL DEFAULT 0, \"LockoutEnd\" TEXT NULL, \"NormalizedEmail\" TEXT NULL, \"NormalizedUserName\" TEXT NULL, \"Password\" TEXT NOT NULL DEFAULT '', \"PasswordHash\" TEXT NULL, \"PhoneNumber\" TEXT NULL, \"PhoneNumberConfirmed\" INTEGER NOT NULL DEFAULT 0, \"SecurityStamp\" TEXT NULL, \"TwoFactorEnabled\" INTEGER NOT NULL DEFAULT 0, \"UserName\" TEXT NULL)",
+            "columns": [
+                {
+                    "name": "Id",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL "
+                        },
+                        {
+                            "type": "PRIMARY KEY",
+                            "definition": "PRIMARY KEY AUTOINCREMENT"
+                        }
+                    ]
+                },
+                {
+                    "name": "Name",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "Email",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL\r\n"
+                        }
+                    ]
+                },
+                {
+                    "name": "AccessFailedCount",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL "
+                        },
+                        {
+                            "type": "DEFAULT",
+                            "definition": "DEFAULT 0"
+                        }
+                    ]
+                },
+                {
+                    "name": "ConcurrencyStamp",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "EmailConfirmed",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL "
+                        },
+                        {
+                            "type": "DEFAULT",
+                            "definition": "DEFAULT 0"
+                        }
+                    ]
+                },
+                {
+                    "name": "LockoutEnabled",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL "
+                        },
+                        {
+                            "type": "DEFAULT",
+                            "definition": "DEFAULT 0"
+                        }
+                    ]
+                },
+                {
+                    "name": "LockoutEnd",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "NormalizedEmail",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "NormalizedUserName",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "Password",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL "
+                        },
+                        {
+                            "type": "DEFAULT",
+                            "definition": "DEFAULT ''"
+                        }
+                    ]
+                },
+                {
+                    "name": "PasswordHash",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "PhoneNumber",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "PhoneNumberConfirmed",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL "
+                        },
+                        {
+                            "type": "DEFAULT",
+                            "definition": "DEFAULT 0"
+                        }
+                    ]
+                },
+                {
+                    "name": "SecurityStamp",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                },
+                {
+                    "name": "TwoFactorEnabled",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "NOT NULL",
+                            "definition": "NOT NULL "
+                        },
+                        {
+                            "type": "DEFAULT",
+                            "definition": "DEFAULT 0"
+                        }
+                    ]
+                },
+                {
+                    "name": "UserName",
+                    "type": "TEXT",
+                    "constraints": [
+                        {
+                            "type": null,
+                            "definition": "NULL"
+                        }
+                    ]
+                }
+            ],
+            "rows": [
+            ]
+        },
+        {
+            "type": "index",
+            "database": null,
+            "name": "IX_Songs_TeacherId",
+            "unique": false,
+            "ddl": "CREATE INDEX IX_Songs_TeacherId ON Songs (\"TeacherId\")"
+        }
+    ]
+}

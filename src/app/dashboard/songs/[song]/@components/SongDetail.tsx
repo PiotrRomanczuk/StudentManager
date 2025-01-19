@@ -64,6 +64,10 @@ export default function SongDetails({ song }: SongDetailsProps) {
 							<strong>Created At:</strong>{' '}
 							{new Date(song.CreatedAt).toLocaleDateString()}
 						</p>
+						<p>
+							<strong>Updated At:</strong>{' '}
+							{new Date(song.UpdatedAt).toLocaleDateString()}
+						</p>
 					</CardContent>
 				</Card>
 

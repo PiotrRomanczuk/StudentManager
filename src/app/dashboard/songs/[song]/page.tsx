@@ -1,4 +1,5 @@
-import { Link, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import SongDetails from './@components/SongDetail';
 import { isGuid } from '@/utils/isGuid';
 import SongNotFound from './@components/SongNotFound';
@@ -34,11 +35,8 @@ export default async function Page({ params }: { params: { song: string } }) {
 					href='/dashboard/'
 					// className='flex items-center mb-6 text-blue-500 hover:text-blue-600'
 				>
-					<ArrowLeft
-						// className='w-24 h-24'
-						size={36}
-					/>
-					{/* <div className='text-3xl text-black'>Back to Songs</div> */}
+					<ArrowLeft size={28} />
+					<div className='text-xl text-black'>Back to Songs</div>
 				</Link>
 			</div>
 			<SongDetails song={song.data} />

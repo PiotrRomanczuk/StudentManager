@@ -17,7 +17,7 @@ export const FORM_FIELDS = [
 	{ id: 'SongKey', label: 'Song Key' },
 	{ id: 'Chords', label: 'Chords' },
 	{ id: 'AudioFiles', label: 'Audio Files' },
-	{ id: 'CreatedAt', label: 'Created At', required: true },
+	// { id: 'CreatedAt', label: 'Created At', required: true },
 	{ id: 'UltimateGuitarLink', label: 'Ultimate Guitar Link' },
-	{ id: 'ShortTitle', label: 'Short Title' },
+	// { id: 'ShortTitle', label: 'Short Title' },
 ];
