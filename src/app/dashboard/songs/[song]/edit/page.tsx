@@ -1,4 +1,4 @@
-import ClientForm from './ClientForm';
+import SongEditClientForm from './SongEditClientForm';
 
 export default async function Page({ params }: { params: { song: string } }) {
 	const { song: slug } = await params;
@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { song: string } }) {
 	return (
 		<div>
 			<h1 className='text-3xl font-bold mb-6'>{song.data.Title}</h1>
-			<ClientForm song={song.data} />
+			<SongEditClientForm song={song.data} />
 		</div>
 	);
 }

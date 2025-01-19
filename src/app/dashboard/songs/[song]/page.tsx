@@ -1,6 +1,7 @@
 import { Link, ArrowLeft } from 'lucide-react';
 import SongDetails from './@components/SongDetail';
 import { isGuid } from '@/utils/isGuid';
+import SongNotFound from './@components/SongNotFound';
 
 export default async function Page({ params }: { params: { song: string } }) {
 	const { song: slug } = await params;
@@ -17,48 +18,30 @@ export default async function Page({ params }: { params: { song: string } }) {
 	}
 
 	if (!response.ok) {
-		return (
-			<div>
-				<Link
-					href='/dashboard/'
-					className='flex items-center mb-6 text-blue-500 hover:text-blue-600'
-				>
-					<ArrowLeft className='mr-20' size={12} />
-					Back to Songs
-				</Link>
-				Song not found
-			</div>
-		);
+		return <SongNotFound />;
 	}
 
 	const song = await response.json();
 
 	if (!song) {
-		return (
-			<div>
-				<Link
-					href='/dashboard/'
-					className='flex items-center mb-6 text-blue-500 hover:text-blue-600'
-				>
-					<ArrowLeft className='mr-20' size={12} />
-					Back to Songs
-				</Link>
-				Song not found
-			</div>
-		);
+		return <SongNotFound />;
 	}
 
 	return (
-		<div>
-			<Link
-				href='/dashboard/'
-				className='flex items-center mb-6 text-blue-500 hover:text-blue-600'
-			>
-				<ArrowLeft className='mr-20' size={40} />
-				Back to Songs
-			</Link>
-
+		<>
+			<div className='flex border border-black'>
+				<Link
+					href='/dashboard/'
+					// className='flex items-center mb-6 text-blue-500 hover:text-blue-600'
+				>
+					<ArrowLeft
+						// className='w-24 h-24'
+						size={36}
+					/>
+					{/* <div className='text-3xl text-black'>Back to Songs</div> */}
+				</Link>
+			</div>
 			<SongDetails song={song.data} />
-		</div>
+		</>
 	);
 }

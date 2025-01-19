@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Song } from '@/types/Song';
 import { redirect } from 'next/navigation';
+import { useState, useMemo } from 'react';
 
 interface SongsTableProps {
 	songs: Song[];
@@ -24,9 +25,75 @@ export function SongTable({
 	currentPage,
 	itemsPerPage,
 }: SongsTableProps) {
+	const [filters] = useState({
+		title: '',
+		author: '',
+		level: '',
+		key: '',
+	});
+
+	// Add sorting state
+	const [sortConfig, setSortConfig] = useState<{
+		key: keyof Song | null;
+		direction: 'asc' | 'desc';
+	}>({
+		key: null,
+		direction: 'asc',
+	});
+
+	// Handle sort click
+	const handleSort = (key: keyof Song) => {
+		setSortConfig((current) => ({
+			key,
+			direction:
+				current.key === key && current.direction === 'asc' ? 'desc' : 'asc',
+		}));
+	};
+
+	// Filter and sort songs using useMemo
+	const filteredAndSortedSongs = useMemo(() => {
+		const result = songs.filter((song) => {
+			return (
+				(song.Title?.toLowerCase() || '').includes(
+					filters.title.toLowerCase()
+				) &&
+				(song.Author?.toLowerCase() || '').includes(
+					filters.author.toLowerCase()
+				) &&
+				(song.Level?.toString() || '').includes(filters.level) &&
+				(song.SongKey?.toLowerCase() || '').includes(filters.key.toLowerCase())
+			);
+		});
+
+		if (sortConfig.key) {
+			result.sort((a, b) => {
+				const aValue = a[sortConfig.key!]?.toString().toLowerCase() || '';
+				const bValue = b[sortConfig.key!]?.toString().toLowerCase() || '';
+
+				if (aValue < bValue) {
+					return sortConfig.direction === 'asc' ? -1 : 1;
+				}
+				if (aValue > bValue) {
+					return sortConfig.direction === 'asc' ? 1 : -1;
+				}
+				return 0;
+			});
+		}
+
+		return result;
+	}, [songs, filters, sortConfig]);
+
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const endIndex = startIndex + itemsPerPage;
-	const currentSongs = songs.slice(startIndex, endIndex);
+	const currentSongs = filteredAndSortedSongs.slice(startIndex, endIndex);
+
+	// Helper function to render sort indicator
+	const getSortIndicator = (key: keyof Song) => {
+		if (sortConfig.key === key) {
+			return sortConfig.direction === 'asc' ? ' ↑' : ' ↓';
+		}
+		return '';
+	};
 
 	return (
 		<div className='space-y-4'>
@@ -34,10 +101,37 @@ export function SongTable({
 				<Table>
 					<TableHeader>
 						<TableRow>
-							<TableHead>Title</TableHead>
-							<TableHead>Author</TableHead>
-							<TableHead>Level</TableHead>
-							<TableHead>Key</TableHead>
+							<TableHead
+								className='cursor-pointer hover:bg-gray-50'
+								onClick={() => handleSort('Title')}
+							>
+								Title{getSortIndicator('Title')}
+							</TableHead>
+							<TableHead
+								className='cursor-pointer hover:bg-gray-50'
+								onClick={() => handleSort('Author')}
+							>
+								Author{getSortIndicator('Author')}
+							</TableHead>
+							<TableHead
+								className='cursor-pointer hover:bg-gray-50'
+								onClick={() => handleSort('Level')}
+							>
+								Level{getSortIndicator('Level')}
+							</TableHead>
+							<TableHead
+								className='cursor-pointer hover:bg-gray-50'
+								onClick={() => handleSort('SongKey')}
+							>
+								Key{getSortIndicator('SongKey')}
+							</TableHead>
+
+							<TableHead
+								className='cursor-pointer hover:bg-gray-50'
+								onClick={() => handleSort('CreatedAt')}
+							>
+								Updated At{getSortIndicator('CreatedAt')}
+							</TableHead>
 							<TableHead>Details</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -48,6 +142,15 @@ export function SongTable({
 								<TableCell>{song.Author}</TableCell>
 								<TableCell>{song.Level}</TableCell>
 								<TableCell>{song.SongKey}</TableCell>
+								<TableCell>
+									{new Date(song.CreatedAt).toLocaleString('en-US', {
+										year: 'numeric',
+										month: '2-digit',
+										day: '2-digit',
+										hour: '2-digit',
+										minute: '2-digit',
+									})}
+								</TableCell>
 								<TableCell>
 									<Button
 										variant='outline'

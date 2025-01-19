@@ -6,7 +6,7 @@ import React from 'react';
 import { SongEditForm } from './@components/SongEditForm';
 import { Song } from '@/types/Song';
 
-const ClientForm = ({ song }: { song: Song }) => {
+const SongEditClientForm = ({ song }: { song: Song }) => {
 	const {
 		handleSubmit,
 		loading: formLoading,
@@ -33,4 +33,4 @@ const ClientForm = ({ song }: { song: Song }) => {
 	);
 };
 
-export default ClientForm;
+export default SongEditClientForm;

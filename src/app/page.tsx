@@ -6,7 +6,7 @@ export default async function Home() {
 		<div>
 			<h2 className='text-4xl color-blue'>Hello world!</h2>
 			{userId}
-			redirect to <a href='/songs'>Songs</a>
+			redirect to <a href='/dashboard'>Songs</a>
 		</div>
 	);
 }

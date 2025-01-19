@@ -19,28 +19,39 @@ const useLoadSongs = (id?: string, title?: string) => {
 				}
 				const response = await fetch(url);
 				const data = await response.json();
-				console.log('Fetched songs:', data);
+				console.log('Raw response:', data); // Debug log
 
-				if (data.data.length === 0) {
+				if (!data || !data.success) {
+					console.error('Invalid response format:', data);
+					setError('Invalid response from server');
+					setSongs([]);
+					return;
+				}
+
+				if (!data.data) {
 					setError('No songs found');
 					setSongs([]);
 					return;
 				}
 
-				if (data && Array.isArray(data.data)) {
-					setSongs(
-						data.data.map((song: Song) => ({
-							...song,
-						}))
-					);
-					setError(null);
-				} else {
-					console.error('Unexpected data format:', data);
-					setError('No songs found');
+				// Handle both single object and array responses
+				const songsData = Array.isArray(data.data) ? data.data : [data.data];
+
+				// Filter out any null or undefined entries
+				const validSongs = songsData.filter((song: Song) => song != null);
+
+				if (validSongs.length === 0) {
+					setError('No valid songs found');
+					setSongs([]);
+					return;
 				}
+
+				setSongs(validSongs);
+				setError(null);
 			} catch (error) {
 				console.error('Error loading songs:', error);
 				setError('Failed to load songs');
+				setSongs([]);
 			} finally {
 				setLoading(false);
 			}

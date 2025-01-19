@@ -3,6 +3,7 @@ import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import path from 'path';
 import type { NextRequest } from 'next/server';
+import { createGuid } from '@/utils/createGuid';
 
 const DB_Path = '../../../../../../app_new.db';
 const pathDB = path.resolve(__dirname, DB_Path);
@@ -13,6 +14,10 @@ async function openDb() {
 		driver: sqlite3.Database,
 	});
 }
+
+// async function closeDb() {
+// 	return sqlite3.Database.close();
+// }
 
 /**
  * GET /api/songs
@@ -56,7 +61,14 @@ export async function GET(req: NextRequest) {
  *
  * Request Body (application/json):
  * - title: string (required)
- * - artist: string (required)
+ * - author: string (optional)
+ * - level: string (optional)
+ * - songKey: string (optional)
+ * - chords: string (optional)
+ * - audioFiles: string (optional)
+ * - createdAt: string (optional)
+ * - ultimateGuitarLink: string (optional)
+ * - shortTitle: string (optional)
  *
  * Response:
  * - success: boolean
@@ -65,13 +77,54 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
 	try {
 		const db = await openDb();
+		debugger;
 		const contentType = req.headers.get('content-type') || '';
+		console.log(contentType);
 		if (contentType.includes('application/json')) {
 			const body = await req.json();
+			const {
+				Title,
+				Author,
+				Level,
+				SongKey,
+				Chords,
+				AudioFiles,
+				UltimateGuitarLink,
+				ShortTitle,
+			} = body;
+
+			const Id = createGuid();
+			const CreatedAt = new Date().toISOString();
+			console.log({
+				Id,
+				Title,
+				Author,
+				Level,
+				SongKey,
+				Chords,
+				AudioFiles,
+				CreatedAt,
+				UltimateGuitarLink,
+				ShortTitle,
+			});
+
 			const result = await db.run(
-				'INSERT INTO songs (title, artist) VALUES (?, ?)',
-				[body.title, body.artist]
+				`INSERT INTO songs (id, title, author, level, songKey, chords, audioFiles, createdAt, ultimateGuitarLink, shortTitle) 
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				[
+					Id,
+					Title,
+					Author,
+					Level,
+					SongKey,
+					Chords,
+					AudioFiles,
+					CreatedAt,
+					UltimateGuitarLink,
+					ShortTitle,
+				]
 			);
+			console.log(result);
 			return NextResponse.json({ success: true, data: { id: result.lastID } });
 		} else if (contentType.includes('multipart/form-data')) {
 			// const formData = await req.formData();
@@ -84,73 +137,74 @@ export async function POST(req: NextRequest) {
 	}
 }
 
-/**
- * PUT /api/songs
- * Updates an existing song in the database.
- *
- * Request Body (application/json):
- * - id: string (required)
- * - title: string (required)
- * - author: string (optional)
- * - level: string (optional)
- * - songKey: string (optional)
- * - chords: string (optional)
- * - audioFiles: string (optional)
- * - createdAt: string (required)
- * - ultimateGuitarLink: string (optional)
- * - shortTitle: string (optional)
- *
- * Response:
- * - success: boolean
- */
 export async function PUT(req: NextRequest) {
 	try {
 		const db = await openDb();
 		const body = await req.json();
-		const {
-			id,
-			title,
-			author,
-			level,
-			songKey,
-			chords,
-			audioFiles,
-			createdAt,
-			ultimateGuitarLink,
-			shortTitle,
-		} = body;
 
-		console.log({ body });
-		console.log('Route PUT');
-		console.log({ id, title });
-		await db.run(
-			`UPDATE songs SET 
-				title = ?, 
-				author = ?, 
-				level = ?, 
-				songKey = ?, 
-				chords = ?, 
-				audioFiles = ?, 
-				createdAt = ?, 
-				ultimateGuitarLink = ?, 
-				shortTitle = ? 
-			WHERE id = ?`,
-			[
-				title,
-				author,
-				level,
-				songKey,
-				chords,
-				audioFiles,
-				createdAt,
-				ultimateGuitarLink,
-				shortTitle,
-				id,
-			]
-		);
-		return NextResponse.json({ success: true });
+		console.log('PUT request body:', body);
+
+		if (!body.id) {
+			console.error('Missing required id field');
+			return NextResponse.json({
+				success: false,
+				error: 'Missing required id field',
+			});
+		}
+
+		// Updated query with correct column name including hyphen
+		const query = `
+            UPDATE songs SET 
+                title = ?, 
+                author = ?, 
+                level = ?, 
+                songKey = ?,
+                chords = ?, 
+                audiofiles = ?,
+                createdat = ?,
+                shorttitle = ?
+            WHERE id = ?
+        `;
+
+		const values = [
+			body.title,
+			body.author,
+			body.level,
+			body.songKey,
+			body.chords,
+			body.audiofiles,
+			body.createdat,
+			// body.ul,
+			body.shorttitle,
+			body.id,
+		];
+
+		console.log('Executing query with values:', {
+			query,
+			values,
+		});
+
+		const result = await db.run(query, values);
+		console.log('Update result:', result);
+
+		if (result.changes === 0) {
+			console.warn('No rows were updated');
+			return NextResponse.json({
+				success: false,
+				error: 'No song found with the provided id',
+			});
+		}
+
+		return NextResponse.json({
+			success: true,
+			data: { message: 'Song updated successfully' },
+		});
 	} catch (error: unknown) {
-		return NextResponse.json({ success: false, error: error });
+		console.error('Error updating song:', error);
+		return NextResponse.json({
+			success: false,
+			error: error instanceof Error ? error.message : 'Unknown error occurred',
+		});
 	}
 }
 

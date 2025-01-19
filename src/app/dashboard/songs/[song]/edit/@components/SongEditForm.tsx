@@ -24,6 +24,8 @@ export function SongEditForm({
 	onSubmit,
 	onCancel,
 }: SongFormProps) {
+	//TODO: Use useForm hook to handle form state
+
 	const [formData, setFormData] = useState<Partial<Song>>(song || {});
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +35,19 @@ export function SongEditForm({
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		onSubmit(formData);
+		// Convert the form data to lowercase property names to match backend
+		const normalizedData = Object.entries(formData).reduce(
+			(acc, [key, value]) => {
+				return {
+					...acc,
+					[key.toLowerCase()]: value,
+				};
+			},
+			{}
+		);
+
+		console.log({ normalizedData });
+		onSubmit(normalizedData);
 	};
 
 	return (

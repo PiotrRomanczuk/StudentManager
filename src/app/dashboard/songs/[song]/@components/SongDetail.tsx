@@ -1,7 +1,7 @@
 'use client';
 
 import { redirect } from 'next/navigation';
-import { Music, User, BarChart, Key } from 'lucide-react';
+import { Music, BarChart, Key } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Song } from '@/types/Song';
@@ -41,48 +41,55 @@ export default function SongDetails({ song }: SongDetailsProps) {
 	return (
 		<div className='container mx-auto px-4 py-8'>
 			<h1 className='text-3xl font-bold mb-6'>{song.Title}</h1>
-			<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+				{/* Basic Info Card */}
 				<Card>
 					<CardHeader>
 						<CardTitle className='flex items-center'>
 							<Music className='mr-2' size={20} />
-							Song Details
+							Basic Info
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
+						{/* <p>
+							<strong>ID:</strong> {song.Id}
+						</p> */}
 						<p>
-							<strong>Author:</strong> {song.Author}
+							<strong>Title:</strong> {song.Title}
 						</p>
+						{/* <p>
+							<strong>Short Title:</strong> {song.ShortTitle || 'N/A'}
+						</p> */}
 						<p>
-							<strong>Level:</strong> {song.Level}
-						</p>
-						<p>
-							<strong>Key:</strong> {song.SongKey}
+							<strong>Created At:</strong>{' '}
+							{new Date(song.CreatedAt).toLocaleDateString()}
 						</p>
 					</CardContent>
 				</Card>
 
+				{/* Musical Details Card */}
 				<Card>
 					<CardHeader>
 						<CardTitle className='flex items-center'>
-							<User className='mr-2' size={20} />
-							Lyrics
-						</CardTitle>
-					</CardHeader>
-					{/* <CardContent>
-            <pre className="whitespace-pre-wrap">{song.lyrics}</pre>
-          </CardContent> */}
-				</Card>
-
-				<Card>
-					<CardHeader>
-						<CardTitle className='flex items-center'>
-							<BarChart className='mr-2' size={20} />
-							Chords
+							<Key className='mr-2' size={20} />
+							Musical Basic Details
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
-						<pre className='whitespace-pre-wrap'>{song.Chords}</pre>
+						<p>
+							<strong>Author:</strong> {song.Author || 'N/A'}
+						</p>
+						<p>
+							<strong>Key:</strong> {song.SongKey || 'N/A'}
+						</p>
+						<p>
+							<strong>Level:</strong> {song.Level || 'N/A'}
+						</p>
+						{song.Chords && (
+							<p>
+								<strong>Chords:</strong> {song.Chords}
+							</p>
+						)}
 					</CardContent>
 				</Card>
 
@@ -90,14 +97,46 @@ export default function SongDetails({ song }: SongDetailsProps) {
 					<CardHeader>
 						<CardTitle className='flex items-center'>
 							<Key className='mr-2' size={20} />
-							Notes
+							Chords
 						</CardTitle>
 					</CardHeader>
-					{/* <CardContent>
-            <p>{song.notes}</p>
-          </CardContent> */}
+					<CardContent>
+						{song.Chords && (
+							<p>
+								<strong>Chords:</strong> {song.Chords}
+							</p>
+						)}
+					</CardContent>
+				</Card>
+
+				{/* Resources Card */}
+				<Card>
+					<CardHeader>
+						<CardTitle className='flex items-center'>
+							<BarChart className='mr-2' size={20} />
+							Resources
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p>
+							<strong>Ultimate Guitar:</strong>{' '}
+							<a
+								href={song.UltimateGuitarLink}
+								target='_blank'
+								rel='noopener noreferrer'
+								className='text-blue-500 hover:underline'
+							>
+								View Tab
+							</a>
+						</p>
+
+						<p>
+							<strong>Audio Files:</strong> {song.AudioFiles}
+						</p>
+					</CardContent>
 				</Card>
 			</div>
+
 			<div className='mt-8 space-x-4'>
 				<Button variant='outline' onClick={handleUpdate}>
 					Edit Song
