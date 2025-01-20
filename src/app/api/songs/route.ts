@@ -1,27 +1,12 @@
 import { NextResponse } from 'next/server';
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
-import path from 'path';
+
 import type { NextRequest } from 'next/server';
 import { createGuid } from '@/utils/createGuid';
 import { getDb } from '@/lib/db';
 import { z } from 'zod';
 import { APIError } from '@/utils/api-helpers';
 import { songInputSchema } from './songInputSchema';
-
-const DB_Path = '../../../../../../app_new.db';
-const pathDB = path.resolve(__dirname, DB_Path);
-
-async function openDb() {
-	return open({
-		filename: pathDB,
-		driver: sqlite3.Database,
-	});
-}
-
-// async function closeDb() {
-// 	return sqlite3.Database.close();
-// }
+import { openDb } from './openDb';
 
 /**
  * GET /api/songs
@@ -55,6 +40,7 @@ export async function GET(req: NextRequest) {
 			return NextResponse.json({ success: true, data: songs });
 		}
 	} catch (error: unknown) {
+		console.log(error);
 		return NextResponse.json({ success: false, error: error });
 	}
 }
@@ -155,104 +141,5 @@ export async function POST(req: NextRequest) {
 			{ error: 'Internal server error' },
 			{ status: 500 }
 		);
-	}
-}
-
-export async function PUT(req: NextRequest) {
-	try {
-		const db = await openDb();
-		const body = await req.json();
-
-		console.log('PUT request body:', body);
-
-		if (!body.id) {
-			return NextResponse.json(
-				{
-					success: false,
-					error: 'Missing required id field',
-				},
-				{ status: 400 }
-			);
-		}
-
-		const query = `
-            UPDATE songs SET 
-                title = ?, 
-                author = ?, 
-                level = ?, 
-                key = ?,
-                chords = ?, 
-                audiofiles = ?,
-                updatedat = ?,
-                shorttitle = ?
-            WHERE id = ?
-        `;
-
-		const updatedAt = new Date().toISOString();
-
-		const values = [
-			body.title,
-			body.author,
-			body.level,
-			body.songKey,
-			body.chords,
-			body.audioFiles,
-			updatedAt,
-			body.shortTitle,
-			body.id,
-		];
-
-		const result = await db.run(query, values);
-
-		if (result.changes === 0) {
-			return NextResponse.json(
-				{
-					success: false,
-					error: 'No song found with the provided id',
-				},
-				{ status: 404 }
-			);
-		}
-
-		return NextResponse.json(
-			{
-				success: true,
-				data: { message: 'Song updated successfully' },
-			},
-			{ status: 200 }
-		);
-	} catch (error: unknown) {
-		console.error('Error updating song:', error);
-		return NextResponse.json(
-			{
-				success: false,
-				error:
-					error instanceof Error ? error.message : 'Unknown error occurred',
-				details: error,
-			},
-			{ status: 500 }
-		);
-	}
-}
-
-/**
- * DELETE /api/songs
- * Deletes a song from the database.
- *
- * Query Parameters:
- * - id: string (required): The ID of the song to delete.
- *
- * Response:
- * - success: boolean
- */
-export async function DELETE(req: NextRequest) {
-	try {
-		const db = await openDb();
-		const { searchParams } = new URL(req.url);
-		const id = searchParams.get('id');
-		await db.run('DELETE FROM songs WHERE id = ?', [id]);
-		return NextResponse.json({ success: true });
-	} catch (error: unknown) {
-		return NextResponse.json({ success: false, error: error });
 	}
 }
