@@ -1,7 +1,7 @@
 import { Song } from '@/types/Song';
 
 export async function updateSong(song: Song) {
-	const response = await fetch(`/api/songs/id=${song.Id}`, {
+	const response = await fetch(`/api/songs/${song.Id}`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',

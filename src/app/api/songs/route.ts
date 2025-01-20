@@ -5,7 +5,7 @@ import { createGuid } from '@/utils/createGuid';
 import { getDb } from '@/lib/db';
 import { z } from 'zod';
 import { APIError } from '@/utils/api-helpers';
-import { songInputSchema } from './songInputSchema';
+import { songInputSchema } from '../../../types/songInputSchema';
 import { openDb } from './openDb';
 
 /**

@@ -3,7 +3,7 @@ export interface Song {
 	Title: string;
 	Author: string;
 	Level: 'beginner' | 'intermediate' | 'advanced';
-	SongKey: string;
+	Key: string;
 	Chords?: string;
 	AudioFiles?: string;
 	UltimateGuitarLink?: string;

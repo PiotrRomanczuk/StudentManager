@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { openDb } from '../openDb';
-import { songInputSchema } from '../songInputSchema';
+import { songInputSchema } from '../../../../types/songInputSchema';
 import { z } from 'zod';
 import { APIError } from '@/utils/api-helpers';
 
 export async function PUT(req: NextRequest) {
 	try {
-		const { searchParams } = new URL(req.url);
-		const songId = searchParams.get('id');
-
+		const { pathname } = new URL(req.url);
+		const songId = pathname.split('/').pop();
+		console.log('ID:');
 		console.log(songId);
 		const body = await req.json();
 		const validatedData = songInputSchema.parse(body);
@@ -18,7 +18,7 @@ export async function PUT(req: NextRequest) {
 			Title,
 			Author,
 			Level,
-			SongKey,
+			Key,
 			Chords,
 			AudioFiles,
 			UltimateGuitarLink,
@@ -27,14 +27,14 @@ export async function PUT(req: NextRequest) {
 
 		const result = await db.run(
 			`UPDATE songs 
-			 SET title = ?, author = ?, level = ?, songKey = ?, 
-				 chords = ?, audioFiles = ?, ultimateGuitarLink = ?, shortTitle = ?
+			 SET title = ?, author = ?, level = ?, Key = ?, 
+				 chords = ?, audioFiles = ?, UltimateGuitar = ?, shortTitle = ?
 			 WHERE id = ?`,
 			[
 				Title,
 				Author,
 				Level,
-				SongKey,
+				Key,
 				Chords,
 				AudioFiles,
 				UltimateGuitarLink,

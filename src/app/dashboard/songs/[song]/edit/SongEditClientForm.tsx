@@ -6,6 +6,7 @@ import React from 'react';
 import { SongEditForm } from './@components/SongEditForm';
 import { Song } from '@/types/Song';
 import { updateSong } from './updateSong';
+import { normalizeSongData } from '@/utils/normalizeSongData';
 
 const SongEditClientForm = ({ song }: { song: Song }) => {
 	const router = useRouter();
@@ -32,26 +33,13 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
 				error={formError}
 				onSubmit={async (normalizedData) => {
 					try {
-						const formattedData = {
-							Id: song.Id,
-							Title: normalizedData.Title || song.Title,
-							Author: normalizedData.Author || song.Author || '',
-							Level: normalizedData.Level || song.Level || '',
-							SongKey: normalizedData.SongKey || song.SongKey || 'Unknown',
-							Chords: normalizedData.Chords || song.Chords || '',
-							AudioFiles: normalizedData.AudioFiles || '',
-							UltimateGuitarLink: normalizedData.UltimateGuitarLink || '',
-							ShortTitle: normalizedData.ShortTitle || '',
-							CreatedAt: song.CreatedAt,
-							UpdatedAt: new Date().toISOString(),
-						};
-
+						const formattedData = normalizeSongData(normalizedData, song);
 						console.log('Submitting data:', formattedData);
-						await updateSong(formattedData);
+						await updateSong(formattedData as Song); // Type assertion to fix type error
 						router.push(`/dashboard/songs/${song.Id}`);
 					} catch (error) {
 						console.error('Error updating song:', error);
-						// You might want to set some error state here to show to the user
+						// Handle error state here
 					}
 				}}
 				onCancel={() => router.push(`/dashboard/songs/${song.Id}`)}

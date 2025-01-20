@@ -4,7 +4,7 @@ export const songInputSchema = z.object({
 	Title: z.string().min(1),
 	Author: z.string().min(1),
 	Level: z.enum(['beginner', 'intermediate', 'advanced']),
-	SongKey: z.string().min(1),
+	Key: z.string().min(1),
 	Chords: z.string().optional(),
 	UltimateGuitarLink: z.string().optional(),
 	AudioFiles: z.string().optional(),

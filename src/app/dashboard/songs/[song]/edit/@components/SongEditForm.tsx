@@ -15,6 +15,7 @@ import { Song } from '@/types/Song';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { SongFormProps, FORM_FIELDS } from '@/interfaces/ISongForm';
+import { normalizeSongData } from '@/utils/normalizeSongData';
 
 export function SongEditForm({
 	mode,
@@ -35,16 +36,8 @@ export function SongEditForm({
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		const normalizedData = {
-			Id: formData.Id,
-			Title: formData.Title,
-			Author: formData.Author,
-			Level: formData.Level,
-			SongKey: formData.SongKey,
-			Chords: formData.Chords,
-			AudioFiles: formData.AudioFiles,
-			ShortTitle: formData.ShortTitle,
-		};
+		if (!song) return;
+		const normalizedData = normalizeSongData(formData, song);
 		console.log({ normalizedData });
 		onSubmit(normalizedData);
 	};
