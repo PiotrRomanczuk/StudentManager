@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { APIError } from '@/utils/api-helpers';
 import { songInputSchema } from '../../../types/songInputSchema';
 import { openDb } from './openDb';
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * GET /api/songs
@@ -20,23 +21,43 @@ import { openDb } from './openDb';
  * - success: boolean
  * - data: array of songs or a single song object
  */
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+	throw new Error('Missing Supabase environment variables');
+}
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 export async function GET(req: NextRequest) {
 	try {
-		const db = await openDb();
 		const { searchParams } = new URL(req.url);
 		const title = searchParams.get('title');
 		const id = searchParams.get('id');
 
 		if (title) {
-			const song = await db.get('SELECT * FROM songs WHERE title = ?', [title]);
+			const { data: song, error } = await supabase
+				.from('songs')
+				.select('*')
+				.eq('title', title)
+				.single();
+			if (error) throw error;
 			console.log(title, song);
 			return NextResponse.json({ success: true, data: song });
 		} else if (id) {
-			const song = await db.get('SELECT * FROM songs WHERE id = ?', [id]);
+			const { data: song, error } = await supabase
+				.from('songs')
+				.select('*')
+				.eq('id', id)
+				.single();
+			if (error) throw error;
 			console.log(id, song);
 			return NextResponse.json({ success: true, data: song });
 		} else {
-			const songs = await db.all('SELECT * FROM songs');
+			const { data: songs, error } = await supabase.from('songs').select('*');
+			if (error) throw error;
 			return NextResponse.json({ success: true, data: songs });
 		}
 	} catch (error: unknown) {

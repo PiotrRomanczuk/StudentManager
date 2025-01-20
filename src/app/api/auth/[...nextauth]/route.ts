@@ -1,9 +1,6 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-
-// import CredentialsProvider from "next-auth/providers/credentials"
-
-// import { NextRequest, NextResponse } from "next/server"
+import { SupabaseAdapter } from '@auth/supabase-adapter';
 
 export const authOptions: NextAuthOptions = {
 	providers: [
@@ -12,24 +9,11 @@ export const authOptions: NextAuthOptions = {
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
 		}),
 	],
+	adapter: SupabaseAdapter({
+		url: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+		secret: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+	}),
 };
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
-
-// export default async function auth(req:NextRequest, res: NextResponse) {
-//   const providers = [
-//     CredentialsProvider(...),
-//     GoogleProvider(...),
-//   ]
-
-//   const isDefaultSigninPage = req.method === "GET" && req.query.nextauth.includes("signin")
-
-//   // Will hide the `GoogleProvider` when you visit `/api/auth/signin`
-//   if (isDefaultSigninPage) providers.pop()
-
-//   return await NextAuth(req, res, {
-//     providers,
-//     ...
-//   })
-// }
