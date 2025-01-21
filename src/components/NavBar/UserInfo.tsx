@@ -1,11 +1,11 @@
 'use client';
 
-import { useUser } from '@clerk/clerk-react';
+import { useSession } from 'next-auth/react';
 
 const UserInfo = () => {
-	const { user } = useUser();
-	if (user) {
-		return <div>{user.fullName}</div>; // Render a specific property of the user object
+	const { data: session, status } = useSession();
+	if (status === 'authenticated' && session?.user?.email) {
+		return <p>Signed in as {session.user.email}</p>;
 	}
 };
 

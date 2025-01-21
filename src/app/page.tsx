@@ -3,6 +3,7 @@
 import GoogleButton from 'react-google-button';
 import { signIn } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function Home() {
 	const { data: session, status } = useSession();
@@ -13,8 +14,7 @@ export default function Home() {
 	return (
 		<div className='flex flex-col items-center mt-16 h-screen'>
 			<h2 className='text-4xl color-blue'>Hello world!</h2>
-			{/* redirect to <a href='/dashboard'>Songs</a> */}
-			return <a href='/api/auth/signin'>Sign in</a>
+			<Link href='/api/auth/signin'>Sign in</Link>
 			<GoogleButton
 				className='mx-auto mt-16'
 				onClick={() => signIn('google')}
