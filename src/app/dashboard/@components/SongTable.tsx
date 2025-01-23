@@ -61,7 +61,7 @@ export function SongTable({
 					filters.author.toLowerCase()
 				) &&
 				(song.Level?.toString() || '').includes(filters.level) &&
-				(song.SongKey?.toLowerCase() || '').includes(filters.key.toLowerCase())
+				(song.Key?.toLowerCase() || '').includes(filters.key.toLowerCase())
 			);
 		});
 
@@ -95,44 +95,24 @@ export function SongTable({
 		return '';
 	};
 
+	const TableHeaders = ['Title', 'Author', 'Level', 'Key', 'Updated At'];
+
 	return (
 		<div className='space-y-4'>
 			<div className='rounded-md border'>
 				<Table>
 					<TableHeader>
 						<TableRow>
-							<TableHead
-								className='cursor-pointer hover:bg-gray-50'
-								onClick={() => handleSort('Title')}
-							>
-								Title{getSortIndicator('Title')}
-							</TableHead>
-							<TableHead
-								className='cursor-pointer hover:bg-gray-50'
-								onClick={() => handleSort('Author')}
-							>
-								Author{getSortIndicator('Author')}
-							</TableHead>
-							<TableHead
-								className='cursor-pointer hover:bg-gray-50'
-								onClick={() => handleSort('Level')}
-							>
-								Level{getSortIndicator('Level')}
-							</TableHead>
-							<TableHead
-								className='cursor-pointer hover:bg-gray-50'
-								onClick={() => handleSort('SongKey')}
-							>
-								Key{getSortIndicator('SongKey')}
-							</TableHead>
-
-							<TableHead
-								className='cursor-pointer hover:bg-gray-50'
-								onClick={() => handleSort('CreatedAt')}
-							>
-								Updated At{getSortIndicator('CreatedAt')}
-							</TableHead>
-							<TableHead>Details</TableHead>
+							{TableHeaders.map((head, index) => (
+								<TableHead
+									key={index}
+									className='cursor-pointer hover:bg-gray-50'
+									onClick={() => handleSort(head as keyof Song)}
+								>
+									{head}
+									{getSortIndicator(head as keyof Song)}
+								</TableHead>
+							))}
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -141,7 +121,7 @@ export function SongTable({
 								<TableCell>{song.Title}</TableCell>
 								<TableCell>{song.Author}</TableCell>
 								<TableCell>{song.Level}</TableCell>
-								<TableCell>{song.SongKey}</TableCell>
+								<TableCell>{song.Key}</TableCell>
 								<TableCell>
 									{new Date(song.CreatedAt).toLocaleString('en-US', {
 										year: 'numeric',

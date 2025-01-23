@@ -34,6 +34,10 @@ export default function Page() {
 		);
 	}
 
+	if (songs.length === 0) {
+		return <div>No songs found</div>;
+	}
+
 	return (
 		<div>
 			<Container className='max-w-4xl'>
