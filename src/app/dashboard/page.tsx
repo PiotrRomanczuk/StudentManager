@@ -1,25 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+// import { useState } from 'react';
 import { Container } from '@/components/ui/container';
 
-import { LoadingComponent } from './@components/LoadingComponent';
-import { ErrorComponent } from './@components/ErrorComponent';
+import { LoadingComponent } from './songs/@components/LoadingComponent';
+import { ErrorComponent } from './songs/@components/ErrorComponent';
 
-import { SongTable } from './@components/SongTable';
-import { PaginationComponent } from './@components/PaginationComponent';
+import { ShortSongTable } from './@components/ShortSongTable';
 
 import useLoadSongs from '@/hooks/useLoadSongs';
 
 export default function Page() {
 	const { loading, songs, error } = useLoadSongs();
-	const [currentPage, setCurrentPage] = useState(1);
-	const itemsPerPage = 12;
-	const totalPages = Math.ceil(songs.length / itemsPerPage);
-
-	const handlePageChange = (page: number) => {
-		setCurrentPage(page);
-	};
 
 	if (loading) {
 		return <LoadingComponent message='Loading songs...' />;
@@ -39,23 +31,25 @@ export default function Page() {
 	}
 
 	return (
-		<div>
-			<Container className='max-w-4xl'>
-				<div className='my-8'>
-					Songs
-					<SongTable
-						songs={songs}
-						currentPage={currentPage}
-						itemsPerPage={itemsPerPage}
-						onPageChange={handlePageChange}
-					/>
-					{totalPages > 1 && (
-						<PaginationComponent
-							currentPage={currentPage}
-							totalPages={totalPages}
-							onPageChange={handlePageChange}
-						/>
-					)}
+		<div className='min-h-screen bg-gray-50'>
+			<Container className='max-w-4xl py-8'>
+				<div className='space-y-8'>
+					<div className='bg-white rounded-lg shadow p-6'>
+						<h2 className='text-2xl font-semibold mb-4'>Recent Songs</h2>
+						<ShortSongTable songs={songs} />
+					</div>
+					<div className='bg-white rounded-lg shadow p-6'>
+						<h2 className='text-2xl font-semibold mb-4'>Popular Songs</h2>
+						<ShortSongTable songs={songs} />
+					</div>
+					<div className='bg-white rounded-lg shadow p-6'>
+						<h2 className='text-2xl font-semibold mb-4'>Your Playlists</h2>
+						<ShortSongTable songs={songs} />
+					</div>
+					<div className='bg-white rounded-lg shadow p-6'>
+						<h2 className='text-2xl font-semibold mb-4'>Recommended</h2>
+						<ShortSongTable songs={songs} />
+					</div>
 				</div>
 			</Container>
 		</div>

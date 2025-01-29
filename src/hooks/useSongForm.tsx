@@ -5,16 +5,7 @@ import { Song } from '@/types/Song';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
-const songSchema = z.object({
-	Title: z.string().min(1, 'Title is required'),
-	Author: z.string().min(1, 'Author is required'),
-	Level: z.enum(['beginner', 'intermediate', 'advanced']),
-	SongKey: z.string().min(1, 'Key is required'),
-	Chords: z.string().optional(),
-	AudioFiles: z.string().optional(),
-	ShortTitle: z.string().optional(),
-});
+import { SongSchema } from '@/schemas/SongSchema';
 
 interface UseSongFormProps {
 	mode: 'create' | 'edit';
@@ -30,14 +21,14 @@ export default function useSongForm({
 	onSuccess,
 }: UseSongFormProps) {
 	const form = useForm({
-		resolver: zodResolver(songSchema),
+		resolver: zodResolver(SongSchema),
 		defaultValues: initialData || {},
 	});
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const handleSubmit = async (data: z.infer<typeof songSchema>) => {
+	const handleSubmit = async (data: z.infer<typeof SongSchema>) => {
 		setLoading(true);
 		setError(null);
 		try {
@@ -69,7 +60,7 @@ export default function useSongForm({
 		loading,
 		error,
 		handleSubmit: form.handleSubmit((data) =>
-			handleSubmit(data as z.infer<typeof songSchema>)
+			handleSubmit(data as unknown as z.infer<typeof SongSchema>)
 		),
 	};
 }

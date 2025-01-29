@@ -4,8 +4,10 @@ import SongDetails from './@components/SongDetail';
 import { isGuid } from '@/utils/isGuid';
 import SongNotFound from './@components/SongNotFound';
 
-export default async function Page({ params }: { params: { song: string } }) {
-	const { song: slug } = await params;
+type Params = Promise<{ slug: string }>;
+
+export default async function Page({ params }: { params: Params }) {
+	const { slug } = await params;
 
 	let response;
 	if (isGuid(slug)) {

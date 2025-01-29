@@ -1,7 +1,9 @@
+import { Params } from '../../{Types}/Params';
 import SongEditClientForm from './SongEditClientForm';
 
-export default async function Page({ params }: { params: { song: string } }) {
-	const { song: slug } = await params;
+export default async function Page({ params }: { params: Params }) {
+	const resolvedParams = await params;
+	const { slug } = resolvedParams;
 	const songResponse = await fetch(
 		`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/songs?title=${slug}`
 	);
@@ -13,6 +15,7 @@ export default async function Page({ params }: { params: { song: string } }) {
 
 	return (
 		<div>
+			{song.data.Title}
 			<SongEditClientForm song={song.data} />
 		</div>
 	);

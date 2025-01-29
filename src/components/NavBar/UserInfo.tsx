@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { Button } from '@/components/ui/button';
-import { LogIn, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { logout } from '@/app/login/actions';
 
 const UserInfo = async () => {

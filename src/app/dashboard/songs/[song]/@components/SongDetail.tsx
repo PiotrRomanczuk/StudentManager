@@ -17,7 +17,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
 		if (window.confirm('Are you sure you want to delete this song?')) {
 			try {
 				const response = await fetch(
-					`/api/songs/${encodeURIComponent(song.Title)}`,
+					`/api/songs/title=${encodeURIComponent(song.Title)}`,
 					{
 						method: 'DELETE',
 					}
@@ -84,7 +84,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
 							<strong>Author:</strong> {song.Author || 'N/A'}
 						</p>
 						<p>
-							<strong>Key:</strong> {song.SongKey || 'N/A'}
+							<strong>Key:</strong> {song.Key || 'N/A'}
 						</p>
 						<p>
 							<strong>Level:</strong> {song.Level || 'N/A'}

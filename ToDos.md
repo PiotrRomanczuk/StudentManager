@@ -1,4 +1,6 @@
-// TODO: Switching from Clerk to Next.Auth
+// TODO: Switching from Clerk to Supabase.Auth
+
+    // TODO: Fixing updating profile + avatar profile
 
 // TODO: Adding songs to favourite for user
 
@@ -10,6 +12,6 @@
 
 // TODO: Adding tests
 
-// TODO: Add sequelize as an ORM for SQLite3
-
 // TODO: Contenerize app in Docker
+
+// TODO: RLS Policy on songs table, users can get only songs from the lessons
