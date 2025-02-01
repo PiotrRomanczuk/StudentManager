@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // import type { NextRequest } from 'next/server';
 // import { createGuid } from '@/utils/createGuid';
@@ -26,27 +26,44 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
  * - data: array of songs or a single song object
  */
 
-export async function GET() {
-	try {
-		const { data: songs, error } = await supabase.from('songs').select('*');
+export async function GET(request: NextRequest) {
+	const { searchParams } = new URL(request.url);
+	const id = searchParams.get('id');
+	const title = searchParams.get('title');
+
+	if (id) {
+		const { data, error } = await supabase
+			.from('songs')
+			.select('*')
+			.eq('id', id);
 
 		if (error) {
 			console.log(error);
 			return NextResponse.json({ success: false, error: error.message });
 		}
-
-		if (!songs || songs.length === 0) {
-			return NextResponse.json({ success: false, error: 'No songs found' });
-		}
-
-		return NextResponse.json({ success: true, data: songs });
-	} catch (error: unknown) {
-		console.log(error);
-		return NextResponse.json({
-			success: false,
-			error: 'Internal server error',
-		});
+		return NextResponse.json({ success: true, data: data });
 	}
+
+	if (title) {
+		const { data, error } = await supabase
+			.from('songs')
+			.select('*')
+			.ilike('title', `%${title}%`);
+
+		if (error) {
+			console.log(error);
+			return NextResponse.json({ success: false, error: error.message });
+		}
+		return NextResponse.json({ success: true, data: data });
+	}
+
+	const { data, error } = await supabase.from('songs').select('*');
+
+	if (error) {
+		console.log(error);
+		return NextResponse.json({ success: false, error: error.message });
+	}
+	return NextResponse.json({ success: true, data: data });
 }
 
 /**

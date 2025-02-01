@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/utils/supabase/clients/server';
 
 export async function login(formData: FormData) {
 	const supabase = await createClient();
@@ -30,7 +30,7 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
 	const supabase = await createClient();
 
-	console.log(supabase);
+	// console.log(supabase);
 
 	// type-casting here for convenience
 	// in practice, you should validate your inputs
@@ -39,19 +39,32 @@ export async function signup(formData: FormData) {
 		password: formData.get('password') as string,
 	};
 
-	console.log(data);
+	const { user, error: signupError } = await supabase.auth.signUp({
+		email: data.email,
+		password: data.password,
+	});
 
-	const { error } = await supabase.auth.signUp(data);
+	console.log(user);
 
-	console.log(error);
-	if (error) {
-		redirect('/error');
+	if (signupError) {
+		console.error('Error creating user:', signupError);
+	} else {
+		// Step 2: Retrieve the user ID
+
+		const userId = user.id;
+
+		// Step 3: Insert profile information
+
+		const { data, error: profileError } = await supabase.from('user_').insert([
+			{ user_id: userId, user_type: 'student' },
+			// or 'teacher'
+		]);
+		if (profileError) {
+			console.error('Error creating user profile:', profileError);
+		} else {
+			console.log('User profile created successfully:', data);
+		}
 	}
-
-	console.log('revalidating');
-	revalidatePath('/', 'layout');
-	console.log('redirecting');
-	redirect('/dashboard');
 }
 
 export async function logout() {

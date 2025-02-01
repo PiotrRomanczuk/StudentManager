@@ -2,15 +2,12 @@
 import { useEffect, useState } from 'react';
 import { type User } from '@supabase/supabase-js';
 // import Avatar from './avatar';
-import {
-	type Profile,
-	useFetchProfile,
-	useHandleUpdateProfile,
-} from './account-utils';
+import { useFetchProfile, useHandleUpdateProfile } from './account-utils';
+import { type IProfile } from './IProfile';
 
 export default function AccountForm({ user }: { user: User | null }) {
 	const [loading, setLoading] = useState(true);
-	const [profile, setProfile] = useState<Profile>({
+	const [profile, setProfile] = useState<IProfile>({
 		full_name: null,
 		username: null,
 		website: null,

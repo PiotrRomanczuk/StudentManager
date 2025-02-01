@@ -18,6 +18,7 @@ export default function Page() {
 	}
 
 	if (error) {
+		console.log(error);
 		return (
 			<ErrorComponent
 				error='Something wrong happened...'

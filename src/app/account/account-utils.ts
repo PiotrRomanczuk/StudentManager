@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/clients/client';
 import { type User } from '@supabase/supabase-js';
 import { type IProfile } from './IProfile';
 
@@ -9,7 +9,7 @@ export const getProfile = async (user: User): Promise<IProfile | null> => {
 
 	try {
 		const { data, error, status } = await supabase
-			.from('profiles')
+			.from('user_profiles')
 			.select('full_name, username, website, avatar_url')
 			.eq('id', user.id)
 			.single();
@@ -39,7 +39,7 @@ export const updateProfile = async ({
 	avatar_url: string | null;
 }) => {
 	try {
-		const { error } = await supabase.from('profiles').upsert({
+		const { error } = await supabase.from('').upsert({
 			id: user?.id as string,
 			full_name: fullname,
 			username,

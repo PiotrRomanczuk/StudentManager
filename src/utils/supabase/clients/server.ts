@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { Create_Supabase_Env } from './Create_Supabase_Env';
+import { Create_Supabase_Env } from '../Create_Supabase_Env';
 
 export async function createClient(): Promise<
 	ReturnType<typeof createServerClient>

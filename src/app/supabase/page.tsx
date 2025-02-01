@@ -1,4 +1,5 @@
-import { createClient } from '@/utils/supabase/server';
+import { Song } from '@/types/Song';
+import { createClient } from '@/utils/supabase/clients/server';
 
 export default async function Page() {
 	const supabase = await createClient();
@@ -10,8 +11,8 @@ export default async function Page() {
 		<div>
 			Hello
 			<ul>
-				{songs?.map((song) => (
-					<li key={song.id}>{song.title}</li>
+				{songs?.map((song: Song) => (
+					<li key={song.Id}>{song.Title}</li>
 				))}
 			</ul>
 		</div>

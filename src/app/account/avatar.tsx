@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/clients/client';
 import Image from 'next/image';
 import { downloadImage, useAvatarUpload } from './avatar-utils';
 

@@ -1,9 +1,32 @@
 'use client';
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/clients/client';
+import Auth from './Auth';
+import Account from './Account';
+import { Session } from '@supabase/supabase-js';
+
+export default function Page() {
+	const supabase = createClient();
+	const [session, setSession] = useState<Session | null>(null);
+
+	useEffect(() => {
+		supabase.auth.getSession().then(({ data: { session } }) => {
+			setSession(session);
+		});
+
+		supabase.auth.onAuthStateChange((_event, session) => {
+			setSession(session);
+		});
+	}, []);
+
 	return (
-		<div className='flex flex-col items-center mt-16 h-screen'>
-			<h2 className='text-4xl color-blue'>Hello world!</h2>
+		<div className='container' style={{ padding: '50px 0 100px 0' }}>
+			{!session ? (
+				<Auth />
+			) : (
+				<Account key={session?.user?.id} session={session} />
+			)}
 		</div>
 	);
 }
