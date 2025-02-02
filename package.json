@@ -29,9 +29,14 @@
 		"axios": "^1.7.9",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
+<<<<<<< HEAD
 		"framer-motion": "^12.4.1",
 		"google-one-tap": "^1.0.6",
 		"heroicons": "^2.2.0",
+=======
+		"date-fns": "^3.6.0",
+		"dayjs": "^1.11.13",
+>>>>>>> 7483b58 (WIP: calendar for apartment availability)
 		"lucide-react": "^0.468.0",
 		"next": "15.1.4",
 		"postcss": "^8.4.49",
