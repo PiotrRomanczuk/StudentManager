@@ -1,4 +1,4 @@
-import { login, signup } from './actions';
+import { login, signInWithGoogle, signup } from './actions';
 
 export default function LoginPage() {
 	return (
@@ -11,7 +11,7 @@ export default function LoginPage() {
 					id='email'
 					name='email'
 					type='email'
-					required
+					// required
 					className='p-2 border border-gray-300 rounded'
 				/>
 				<label htmlFor='password' className='text-gray-700'>
@@ -21,7 +21,7 @@ export default function LoginPage() {
 					id='password'
 					name='password'
 					// type='password'
-					required
+					// required
 					className='p-2 border border-gray-300 rounded'
 				/>
 				<button
@@ -36,7 +36,14 @@ export default function LoginPage() {
 				>
 					Sign up
 				</button>
+				<button
+					formAction={signInWithGoogle}
+					className='bg-red-500 text-white p-2 rounded hover:bg-red-600'
+				>
+					Sign in with Google
+				</button>
 			</form>
 		</div>
+
 	);
 }

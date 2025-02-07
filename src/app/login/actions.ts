@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/utils/supabase/clients/server';
 
+
 export async function login(formData: FormData) {
 	const supabase = await createClient();
 
@@ -14,6 +15,8 @@ export async function login(formData: FormData) {
 		email: formData.get('email') as string,
 		password: formData.get('password') as string,
 	};
+
+	console.log(dataForm);
 
 	const { data, error } = await supabase.auth.signInWithPassword(dataForm);
 
@@ -28,43 +31,53 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
+    const supabase = await createClient();
+
+    const data = {
+        email: formData.get('email') as string,
+        password: formData.get('password') as string,
+    };
+
+    const { data: { user }, error: signupError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+    });
+
+    console.log(user);
+
+    if (signupError) {
+        console.error('Error creating user:', signupError);
+    } else if (user) {
+        // Step 2: Retrieve the user ID
+        const userId = user.id;
+
+        // Step 3: Insert profile information
+        const { data, error: profileError } = await supabase.from('user_').insert([
+            { user_id: userId, user_type: 'student' },
+        ]);
+
+        if (profileError) {
+            console.error('Error creating user profile:', profileError);
+        } else {
+            console.log('User profile created successfully:', data);
+        }
+    }
+}
+
+export async function signInWithGoogle() {
 	const supabase = await createClient();
-
-	// console.log(supabase);
-
-	// type-casting here for convenience
-	// in practice, you should validate your inputs
-	const data = {
-		email: formData.get('email') as string,
-		password: formData.get('password') as string,
-	};
-
-	const { user, error: signupError } = await supabase.auth.signUp({
-		email: data.email,
-		password: data.password,
+	const { data, error } = await supabase.auth.signInWithOAuth({
+		provider: 'google',
+		options: {
+			redirectTo: 'http://localhost:3000/api/auth/callback',
+		},
 	});
 
-	console.log(user);
+	console.log(data);
 
-	if (signupError) {
-		console.error('Error creating user:', signupError);
-	} else {
-		// Step 2: Retrieve the user ID
-
-		const userId = user.id;
-
-		// Step 3: Insert profile information
-
-		const { data, error: profileError } = await supabase.from('user_').insert([
-			{ user_id: userId, user_type: 'student' },
-			// or 'teacher'
-		]);
-		if (profileError) {
-			console.error('Error creating user profile:', profileError);
-		} else {
-			console.log('User profile created successfully:', data);
-		}
-	}
+	  if (data.url) {
+		redirect(data.url) // use the redirect API for your server framework
+	  }
 }
 
 export async function logout() {
@@ -72,3 +85,4 @@ export async function logout() {
 	await supabase.auth.signOut();
 	redirect('/login');
 }
+

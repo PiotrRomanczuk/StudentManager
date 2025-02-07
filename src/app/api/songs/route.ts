@@ -1,21 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// import type { NextRequest } from 'next/server';
-// import { createGuid } from '@/utils/createGuid';
-
-// import { z } from 'zod';
-// import { APIError } from '@/utils/api-helpers';
-// import { songInputSchema } from '../../../types/songInputSchema';
-import { createClient } from '@supabase/supabase-js';
-import { Create_Supabase_Env } from '@/utils/supabase/Create_Supabase_Env';
-
-const { supabaseUrl, supabaseAnonKey } = Create_Supabase_Env();
-
-if (!supabaseUrl || !supabaseAnonKey) {
-	throw new Error('Missing Supabase environment variables');
-}
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { createClient } from '@/utils/supabase/clients/server';
 
 /**
  * GET /api/songs
@@ -27,35 +11,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
  */
 
 export async function GET(request: NextRequest) {
-	const { searchParams } = new URL(request.url);
-	const id = searchParams.get('id');
-	const title = searchParams.get('title');
-
-	if (id) {
-		const { data, error } = await supabase
-			.from('songs')
-			.select('*')
-			.eq('id', id);
-
-		if (error) {
-			console.log(error);
-			return NextResponse.json({ success: false, error: error.message });
-		}
-		return NextResponse.json({ success: true, data: data });
-	}
-
-	if (title) {
-		const { data, error } = await supabase
-			.from('songs')
-			.select('*')
-			.ilike('title', `%${title}%`);
-
-		if (error) {
-			console.log(error);
-			return NextResponse.json({ success: false, error: error.message });
-		}
-		return NextResponse.json({ success: true, data: data });
-	}
+	const supabase = await createClient();
 
 	const { data, error } = await supabase.from('songs').select('*');
 
@@ -89,3 +45,26 @@ export async function GET(request: NextRequest) {
  *
  * }
  */
+
+export async function POST(request: NextRequest) {
+	const supabase = await createClient();
+
+	const { data, error } = await supabase.from('songs').insert({
+		title: 'Test Song',
+		author: 'Test Author',
+		level: 'Test Level',
+		songKey: 'Test Key',
+		chords: 'Test Chords',
+		audioFiles: 'Test Audio Files',
+		createdAt: 'Test Created At',
+		ultimateGuitarLink: 'Test Ultimate Guitar Link',
+		shortTitle: 'Test Short Title',
+	});
+
+	if (error) {
+		console.log(error);
+		return NextResponse.json({ success: false, error: error.message });
+	}
+
+	return NextResponse.json({ success: true, data: data });
+}

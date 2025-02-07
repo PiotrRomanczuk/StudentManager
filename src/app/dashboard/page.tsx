@@ -1,4 +1,3 @@
-'use client';
 
 // import { useState } from 'react';
 import { Container } from '@/components/ui/container';
@@ -6,16 +5,19 @@ import { Container } from '@/components/ui/container';
 import { LoadingComponent } from './songs/@components/LoadingComponent';
 import { ErrorComponent } from './songs/@components/ErrorComponent';
 
-import { ShortSongTable } from './@components/ShortSongTable';
+import { ShortSongTable } from './@components/cards/ShortSongTable';
 
-import useLoadSongs from '@/hooks/useLoadSongs';
+import { createClient } from '@/utils/supabase/clients/server';
 
-export default function Page() {
-	const { loading, songs, error } = useLoadSongs();
+export default async function Page() {
+	const supabase = await createClient();
+
+	const { data: songs, error, loading } = await supabase.from('songs').select();
 
 	if (loading) {
 		return <LoadingComponent message='Loading songs...' />;
 	}
+
 
 	if (error) {
 		console.log(error);
