@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import {
 	Table,
 	TableBody,
@@ -9,93 +10,18 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { SongsTableProps } from './types/tableTypes';
+import { useSongTable } from './hooks/useSongTable';
+import { TABLE_HEADERS } from './constants/tableConstants';
 import { Song } from '@/types/Song';
-import { redirect } from 'next/navigation';
-import { useState, useMemo } from 'react';
 
-interface SongsTableProps {
-	songs: Song[];
-	currentPage: number;
-	itemsPerPage: number;
-	onPageChange: (page: number) => void;
-}
-
-export function SongTable({
-	songs,
-	currentPage,
-	itemsPerPage,
-}: SongsTableProps) {
-	const [filters] = useState({
-		title: '',
-		author: '',
-		level: '',
-		key: '',
-	});
-
-	// Add sorting state
-	const [sortConfig, setSortConfig] = useState<{
-		key: keyof Song | null;
-		direction: 'asc' | 'desc';
-	}>({
-		key: null,
-		direction: 'asc',
-	});
-
-	// Handle sort click
-	const handleSort = (key: keyof Song) => {
-		setSortConfig((current) => ({
-			key,
-			direction:
-				current.key === key && current.direction === 'asc' ? 'desc' : 'asc',
-		}));
-	};
-
-	// Filter and sort songs using useMemo
-	const filteredAndSortedSongs = useMemo(() => {
-		const result = songs.filter((song) => {
-			return (
-				(song.Title?.toLowerCase() || '').includes(
-					filters.title.toLowerCase()
-				) &&
-				(song.Author?.toLowerCase() || '').includes(
-					filters.author.toLowerCase()
-				) &&
-				(song.Level?.toString() || '').includes(filters.level) &&
-				(song.Key?.toLowerCase() || '').includes(filters.key.toLowerCase())
-			);
-		});
-
-		if (sortConfig.key) {
-			result.sort((a, b) => {
-				const aValue = a[sortConfig.key!]?.toString().toLowerCase() || '';
-				const bValue = b[sortConfig.key!]?.toString().toLowerCase() || '';
-
-				if (aValue < bValue) {
-					return sortConfig.direction === 'asc' ? -1 : 1;
-				}
-				if (aValue > bValue) {
-					return sortConfig.direction === 'asc' ? 1 : -1;
-				}
-				return 0;
-			});
-		}
-
-		return result;
-	}, [songs, filters, sortConfig]);
-
-	const startIndex = (currentPage - 1) * itemsPerPage;
-	const endIndex = startIndex + itemsPerPage;
-	const currentSongs = filteredAndSortedSongs.slice(startIndex, endIndex);
-
-	// Helper function to render sort indicator
-	const getSortIndicator = (key: keyof Song) => {
-		if (sortConfig.key === key) {
-			return sortConfig.direction === 'asc' ? ' ↑' : ' ↓';
-		}
-		return '';
-	};
-
-	const TableHeaders = ['Title', 'Author', 'Level', 'Key', 'Updated At'];
+export function SongTable({ songs, currentPage, itemsPerPage }: SongsTableProps) {
+	const router = useRouter();
+	const { currentSongs, handleSort, getSortIndicator } = useSongTable(
+		songs,
+		currentPage,
+		itemsPerPage
+	);
 
 	return (
 		<div className='space-y-4'>
@@ -103,9 +29,9 @@ export function SongTable({
 				<Table>
 					<TableHeader>
 						<TableRow>
-							{TableHeaders.map((head, index) => (
+							{TABLE_HEADERS.map((head) => (
 								<TableHead
-									key={index}
+									key={`header-${head}`}
 									className='cursor-pointer hover:bg-gray-50'
 									onClick={() => handleSort(head as keyof Song)}
 								>
@@ -116,8 +42,8 @@ export function SongTable({
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{currentSongs.map((song) => (
-							<TableRow key={song.Id}>
+						{currentSongs.map((song, index) => (
+							<TableRow key={`${song.Id}-${index}`}>
 								<TableCell>{song.Title}</TableCell>
 								<TableCell>{song.Author}</TableCell>
 								<TableCell>{song.Level}</TableCell>
@@ -134,7 +60,7 @@ export function SongTable({
 								<TableCell>
 									<Button
 										variant='outline'
-										onClick={() => redirect(`/dashboard/songs/${song.Title}`)}
+										onClick={() => router.push(`/dashboard/songs/${song.Id}`)}
 									>
 										More
 									</Button>

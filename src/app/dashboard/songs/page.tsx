@@ -13,6 +13,7 @@ import useLoadSongs from '@/hooks/useLoadSongs';
 
 export default function Page() {
 	const { loading, songs, error } = useLoadSongs();
+	console.log(songs)
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 12;
 	const totalPages = Math.ceil(songs.length / itemsPerPage);

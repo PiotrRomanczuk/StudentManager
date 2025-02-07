@@ -36,24 +36,10 @@ export default async function Page() {
 	return (
 		<div className='min-h-screen bg-gray-50'>
 			<Container className='max-w-4xl py-8'>
-				<div className='space-y-8'>
 					<div className='bg-white rounded-lg shadow p-6'>
 						<h2 className='text-2xl font-semibold mb-4'>Recent Songs</h2>
 						<ShortSongTable songs={songs} />
 					</div>
-					<div className='bg-white rounded-lg shadow p-6'>
-						<h2 className='text-2xl font-semibold mb-4'>Popular Songs</h2>
-						<ShortSongTable songs={songs} />
-					</div>
-					<div className='bg-white rounded-lg shadow p-6'>
-						<h2 className='text-2xl font-semibold mb-4'>Your Playlists</h2>
-						<ShortSongTable songs={songs} />
-					</div>
-					<div className='bg-white rounded-lg shadow p-6'>
-						<h2 className='text-2xl font-semibold mb-4'>Recommended</h2>
-						<ShortSongTable songs={songs} />
-					</div>
-				</div>
 			</Container>
 		</div>
 	);
