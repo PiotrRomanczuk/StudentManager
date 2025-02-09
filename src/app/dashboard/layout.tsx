@@ -1,4 +1,4 @@
-import NavBar from '@/components/NavBar/NavBar';
+import NavBar from '@/components/dashboard/NavBar/NavBar';
 import Dashboard from './@components/dashboard/Dashboard';
 
 interface LayoutProps {

@@ -8,8 +8,8 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
+} from '@/components/dashboard/ui/table';
+import { Button } from '@/components/dashboard/ui/button';
 import { SongsTableProps } from './types/tableTypes';
 import { useSongTable } from './hooks/useSongTable';
 import { TABLE_HEADERS } from './constants/tableConstants';

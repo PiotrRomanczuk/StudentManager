@@ -2,10 +2,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Song } from '@/types/Song';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
+import { Label } from '@/components/dashboard/ui/label';
+import { Input } from '@/components/dashboard/ui/input';
+import { Select } from '@/components/dashboard/ui/select';
+import { Button } from '@/components/dashboard/ui/button';
 import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({

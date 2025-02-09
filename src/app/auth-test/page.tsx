@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useSearchParams } from "next/navigation"
  
 import { createClient } from "@/utils/supabase/clients/client"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/dashboard/ui/button"
 // import { toast } from "@/components/ui/use-toast"
 // import { Icons } from "@/components/ui/icons"
  

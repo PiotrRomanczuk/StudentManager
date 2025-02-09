@@ -1,20 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/dashboard/ui/button';
 import {
 	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from '@/components/dashboard/ui/card';
+import { Input } from '@/components/dashboard/ui/input';
+import { Label } from '@/components/dashboard/ui/label';
 import { Song } from '@/types/Song';
 import { AlertCircle, Loader2 } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { SongFormProps, FORM_FIELDS } from '@/components/forms/ISongForm';
+import { Alert, AlertDescription, AlertTitle } from '@/components/dashboard/ui/alert';
+import { SongFormProps, FORM_FIELDS } from '@/components/dashboard/forms/ISongForm';
 import { normalizeSongData } from '@/utils/normalizeSongData';
 
 export function SongEditForm({

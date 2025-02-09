@@ -1,4 +1,4 @@
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/dashboard/ui/card';
 import React from 'react';
 
 const LastLesson = () => {

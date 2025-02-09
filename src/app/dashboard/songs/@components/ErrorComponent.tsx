@@ -1,5 +1,5 @@
-import { Button } from '../../../../components/ui/button';
-import { Alert, AlertDescription } from '../../../../components/ui/alert';
+import { Button } from '../../../../components/dashboard/ui/button';
+import { Alert, AlertDescription } from '../../../../components/dashboard/ui/alert';
 
 interface ErrorComponentProps {
 	error: string;

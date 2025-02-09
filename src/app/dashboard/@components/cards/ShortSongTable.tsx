@@ -6,14 +6,14 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '@/components/ui/table';
+} from '@/components/dashboard/ui/table';
 import {
 	Card,
 	CardHeader,
 	CardTitle,
 	CardDescription,
 	CardContent,
-} from '@/components/ui/card';
+} from '@/components/dashboard/ui/card';
 
 interface ShortSongTableProps {
 	songs: Song[];

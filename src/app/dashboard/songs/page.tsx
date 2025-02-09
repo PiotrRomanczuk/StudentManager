@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Container } from '@/components/ui/container';
+import { Container } from '@/components/dashboard/ui/container';
 
 import { LoadingComponent } from './@components/LoadingComponent';
 import { ErrorComponent } from './@components/ErrorComponent';

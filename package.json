@@ -14,6 +14,7 @@
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
 		"@emotion/styled": "^11.14.0",
+		"@heroicons/react": "^2.2.0",
 		"@hookform/resolvers": "^3.10.0",
 		"@mui/material": "^6.2.1",
 		"@mui/x-date-pickers": "^7.25.0",
@@ -29,6 +30,7 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"google-one-tap": "^1.0.6",
+		"heroicons": "^2.2.0",
 		"lucide-react": "^0.468.0",
 		"next": "15.1.4",
 		"postcss": "^8.4.49",

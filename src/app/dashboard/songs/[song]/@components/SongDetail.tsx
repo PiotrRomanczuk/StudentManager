@@ -2,8 +2,8 @@
 
 import { redirect } from 'next/navigation';
 import { Music, BarChart, Key } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/dashboard/ui/card';
+import { Button } from '@/components/dashboard/ui/button';
 import { Song } from '@/types/Song';
 
 interface SongDetailsProps {

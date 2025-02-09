@@ -1,5 +1,5 @@
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/components/dashboard/ui/input';
+import { Label } from '@/components/dashboard/ui/label';
 import { Song } from '@/types/Song';
 
 interface RenderInputProps {
