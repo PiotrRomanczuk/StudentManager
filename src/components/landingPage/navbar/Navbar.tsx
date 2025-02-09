@@ -1,11 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="bg-white shadow-md">
-
+    <motion.nav 
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white shadow-md"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Brand */}
@@ -18,39 +23,32 @@ const Navbar: React.FC = () => {
           {/* Navigation Links */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-4">
-              <Link
-                href="/"
-                className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md"
-              >
-                Home
+              {[
+                { href: '/', label: 'Home' },
+                // { href: '/about', label: 'About' },
+                { href: '/login', label: 'SignIn' },
+                { href: '/register', label: 'SignUp' }
+              ].map((link, index) => (
+                <motion.div
+                  key={link.href}
 
-              </Link>
-              <Link
-                href="/about"
-                className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md"
-              >
-                About
-
-              </Link>
-              <Link
-                href="/services"
-                className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md"
-              >
-
-                Services
-              </Link>
-              <Link
-                href="/contact"
-                className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md"
-              >
-
-                Contact
-              </Link>
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <Link
+                    href={link.href}
+                    className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md"
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 

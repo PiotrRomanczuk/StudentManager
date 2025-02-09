@@ -9,6 +9,7 @@
 
 import HeroHome from '@/components/landingPage/hero/HeroHome';
 import Feature from '@/components/landingPage/feature/Feature';
+import Team from '@/components/landingPage/team/Team';
 
 export default function Page() {
 	// const supabase = createClient();
@@ -39,6 +40,7 @@ export default function Page() {
 		<div>
 			<HeroHome />
 			<Feature />
+			<Team />
 		</div>
 	);
 

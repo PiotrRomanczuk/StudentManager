@@ -14,6 +14,8 @@ export default async function Page() {
 
 	const { data: songs, error, loading } = await supabase.from('songs').select();
 
+
+	console.log(songs);
 	if (loading) {
 		return <LoadingComponent message='Loading songs...' />;
 	}
