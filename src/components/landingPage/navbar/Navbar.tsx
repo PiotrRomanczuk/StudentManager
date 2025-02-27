@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
                 { href: '/', label: 'Home' },
                 // { href: '/about', label: 'About' },
                 { href: '/login', label: 'SignIn' },
-                { href: '/register', label: 'SignUp' }
+                { href: '/signUp', label: 'SignUp' }
               ].map((link, index) => (
                 <motion.div
                   key={link.href}
