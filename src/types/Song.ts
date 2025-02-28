@@ -1,15 +1,15 @@
 export interface Song {
-	Id: string;
-	Title: string;
-	Author: string;
-	Level: 'beginner' | 'intermediate' | 'advanced';
-	Key: string;
-	Chords?: string;
-	AudioFiles?: string;
-	UltimateGuitarLink?: string;
-	ShortTitle?: string;
-	CreatedAt: string;
-	UpdatedAt: string;
+	id: string;
+	title: string;
+	author: string;
+	level: 'beginner' | 'intermediate' | 'advanced';
+	key: string;
+	chords?: string;
+	audioFiles?: string;
+	ultimateGuitarLink?: string;
+	shortTitle?: string;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export type CreateSongDTO = Omit<Song, 'Id' | 'CreatedAt' | 'UpdatedAt'>;

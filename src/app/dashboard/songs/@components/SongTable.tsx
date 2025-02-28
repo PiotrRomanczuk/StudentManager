@@ -15,7 +15,11 @@ import { useSongTable } from './hooks/useSongTable';
 import { TABLE_HEADERS } from './constants/tableConstants';
 import { Song } from '@/types/Song';
 
-export function SongTable({ songs, currentPage, itemsPerPage }: SongsTableProps) {
+export function SongTable({
+	songs,
+	currentPage,
+	itemsPerPage,
+}: SongsTableProps) {
 	const router = useRouter();
 	const { currentSongs, handleSort, getSortIndicator } = useSongTable(
 		songs,
@@ -43,13 +47,13 @@ export function SongTable({ songs, currentPage, itemsPerPage }: SongsTableProps)
 					</TableHeader>
 					<TableBody>
 						{currentSongs.map((song, index) => (
-							<TableRow key={`${song.Id}-${index}`}>
-								<TableCell>{song.Title}</TableCell>
-								<TableCell>{song.Author}</TableCell>
-								<TableCell>{song.Level}</TableCell>
-								<TableCell>{song.Key}</TableCell>
+							<TableRow key={`${song.id}-${index}`}>
+								<TableCell>{song.title}</TableCell>
+								<TableCell>{song.author}</TableCell>
+								<TableCell>{song.level}</TableCell>
+								<TableCell>{song.key}</TableCell>
 								<TableCell>
-									{new Date(song.CreatedAt).toLocaleString('en-US', {
+									{new Date(song.createdAt).toLocaleString('en-US', {
 										year: 'numeric',
 										month: '2-digit',
 										day: '2-digit',
@@ -60,7 +64,7 @@ export function SongTable({ songs, currentPage, itemsPerPage }: SongsTableProps)
 								<TableCell>
 									<Button
 										variant='outline'
-										onClick={() => router.push(`/dashboard/songs/${song.Id}`)}
+										onClick={() => router.push(`/dashboard/songs/${song.id}`)}
 									>
 										More
 									</Button>

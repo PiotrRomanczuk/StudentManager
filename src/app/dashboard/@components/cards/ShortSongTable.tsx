@@ -47,15 +47,15 @@ export function ShortSongTable({ songs }: ShortSongTableProps) {
 					<TableBody>
 						{displaySongs.map((song) => (
 							<TableRow
-								key={song.Id}
+								key={song.id}
 								className='hover:bg-muted/50 transition-colors'
 							>
-								<TableCell className='font-medium'>{song.Title}</TableCell>
+								<TableCell className='font-medium'>{song.title}</TableCell>
 								<TableCell className='text-muted-foreground'>
-									{song.Author}
+									{song.author}
 								</TableCell>
 								<TableCell className='text-right text-muted-foreground'>
-									{song.Key}
+									{song.key}
 								</TableCell>
 							</TableRow>
 						))}

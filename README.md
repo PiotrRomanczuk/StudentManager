@@ -1,5 +1,7 @@
 # Song Manager
 
+![Scheme Visualizer](./DBSchemeVisualiser.png)
+
 A modern web application for efficient song management and organization. This platform provides a seamless interface for managing your music collection with robust authentication, sorting capabilities, and an intuitive dashboard.
 
 ## Future Enhancements
