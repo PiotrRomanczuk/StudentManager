@@ -41,9 +41,15 @@ export async function signInWithGoogle() {
 
 	console.log(data);
 
-	  if (data.url) {
-		redirect(data.url) // use the redirect API for your server framework
-	  }
+	if (error) {
+		console.log(error);
+		redirect('/error');
+		return;
+	}
+
+	if (data.url) {
+		redirect(data.url);
+	}
 }
 
 

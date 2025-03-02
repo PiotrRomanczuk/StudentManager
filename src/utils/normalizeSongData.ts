@@ -5,16 +5,16 @@ export const normalizeSongData = (
 	existingSong: Song
 ): Partial<Song> => {
 	return {
-		Id: existingSong.Id,
-		Title: song.Title || existingSong.Title,
-		Author: song.Author || existingSong.Author || '',
-		Level: song.Level || existingSong.Level || '',
-		Key: song.Key || existingSong.Key || 'Unknown',
-		Chords: song.Chords || existingSong.Chords || '',
-		AudioFiles: song.AudioFiles || '',
-		UltimateGuitarLink: song.UltimateGuitarLink || '',
-		ShortTitle: song.ShortTitle || '',
-		CreatedAt: existingSong.CreatedAt,
-		UpdatedAt: new Date().toISOString(),
+		id: existingSong.id,
+		title: song.title || existingSong.title,
+		author: song.author || existingSong.author || '',
+		level: song.level || existingSong.level || '',
+		key: song.key || existingSong.key || 'Unknown',
+		chords: song.chords || existingSong.chords || '',
+		audioFiles: song.audioFiles || '',
+		ultimateGuitarLink: song.ultimateGuitarLink || '',
+		shortTitle: song.shortTitle || '',
+		createdAt: existingSong.createdAt,
+		updatedAt: new Date().toISOString(),
 	};
 };

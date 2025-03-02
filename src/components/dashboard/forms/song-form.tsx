@@ -25,7 +25,11 @@ interface SongFormProps {
 export function SongForm({ initialData, onSubmit }: SongFormProps) {
 	const form = useForm<FormData>({
 		resolver: zodResolver(formSchema),
-		defaultValues: initialData,
+		defaultValues: {
+			Title: initialData?.title || '',
+			Author: initialData?.author || '',
+			Level: initialData?.level || 'beginner'
+		},
 	});
 
 	const {

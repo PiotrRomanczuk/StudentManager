@@ -1,5 +1,6 @@
-import { Params } from '../../{Types}/Params';
 import SongEditClientForm from './SongEditClientForm';
+
+type Params = Promise<{ slug: string }>;
 
 export default async function Page({ params }: { params: Params }) {
 	const resolvedParams = await params;

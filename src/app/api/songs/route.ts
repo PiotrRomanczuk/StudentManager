@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import {  NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/clients/server';
 
 /**
@@ -10,7 +10,7 @@ import { createClient } from '@/utils/supabase/clients/server';
  * - data: array of songs or a single song object
  */
 
-export async function GET(request: NextRequest) {
+export async function GET() {
 	const supabase = await createClient();
 
 	const { data, error } = await supabase.from('songs').select('*');
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
  * }
  */
 
-export async function POST(request: NextRequest) {
+export async function POST() {
 	const supabase = await createClient();
 
 	const { data, error } = await supabase.from('songs').insert({

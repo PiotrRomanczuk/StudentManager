@@ -17,18 +17,18 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
 		error: formError,
 	} = useSongForm({
 		mode: 'edit',
-		songId: song.Id,
+		songId: song.id,
 		initialData: song,
-		onSuccess: () => router.push(`/songs/${song?.Id}`),
+		onSuccess: () => router.push(`/songs/${song?.id}`),
 	});
 
 	return (
 		<div>
-			<h1 className='text-3xl font-bold pl-6 pt-4 mb-6'>{song.Title}</h1>
+			<h1 className='text-3xl font-bold pl-6 pt-4 mb-6'>{song.title}</h1>
 			<SongEditForm
 				song={song}
 				mode='edit'
-				songId={song.Id}
+				songId={song.id}
 				loading={formLoading}
 				error={formError}
 				onSubmit={async (normalizedData) => {
@@ -36,13 +36,13 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
 						const formattedData = normalizeSongData(normalizedData, song);
 						console.log('Submitting data:', formattedData);
 						await updateSong(formattedData as Song); // Type assertion to fix type error
-						router.push(`/dashboard/songs/${song.Id}`);
+						router.push(`/dashboard/songs/${song.id}`);
 					} catch (error) {
 						console.error('Error updating song:', error);
 						// Handle error state here
 					}
 				}}
-				onCancel={() => router.push(`/dashboard/songs/${song.Id}`)}
+				onCancel={() => router.push(`/dashboard/songs/${song.id}`)}
 			/>
 		</div>
 	);

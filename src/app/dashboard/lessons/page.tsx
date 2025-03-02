@@ -1,3 +1,4 @@
+import { Lesson } from "@/types/Lesson"
 import { createClient } from "@/utils/supabase/clients/server"
 
 export default async function Page() {
@@ -12,7 +13,7 @@ export default async function Page() {
     console.log(lessons)
     return (
         <div>
-            {lessons.map((lesson: any) => (
+            {lessons.map((lesson: Lesson) => (
                 <div key={lesson.id}>
                     <h2>Lesson ID: {lesson.id}</h2>
                     <p>Student ID: {lesson.student_id}</p>

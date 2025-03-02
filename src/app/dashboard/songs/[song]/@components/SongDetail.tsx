@@ -2,7 +2,12 @@
 
 import { redirect } from 'next/navigation';
 import { Music, BarChart, Key } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/dashboard/ui/card';
+import {
+	Card,
+	CardHeader,
+	CardTitle,
+	CardContent,
+} from '@/components/dashboard/ui/card';
 import { Button } from '@/components/dashboard/ui/button';
 import { Song } from '@/types/Song';
 
@@ -17,7 +22,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
 		if (window.confirm('Are you sure you want to delete this song?')) {
 			try {
 				const response = await fetch(
-					`/api/songs/title=${encodeURIComponent(song.Title)}`,
+					`/api/songs/title=${encodeURIComponent(song.title)}`,
 					{
 						method: 'DELETE',
 					}
@@ -35,12 +40,12 @@ export default function SongDetails({ song }: SongDetailsProps) {
 	};
 
 	function handleUpdate() {
-		redirect(`/dashboard/songs/${encodeURIComponent(song.Title)}/edit`);
+		redirect(`/dashboard/songs/${encodeURIComponent(song.title)}/edit`);
 	}
 
 	return (
 		<div className='container mx-auto px-4 py-8'>
-			<h1 className='text-3xl font-bold mb-6'>{song.Title}</h1>
+			<h1 className='text-3xl font-bold mb-6'>{song.title}</h1>
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
 				{/* Basic Info Card */}
 				<Card>
@@ -55,18 +60,18 @@ export default function SongDetails({ song }: SongDetailsProps) {
 							<strong>ID:</strong> {song.Id}
 						</p> */}
 						<p>
-							<strong>Title:</strong> {song.Title}
+							<strong>Title:</strong> {song.title}
 						</p>
 						{/* <p>
 							<strong>Short Title:</strong> {song.ShortTitle || 'N/A'}
 						</p> */}
 						<p>
 							<strong>Created At:</strong>{' '}
-							{new Date(song.CreatedAt).toLocaleDateString()}
+							{new Date(song.createdAt).toLocaleDateString()}
 						</p>
 						<p>
 							<strong>Updated At:</strong>{' '}
-							{new Date(song.UpdatedAt).toLocaleDateString()}
+							{new Date(song.updatedAt).toLocaleDateString()}
 						</p>
 					</CardContent>
 				</Card>
@@ -81,17 +86,17 @@ export default function SongDetails({ song }: SongDetailsProps) {
 					</CardHeader>
 					<CardContent>
 						<p>
-							<strong>Author:</strong> {song.Author || 'N/A'}
+							<strong>Author:</strong> {song.author || 'N/A'}
 						</p>
 						<p>
-							<strong>Key:</strong> {song.Key || 'N/A'}
+							<strong>Key:</strong> {song.key || 'N/A'}
 						</p>
 						<p>
-							<strong>Level:</strong> {song.Level || 'N/A'}
+							<strong>Level:</strong> {song.level || 'N/A'}
 						</p>
-						{song.Chords && (
+						{song.chords && (
 							<p>
-								<strong>Chords:</strong> {song.Chords}
+								<strong>Chords:</strong> {song.chords}
 							</p>
 						)}
 					</CardContent>
@@ -105,9 +110,9 @@ export default function SongDetails({ song }: SongDetailsProps) {
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
-						{song.Chords && (
+						{song.chords && (
 							<p>
-								<strong>Chords:</strong> {song.Chords}
+								<strong>Chords:</strong> {song.chords}
 							</p>
 						)}
 					</CardContent>
@@ -125,7 +130,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
 						<p>
 							<strong>Ultimate Guitar:</strong>{' '}
 							<a
-								href={song.UltimateGuitarLink}
+								href={song.ultimateGuitarLink}
 								target='_blank'
 								rel='noopener noreferrer'
 								className='text-blue-500 hover:underline'
@@ -135,7 +140,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
 						</p>
 
 						<p>
-							<strong>Audio Files:</strong> {song.AudioFiles}
+							<strong>Audio Files:</strong> {song.audioFiles}
 						</p>
 					</CardContent>
 				</Card>
