@@ -1,11 +1,11 @@
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 const Navbar: React.FC = () => {
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
           {/* Logo/Brand */}
           <div className="flex-shrink-0">
             <Link href="/" className="text-xl font-bold">
-             <Image src="/LOGO_V1.png" alt="logo" width={100} height={100} />
+              <Image src="/LOGO_V1.png" alt="logo" width={100} height={100} />
             </Link>
           </div>
 
@@ -24,14 +24,13 @@ const Navbar: React.FC = () => {
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-4">
               {[
-                { href: '/', label: 'Home' },
+                { href: "/", label: "Home" },
                 // { href: '/about', label: 'About' },
-                { href: '/login', label: 'SignIn' },
-                { href: '/signUp', label: 'SignUp' }
+                { href: "/login", label: "SignIn" },
+                { href: "/signUp", label: "SignUp" },
               ].map((link, index) => (
                 <motion.div
                   key={link.href}
-
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}

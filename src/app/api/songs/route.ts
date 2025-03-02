@@ -1,5 +1,5 @@
-import {  NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/clients/server';
+import { NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/clients/server";
 
 /**
  * GET /api/songs
@@ -11,15 +11,15 @@ import { createClient } from '@/utils/supabase/clients/server';
  */
 
 export async function GET() {
-	const supabase = await createClient();
+  const supabase = await createClient();
 
-	const { data, error } = await supabase.from('songs').select('*');
+  const { data, error } = await supabase.from("songs").select("*");
 
-	if (error) {
-		console.log(error);
-		return NextResponse.json({ success: false, error: error.message });
-	}
-	return NextResponse.json({ success: true, data: data });
+  if (error) {
+    console.log(error);
+    return NextResponse.json({ success: false, error: error.message });
+  }
+  return NextResponse.json({ success: true, data: data });
 }
 
 /**
@@ -47,24 +47,24 @@ export async function GET() {
  */
 
 export async function POST() {
-	const supabase = await createClient();
+  const supabase = await createClient();
 
-	const { data, error } = await supabase.from('songs').insert({
-		title: 'Test Song',
-		author: 'Test Author',
-		level: 'Test Level',
-		songKey: 'Test Key',
-		chords: 'Test Chords',
-		audioFiles: 'Test Audio Files',
-		createdAt: 'Test Created At',
-		ultimateGuitarLink: 'Test Ultimate Guitar Link',
-		shortTitle: 'Test Short Title',
-	});
+  const { data, error } = await supabase.from("songs").insert({
+    title: "Test Song",
+    author: "Test Author",
+    level: "Test Level",
+    songKey: "Test Key",
+    chords: "Test Chords",
+    audioFiles: "Test Audio Files",
+    createdAt: "Test Created At",
+    ultimateGuitarLink: "Test Ultimate Guitar Link",
+    shortTitle: "Test Short Title",
+  });
 
-	if (error) {
-		console.log(error);
-		return NextResponse.json({ success: false, error: error.message });
-	}
+  if (error) {
+    console.log(error);
+    return NextResponse.json({ success: false, error: error.message });
+  }
 
-	return NextResponse.json({ success: true, data: data });
+  return NextResponse.json({ success: true, data: data });
 }

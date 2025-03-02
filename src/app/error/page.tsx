@@ -1,5 +1,5 @@
-'use client';
+"use client";
 
 export default function Page() {
-	return <p>Sorry, something went wrong</p>;
+  return <p>Sorry, something went wrong</p>;
 }

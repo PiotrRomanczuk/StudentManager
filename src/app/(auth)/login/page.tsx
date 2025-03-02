@@ -1,41 +1,61 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-import { login, signInWithGoogle } from "./actions"
+import { login, signInWithGoogle } from "./actions";
 
 export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-[400px] space-y-6">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
-          <p className="text-sm text-muted-foreground">Enter your email to sign in to your account</p>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Welcome back
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Enter your email to sign in to your account
+          </p>
         </div>
 
         <form className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" placeholder="m@example.com" required autoComplete="email" />
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="m@example.com"
+              required
+              autoComplete="email"
+            />
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
-              <Link href="/forgot-password" className="text-sm text-muted-foreground hover:text-primary">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-muted-foreground hover:text-primary"
+              >
                 Forgot password?
               </Link>
             </div>
-            <Input id="password" name="password" type="password" required autoComplete="current-password" />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              required
+              autoComplete="current-password"
+            />
           </div>
 
           <Button
             formAction={async (formData: FormData) => {
-              "use server"
+              "use server";
               // Add loading state handling
-              await login(formData)
+              await login(formData);
             }}
             className="w-full"
           >
@@ -48,12 +68,18 @@ export default function LoginPage() {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
           </div>
         </div>
 
         <div className="grid gap-2">
-          <Button variant="outline" formAction={signInWithGoogle} className="w-full">
+          <Button
+            variant="outline"
+            formAction={signInWithGoogle}
+            className="w-full"
+          >
             <svg
               className="mr-2 h-4 w-4"
               aria-hidden="true"
@@ -75,12 +101,14 @@ export default function LoginPage() {
 
         <div className="text-center text-sm">
           Don&apos;t have an account?
-          <Link href="/signUp" className="font-medium text-primary hover:underline">
+          <Link
+            href="/signUp"
+            className="font-medium text-primary hover:underline"
+          >
             Sign up
           </Link>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

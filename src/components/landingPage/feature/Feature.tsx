@@ -1,23 +1,26 @@
 import { features_list } from "./features_list";
 import { motion } from "framer-motion";
-  
+
 export default function Feature() {
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <motion.div 
+        <motion.div
           className="mx-auto max-w-2xl sm:text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-base/7 font-semibold text-indigo-600">Everything you need</h2>
+          <h2 className="text-base/7 font-semibold text-indigo-600">
+            Everything you need
+          </h2>
           <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl sm:text-balance">
             No server? No problem.
           </p>
           <p className="mt-6 text-lg/8 text-gray-600">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste
-            dolor cupiditate blanditiis.
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores
+            impedit perferendis suscipit eaque, iste dolor cupiditate
+            blanditiis.
           </p>
         </motion.div>
       </div>
@@ -38,7 +41,7 @@ export default function Feature() {
           </div>
         </div>
       </div>
-      <motion.div 
+      <motion.div
         className="mx-auto mt-16 max-w-7xl px-6 sm:mt-20 md:mt-24 lg:px-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -54,15 +57,17 @@ export default function Feature() {
               transition={{ duration: 0.5, delay: 0.2 * index }}
             >
               <dt className="inline font-semibold text-gray-900">
-                <feature.icon aria-hidden="true" className="absolute top-1 left-1 size-5 text-indigo-600" />
+                <feature.icon
+                  aria-hidden="true"
+                  className="absolute top-1 left-1 size-5 text-indigo-600"
+                />
                 {feature.name}
-              </dt>{' '}
+              </dt>{" "}
               <dd className="inline">{feature.description}</dd>
             </motion.div>
           ))}
         </dl>
       </motion.div>
     </div>
-  )
+  );
 }
-  

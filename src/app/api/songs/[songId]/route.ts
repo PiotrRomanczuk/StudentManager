@@ -1,35 +1,35 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/clients/server';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/clients/server";
 
 export async function GET(req: NextRequest) {
-	const supabase = createClient();
-	// make a Get request to the database to get the song by id or by title from the url
+  const supabase = createClient();
+  // make a Get request to the database to get the song by id or by title from the url
 
-	const { searchParams } = new URL(req.url);
-	const id = searchParams.get('id');
-	const title = searchParams.get('title');
-	let song;
-	if (id) {
-		const { data } = await (await supabase)
-			.from('songs')
-			.select('*')
-			.eq('id', id);
-		song = data;
-		console.log(song);
-	} else if (title) {
-		const { data } = await (await supabase)
-			.from('songs')
-			.select('*')
-			.eq('title', title);
-		song = data;
-		console.log(song);
-	}
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+  const title = searchParams.get("title");
+  let song;
+  if (id) {
+    const { data } = await (await supabase)
+      .from("songs")
+      .select("*")
+      .eq("id", id);
+    song = data;
+    console.log(song);
+  } else if (title) {
+    const { data } = await (await supabase)
+      .from("songs")
+      .select("*")
+      .eq("title", title);
+    song = data;
+    console.log(song);
+  }
 
-	if (!song) {
-		return NextResponse.json({ success: false, error: 'Song not found' });
-	}
+  if (!song) {
+    return NextResponse.json({ success: false, error: "Song not found" });
+  }
 
-	return NextResponse.json({ success: true, data: song });
+  return NextResponse.json({ success: true, data: song });
 }
 
 // export async function PUT(req: NextRequest) {
