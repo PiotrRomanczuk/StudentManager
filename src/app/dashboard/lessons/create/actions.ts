@@ -1,42 +1,51 @@
-"use server"
+"use server";
 
-import { createClient } from "@/utils/supabase/clients/server"
-import { redirect } from "next/navigation"
+import { createClient } from "@/utils/supabase/clients/server";
+import { redirect } from "next/navigation";
 
 export async function createLesson(formData: FormData) {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  const teacherId = formData.get('teacher_id')
-  const studentId = formData.get('student_id')
-  const date = formData.get('date')
-  const hour_date = formData.get('time')
+  const teacherId = formData.get("teacher_id");
+  const studentId = formData.get("student_id");
+  const date = formData.get("date");
+  const hour_date = formData.get("time");
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
+  // Call the increment_lesson_number function to get the next lesson number
+  const { data: lessonNumberData, error: lessonNumberError } =
+    await supabase.rpc("increment_lesson_number", {
+      p_student_id: studentId,
+      p_teacher_id: teacherId,
+    });
 
-  
+  if (lessonNumberError) {
+    console.error("Error fetching lesson number:", lessonNumberError);
+    return;
+  }
 
-  console.log(`teacherId: ${teacherId}`)
-  console.log(`studentId: ${studentId}`)
-  console.log(`user?.id: ${user?.id}`)
+  const lessonNumber = lessonNumberData;
 
-  const { data: lesson, error } = await supabase.from('lessons').insert({
+  const { data: lesson, error } = await supabase.from("lessons").insert({
     teacher_id: teacherId,
     student_id: studentId,
     date: date,
     hour_date: hour_date,
-    user_id: user?.id
-  })
+    creator_user_id: user?.id,
+    lesson_number: lessonNumber,
+    // other_column: otherValue // Uncomment and replace with actual column name if needed
+  });
 
-  console.log(lesson)
+  console.log(lesson);
 
   if (error) {
-    console.error(error)
-  }
-  else {
-    console.log("Lesson created successfully")
-    console.log(lesson)
+    console.error("Error creating lesson:", error);
+  } else {
+    console.log("Lesson created successfully:", lesson);
   }
 
-  redirect("/dashboard/lessons")
+  redirect("/dashboard/lessons");
 }

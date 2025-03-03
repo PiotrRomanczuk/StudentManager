@@ -20,8 +20,6 @@ export default async function Page() {
   console.log(students);
   console.log(teachers);
 
-
-
   return (
     <div>
       <form className="flex flex-col gap-4" action={createLesson}>
