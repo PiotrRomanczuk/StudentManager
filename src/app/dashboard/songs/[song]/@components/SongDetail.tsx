@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-} from "@/components/dashboard/ui/card";
-import { Button } from "@/components/dashboard/ui/button";
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Song } from "@/types/Song";
 
 interface SongDetailsProps {

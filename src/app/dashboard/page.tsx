@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import { Container } from "@/components/dashboard/ui/container";
+import { Container } from "@/components/ui/container";
 
 import { LoadingComponent } from "./songs/@components/LoadingComponent";
 import { ErrorComponent } from "./songs/@components/ErrorComponent";

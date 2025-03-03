@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/clients/server";
-import { Button } from "@/components/dashboard/ui/button";
+import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { logout } from "@/app/(auth)/login/actions";
 

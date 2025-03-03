@@ -5,7 +5,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/dashboard/ui/pagination";
+} from "@/components/ui/pagination";
 
 interface PaginationComponentProps {
   currentPage: number;
