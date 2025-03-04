@@ -28,9 +28,10 @@ export default function SignUpPage() {
     }
 
     const result = await signup(formData);
-
     if (!result.success) {
-      throw new Error("Error signing up:" + result.error);
+      setError("Error signing up");
+      setLoading(false);
+      return;
     }
 
     setLoading(false);
