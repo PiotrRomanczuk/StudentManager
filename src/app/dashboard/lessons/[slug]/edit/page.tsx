@@ -1,5 +1,3 @@
-
-import type { Song } from "@/types/Song";
 import { createClient } from "@/utils/supabase/clients/server";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -14,13 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { ArrowLeft } from "lucide-react";
 
 type Params = { slug: string };
@@ -52,9 +44,9 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   }
 
   return (
-    <div className="container max-w-3xl py-10">
+    <div className="container max-w-3xl py-10 flex">
       <Link
-        href="/lessons"
+        href="/dashboard/lessons"
         className="flex items-center text-sm text-muted-foreground mb-6 hover:text-primary"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -67,19 +59,19 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           const supabase = await createClient();
 
           const title = formData.get("title") as string;
-          const songId = formData.get("songs") as string;
           const notes = formData.get("notes") as string;
           const slug = formData.get("slug") as string;
+          const date = formData.get("date") as string;
+          const time = formData.get("time") as string;
 
-          const { error } = await supabase
+
+          const { error: lessonError } = await supabase
             .from("lessons")
-            .update({ title, song_id: songId, notes })
-            .eq("id", slug); // Use 'id' instead of 'slug' if 'id' is the primary key
+            .update({ title, notes, date, time })
+            .eq("id", slug);
 
-          if (error) {
-            console.error("Error updating lesson:", error);
-            // Handle the error (e.g., display a message or log it)
-            return; // Return void to satisfy the type requirement
+          if (lessonError) {
+            console.error("Error updating lesson:", lessonError);
           }
 
           // Handle success (e.g., redirect the user or display a success message)
@@ -107,27 +99,26 @@ export default async function Page({ params }: { params: Promise<Params> }) {
               />
             </div>
 
+        
+
             <div className="space-y-2">
-              <Label htmlFor="songs">Song</Label>
-              <Select name="songs" defaultValue={lesson.song_id?.toString()}>
-                <SelectTrigger
-                  id="songs"
-                  className="focus:bg-white active:bg-white data-[state=open]:bg-white text-black bg-white"
-                >
-                  <SelectValue placeholder="Select a song" />
-                </SelectTrigger>
-                <SelectContent>
-                  {songs?.map((song: Song) => (
-                    <SelectItem
-                      key={song.id}
-                      value={song.id.toString()}
-                      className="text-black bg-white"
-                    >
-                      {song.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="date">Date</Label>
+              <Input
+                id="date"
+                name="date"
+                type="date"
+                defaultValue={lesson.date}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="time">Time</Label>
+              <Input
+                id="time"
+                name="time"
+                type="time"
+                defaultValue={lesson.time}
+              />
             </div>
 
             <div className="space-y-2">
