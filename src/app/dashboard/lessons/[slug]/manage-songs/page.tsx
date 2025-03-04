@@ -2,9 +2,9 @@ import type { Song } from "@/types/Song"
 import { createClient } from "@/utils/supabase/clients/server"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { revalidatePath } from "next/cache"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { addSongToLesson, removeSongFromLesson } from "./actions"
 
 type Params = { slug: string }
 
@@ -23,51 +23,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
   const assignedSongIds = lessonSongs?.map((ls: { song_id: string }) => ls.song_id) || []
 
-  // Server action to add a song to a lesson
-  async function addSongToLesson(formData: FormData) {
-    "use server"
-
-    const songId = formData.get("songId") as string
-    if (!songId) return
-
-    const supabase = await createClient()
-
-    const { error: lessonError } = await supabase.from("lesson_songs").insert({
-      lesson_id: slug,
-      song_id: songId,
-    })
-
-    if (lessonError) {
-      console.error("Error inserting lesson song:", lessonError.message || lessonError)
-      return
-    }
-
-    revalidatePath(`/lessons/${slug}/manage-songs`)
-  }
-
-  // Server action to remove a song from a lesson
-  async function removeSongFromLesson(formData: FormData) {
-    "use server"
-
-    const songId = formData.get("songId") as string
-    if (!songId) return
-
-    const supabase = await createClient()
-
-    const { error: lessonError } = await supabase
-      .from("lesson_songs")
-      .delete()
-      .eq("lesson_id", slug)
-      .eq("song_id", songId)
-
-    if (lessonError) {
-      console.error("Error removing lesson song:", lessonError.message || lessonError)
-      return
-    }
-
-    revalidatePath(`/lessons/${slug}/manage-songs`)
-  }
-
   return (
     <div className="container py-8 space-y-6">
       <h1 className="text-3xl font-bold">Manage Songs for Lesson {slug}</h1>
@@ -83,7 +38,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       <div className="space-y-8">
         <div className="bg-card p-6 rounded-lg border">
           <h2 className="text-xl font-semibold mb-4">Add Song to Lesson</h2>
-          <form action={addSongToLesson} className="flex items-end gap-4">
+          <form action={(formData) => addSongToLesson(formData, slug)} className="flex items-end gap-4">
             <div className="flex-1">
               <Select name="songId">
                 <SelectTrigger className="w-full">
@@ -115,7 +70,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                 .map((song: Song) => (
                   <li key={song.id} className="flex items-center justify-between p-3 bg-muted rounded-md">
                     <span>{song.title}</span>
-                    <form action={removeSongFromLesson}>
+                    <form action={(formData) => removeSongFromLesson(formData, slug)}>
                       <input type="hidden" name="songId" value={song.id} />
                       <Button variant="destructive" size="sm" type="submit">
                         Remove
