@@ -19,7 +19,6 @@ type Params = { slug: string };
 
 export default async function Page({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-
   const supabase = await createClient();
 
   // Fetch the lesson data to pre-fill the form
@@ -30,16 +29,30 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     .single();
 
   if (lessonError) {
-    throw new Error("Error loading lesson data:" + lessonError);
+    console.error("Error loading lesson data:", lessonError);
+    throw new Error("Failed to load lesson data.");
   }
 
-  const { data: songs, error: songsError } = await supabase
-    .from("songs")
-    .select("*");
+  const handleSubmit = async (formData: FormData) => {
+    "use server";
+    const supabase = await createClient();
 
-  if (songsError) {
-    throw new Error("Error loading songs:" + songsError);
-  }
+    const title = formData.get("title") as string;
+    const notes = formData.get("notes") as string;
+    const slug = formData.get("slug") as string;
+    const date = formData.get("date") as string;
+    const time = formData.get("time") as string;
+
+    const { error: updateError } = await supabase
+      .from("lessons")
+      .update({ title, notes, date, time })
+      .eq("id", slug);
+
+    if (updateError) {
+      console.error("Error updating lesson:", updateError);
+      throw new Error("Failed to update lesson.");
+    }
+  };
 
   return (
     <div className="container max-w-3xl py-10 flex">
@@ -51,32 +64,8 @@ export default async function Page({ params }: { params: Promise<Params> }) {
         Back to lessons
       </Link>
 
-      <form
-        action={async (formData: FormData) => {
-          "use server";
-          const supabase = await createClient();
-
-          const title = formData.get("title") as string;
-          const notes = formData.get("notes") as string;
-          const slug = formData.get("slug") as string;
-          const date = formData.get("date") as string;
-          const time = formData.get("time") as string;
-
-
-          const { error: lessonError } = await supabase
-            .from("lessons")
-            .update({ title, notes, date, time })
-            .eq("id", slug);
-
-          if (lessonError) {
-            throw new Error("Error updating lesson:" + lessonError);
-          }
-
-          return;
-        }}
-      >
-        <input type="hidden" name="slug" value={slug} />{" "}
-        {/* Include slug in form data */}
+      <form action={handleSubmit}>
+        <input type="hidden" name="slug" value={slug} />
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl">Edit Lesson</CardTitle>
@@ -94,9 +83,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                 defaultValue={lesson.title}
               />
             </div>
-
-        
-
             <div className="space-y-2">
               <Label htmlFor="date">Date</Label>
               <Input
@@ -106,7 +92,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                 defaultValue={lesson.date}
               />
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="time">Time</Label>
               <Input
@@ -116,7 +101,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                 defaultValue={lesson.time}
               />
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="notes">Notes</Label>
               <Textarea

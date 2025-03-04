@@ -28,7 +28,7 @@ export async function signup(formData: FormData) {
     const userId = user.id;
 
     // Step 3: Insert profile information
-    const { data, error: profileError } = await supabase
+    const { error: profileError } = await supabase
       .from("user_")
       .insert([{ user_id: userId, user_type: "student" }]);
 

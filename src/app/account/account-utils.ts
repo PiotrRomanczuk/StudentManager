@@ -15,12 +15,12 @@ export const getProfile = async (user: User): Promise<IProfile | null> => {
       .single();
 
     if (error && status !== 406) {
-      throw error;
+      throw new Error(`Error loading user data! ${error}`);
     }
 
     return data;
-  } catch (error) {
-    throw new Error("Error loading user data!");
+  } catch {
+    throw new Error(`Error loading user data!`);
   }
 };
 
@@ -48,7 +48,7 @@ export const updateProfile = async ({
     });
     if (error) throw error;
     return true;
-  } catch (error) {
+  } catch {
     throw new Error("Error updating the data!");
   }
 };
@@ -71,8 +71,8 @@ export const useFetchProfile = (
           avatar_url: data.avatar_url,
         });
       }
-    } catch (error) {
-      // alert('Error loading user data!');
+    } catch {
+      throw new Error("Error loading user data!");
     } finally {
       setLoading(false);
     }
@@ -93,9 +93,9 @@ export const useHandleUpdateProfile = (
         website: profile.website,
         avatar_url: profile.avatar_url,
       });
-      alert("Profile updated!");
-    } catch (error) {
-      alert("Error updating the data!");
+      throw new Error("Profile updated!");
+    } catch {
+      throw new Error("Error updating the data!");
     } finally {
       setLoading(false);
     }

@@ -28,7 +28,7 @@ export async function createLesson(formData: FormData) {
 
   const lessonNumber = lessonNumberData;
 
-  const { data: lesson, error } = await supabase.from("lessons").insert({
+  const { error } = await supabase.from("lessons").insert({
     teacher_id: teacherId,
     student_id: studentId,
     date: date,

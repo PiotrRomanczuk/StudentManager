@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { createLesson } from "./actions";
-
+import { User } from "@/types/User";
 export default async function Page() {
   const supabase = await createClient();
 
@@ -24,7 +24,7 @@ export default async function Page() {
       <form className="flex flex-col gap-4" action={createLesson}>
         Teacher:
         <select name="teacher_id">
-          {teachers?.map((teacher: any) => (
+          {teachers?.map((teacher: User) => (
             <option key={teacher.user_id} value={teacher.user_id}>
               {teacher.email}
             </option>
@@ -33,7 +33,7 @@ export default async function Page() {
         <br />
         Student:
         <select name="student_id">
-          {students?.map((student: any) => (
+          {students?.map((student: User) => (
             <option key={student.user_id} value={student.user_id}>
               {student.email}
             </option>

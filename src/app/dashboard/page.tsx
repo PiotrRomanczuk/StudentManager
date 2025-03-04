@@ -1,11 +1,7 @@
 // import { useState } from 'react';
 import { Container } from "@/components/ui/container";
-
 import { LoadingComponent } from "./songs/@components/LoadingComponent";
-import { ErrorComponent } from "./songs/@components/ErrorComponent";
-
 import { ShortSongTable } from "./@components/cards/ShortSongTable";
-
 import { createClient } from "@/utils/supabase/clients/server";
 
 export default async function Page() {
