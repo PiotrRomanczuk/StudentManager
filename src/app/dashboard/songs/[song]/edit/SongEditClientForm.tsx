@@ -34,12 +34,10 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
         onSubmit={async (normalizedData) => {
           try {
             const formattedData = normalizeSongData(normalizedData, song);
-            console.log("Submitting data:", formattedData);
             await updateSong(formattedData as Song); // Type assertion to fix type error
             router.push(`/dashboard/songs/${song.id}`);
-          } catch (error) {
-            console.error("Error updating song:", error);
-            // Handle error state here
+            } catch (error) {
+              throw new Error("Error updating song:" + error);
           }
         }}
         onCancel={() => router.push(`/dashboard/songs/${song.id}`)}

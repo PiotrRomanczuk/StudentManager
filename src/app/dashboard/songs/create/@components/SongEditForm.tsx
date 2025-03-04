@@ -53,7 +53,6 @@ export function SongEditForm({
       {},
     );
 
-    console.log({ normalizedData });
     onSubmit(normalizedData);
   };
 

@@ -31,10 +31,10 @@ export default function SongDetails({ song }: SongDetailsProps) {
         if (response.ok) {
           redirect("/dashboard/songs");
         } else {
-          console.error("Failed to delete song");
+          throw new Error("Failed to delete song");
         }
       } catch (error) {
-        console.error("Error deleting song:", error);
+        throw new Error("Error deleting song:" + error);
       }
     }
   };

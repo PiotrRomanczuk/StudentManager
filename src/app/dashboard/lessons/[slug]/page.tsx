@@ -12,8 +12,6 @@ type Params = { slug: string };
 
 export default async function Page({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  console.log("Resolved Params:", slug);
-
   const supabase = await createClient();
   const { data: lessons, error } = await supabase
     .from("lessons")
@@ -23,7 +21,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   if (error) {
     console.error(error);
     return (
-     <LessonError />
+     <LessonError error={error.message} />
     );
   }
 

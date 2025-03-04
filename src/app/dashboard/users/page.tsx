@@ -5,11 +5,9 @@ export default async function Page() {
   const { data: profiles, error } = await supabase.from("profiles").select("*");
 
   if (error) {
-    console.error(error);
-    return <div>Error loading profiles</div>;
+    throw new Error("Error loading profiles:" + error);
   }
 
-  console.log(profiles);
 
   return (
     <div>

@@ -10,7 +10,6 @@ type Params = { slug: string }
 
 export default async function Page({ params }: { params: Promise<Params> }) {
   const { slug } = await params
-  console.log("Resolved Params:", slug)
 
   const supabase = await createClient()
 

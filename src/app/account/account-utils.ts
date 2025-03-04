@@ -20,7 +20,6 @@ export const getProfile = async (user: User): Promise<IProfile | null> => {
 
     return data;
   } catch (error) {
-    console.log(error);
     throw new Error("Error loading user data!");
   }
 };
@@ -50,7 +49,6 @@ export const updateProfile = async ({
     if (error) throw error;
     return true;
   } catch (error) {
-    console.log(error);
     throw new Error("Error updating the data!");
   }
 };
@@ -74,7 +72,6 @@ export const useFetchProfile = (
         });
       }
     } catch (error) {
-      console.log(error);
       // alert('Error loading user data!');
     } finally {
       setLoading(false);
@@ -98,7 +95,6 @@ export const useHandleUpdateProfile = (
       });
       alert("Profile updated!");
     } catch (error) {
-      console.log(error);
       alert("Error updating the data!");
     } finally {
       setLoading(false);

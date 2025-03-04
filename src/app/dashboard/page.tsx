@@ -13,19 +13,12 @@ export default async function Page() {
 
   const { data: songs, error, loading } = await supabase.from("songs").select();
 
-  console.log(songs);
   if (loading) {
     return <LoadingComponent message="Loading songs..." />;
   }
 
   if (error) {
-    console.log(error);
-    return (
-      <ErrorComponent
-        error="Something wrong happened..."
-        loadSongs={() => window.location.reload()}
-      />
-    );
+    throw new Error("Error loading songs:" + error);
   }
 
   if (songs.length === 0) {

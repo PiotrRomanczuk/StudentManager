@@ -45,7 +45,6 @@ export function SongEditForm({
     e.preventDefault();
     if (!song) return;
     const normalizedData = normalizeSongData(formData, song);
-    console.log({ normalizedData });
     onSubmit(normalizedData);
   };
 

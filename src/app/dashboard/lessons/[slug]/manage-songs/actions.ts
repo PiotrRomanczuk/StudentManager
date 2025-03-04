@@ -15,8 +15,7 @@ export async function addSongToLesson(formData: FormData, slug: string) {
   })
 
   if (lessonError) {
-    console.error("Error inserting lesson song:", lessonError.message || lessonError)
-    return
+    throw new Error("Error inserting lesson song:" + lessonError.message || lessonError)
   }
 
   revalidatePath(`/lessons/${slug}/manage-songs`)
@@ -37,8 +36,7 @@ export async function removeSongFromLesson(formData: FormData, slug: string) {
     .eq("song_id", songId)
 
   if (lessonError) {
-    console.error("Error removing lesson song:", lessonError.message || lessonError)
-    return
+    throw new Error("Error removing lesson song:" + lessonError.message || lessonError)
   }
 
   revalidatePath(`/lessons/${slug}/manage-songs`)

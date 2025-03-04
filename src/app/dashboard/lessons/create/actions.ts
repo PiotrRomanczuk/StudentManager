@@ -23,8 +23,7 @@ export async function createLesson(formData: FormData) {
     });
 
   if (lessonNumberError) {
-    console.error("Error fetching lesson number:", lessonNumberError);
-    return;
+    throw new Error("Error fetching lesson number:" + lessonNumberError);
   }
 
   const lessonNumber = lessonNumberData;
@@ -39,13 +38,11 @@ export async function createLesson(formData: FormData) {
     // other_column: otherValue // Uncomment and replace with actual column name if needed
   });
 
-  console.log(lesson);
 
   if (error) {
-    console.error("Error creating lesson:", error);
+    throw new Error("Error creating lesson:" + error);
   } else {
-    console.log("Lesson created successfully:", lesson);
+    redirect("/dashboard/lessons");
   }
 
-  redirect("/dashboard/lessons");
 }

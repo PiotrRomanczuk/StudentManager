@@ -24,7 +24,9 @@ export default function Avatar({
     if (url) {
       downloadImage(supabase, url)
         .then(setAvatarUrl)
-        .catch((error) => console.log("Error downloading image: ", error));
+        .catch((error) => {
+          throw new Error("Error downloading image: " + error);
+        });
     }
   }, [url, supabase]);
 

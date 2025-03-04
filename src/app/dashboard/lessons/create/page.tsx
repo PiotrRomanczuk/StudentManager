@@ -14,11 +14,10 @@ export default async function Page() {
     .eq("isTeacher", true);
 
   if (studentsError || teachersError) {
-    console.error(studentsError, teachersError);
+    throw new Error("Error fetching students or teachers:" + studentsError + teachersError);
   }
 
-  console.log(students);
-  console.log(teachers);
+
 
   return (
     <div>

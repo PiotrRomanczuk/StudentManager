@@ -19,7 +19,6 @@ type Params = { slug: string };
 
 export default async function Page({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  console.log("Resolved Params:", slug);
 
   const supabase = await createClient();
 
@@ -31,8 +30,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     .single();
 
   if (lessonError) {
-    console.error(lessonError);
-    return <div>Error loading lesson data.</div>;
+    throw new Error("Error loading lesson data:" + lessonError);
   }
 
   const { data: songs, error: songsError } = await supabase
@@ -40,7 +38,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     .select("*");
 
   if (songsError) {
-    console.error(songsError);
+    throw new Error("Error loading songs:" + songsError);
   }
 
   return (
@@ -71,12 +69,10 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             .eq("id", slug);
 
           if (lessonError) {
-            console.error("Error updating lesson:", lessonError);
+            throw new Error("Error updating lesson:" + lessonError);
           }
 
-          // Handle success (e.g., redirect the user or display a success message)
-          console.log("Lesson updated successfully!");
-          return; // Return void to satisfy the type requirement
+          return;
         }}
       >
         <input type="hidden" name="slug" value={slug} />{" "}

@@ -26,7 +26,6 @@ export async function GET(request: NextRequest) {
     if (!error) {
       redirectTo.searchParams.delete("next");
       throw new Error("Error verifying OTP");
-      return NextResponse.redirect(redirectTo);
     }
   }
 

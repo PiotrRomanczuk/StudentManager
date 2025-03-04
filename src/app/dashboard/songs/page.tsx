@@ -11,7 +11,7 @@ export default async function Page() {
   if (error) {
     return (
       <ErrorComponent
-        error="Something wrong happened..."
+        error={`Error loading songs: ${error}`}
         loadSongs={() => window.location.reload()}
       />
     );

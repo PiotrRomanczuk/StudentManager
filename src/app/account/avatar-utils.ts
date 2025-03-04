@@ -6,14 +6,13 @@ export const downloadImage = async (supabase: SupabaseClient, path: string) => {
       .from("avatars")
       .download(path);
     if (error) {
-      throw error;
+      throw new Error("Error downloading image:" + error);
     }
 
     const url = URL.createObjectURL(data);
     return url;
   } catch (error) {
-    console.log("Error downloading image: ", error);
-    throw error;
+    throw new Error("Error downloading image:" + error);
   }
 };
 
@@ -30,7 +29,7 @@ export const uploadAvatarImage = async (
     .upload(filePath, file);
 
   if (uploadError) {
-    throw uploadError;
+    throw new Error("Error uploading avatar:" + uploadError);
   }
 
   return filePath;
@@ -54,8 +53,7 @@ export const useAvatarUpload = (
       const filePath = await uploadAvatarImage(supabase, uid, file);
       onUpload(filePath);
     } catch (error) {
-      console.log(error);
-      alert("Error uploading avatar!");
+      throw new Error("Error uploading avatar:" + error);
     } finally {
       setUploading(false);
     }

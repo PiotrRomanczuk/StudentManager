@@ -20,8 +20,7 @@ export async function signup(formData: FormData) {
   });
 
   if (signupError) {
-    console.error("Error creating user:", signupError);
-    return { error: signupError.message };
+    throw new Error("Error creating user:" + signupError);
   }
 
   if (user) {
@@ -34,14 +33,11 @@ export async function signup(formData: FormData) {
       .insert([{ user_id: userId, user_type: "student" }]);
 
     if (profileError) {
-      console.error("Error creating user profile:", profileError);
-      return { error: profileError.message };
+      throw new Error("Error creating user profile:" + profileError);
     } else {
-      console.log("User profile created successfully:", data);
-      // Optionally redirect or return success
       return { success: true };
     }
   }
 
-  return { error: "Unknown error occurred" };
+  throw new Error("Unknown error occurred");
 }
