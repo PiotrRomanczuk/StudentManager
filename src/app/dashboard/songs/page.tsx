@@ -1,30 +1,12 @@
-"use client";
-
-import { useState } from "react";
 import { Container } from "@/components/ui/container";
-
-import { LoadingComponent } from "./@components/LoadingComponent";
 import { ErrorComponent } from "./@components/ErrorComponent";
+import { createClient } from "@/utils/supabase/clients/server";
+import NoSongsFound from "./@components/NoSongsFound";
+import SongsClientComponent from "./@components/SongsClientComponent";
 
-import { SongTable } from "./@components/SongTable";
-import { PaginationComponent } from "./@components/PaginationComponent";
-
-import useLoadSongs from "@/hooks/useLoadSongs";
-
-export default function Page() {
-  const { loading, songs, error } = useLoadSongs();
-  console.log(songs);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
-  const totalPages = Math.ceil(songs.length / itemsPerPage);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  if (loading) {
-    return <LoadingComponent message="Loading songs..." />;
-  }
+export default async function Page() {
+  const supabase = await createClient();
+  const { data: songs, error } = await supabase.from("songs").select("*");
 
   if (error) {
     return (
@@ -35,8 +17,8 @@ export default function Page() {
     );
   }
 
-  if (songs.length === 0) {
-    return <div>No songs found</div>;
+  if (!songs || songs.length === 0) {
+    return <NoSongsFound />;
   }
 
   return (
@@ -44,19 +26,7 @@ export default function Page() {
       <Container className="max-w-4xl">
         <div className="my-8">
           Songs
-          <SongTable
-            songs={songs}
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
-          />
-          {totalPages > 1 && (
-            <PaginationComponent
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          )}
+          <SongsClientComponent songs={songs} />
         </div>
       </Container>
     </div>
