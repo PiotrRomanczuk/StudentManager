@@ -8,8 +8,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 type Params = { slug: string }
 
-export default async function Page({ params }: { params: Params }) {
-  const { slug } = params
+export default async function Page({ params }: { params: Promise<Params> }) {
+  const { slug } = await params
   console.log("Resolved Params:", slug)
 
   const supabase = await createClient()
@@ -111,7 +111,7 @@ export default async function Page({ params }: { params: Params }) {
           ) : (
             <ul className="space-y-2">
               {songs
-                ?.filter((song) => assignedSongIds.includes(song.id))
+                ?.filter((song: Song) => assignedSongIds.includes(song.id))
                 .map((song: Song) => (
                   <li key={song.id} className="flex items-center justify-between p-3 bg-muted rounded-md">
                     <span>{song.title}</span>
