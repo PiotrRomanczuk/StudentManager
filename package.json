@@ -8,7 +8,8 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"cy:open": "cypress open"
+		"cy:open": "cypress open",
+		"e2e": "cypress run --browser chrome"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",

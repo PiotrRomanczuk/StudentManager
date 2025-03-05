@@ -1,10 +1,8 @@
-import Navbar from "../navbar/Navbar";
 import { motion } from "framer-motion";
 
 export default function HeroHome() {
   return (
-    <section>
-      <Navbar />
+    <section id="hero" >
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="text-center">

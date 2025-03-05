@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 export default function Feature() {
   return (
-    <div className="bg-white py-24 sm:py-32">
+    <div className="bg-white py-24 sm:py-32" id="feature">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
           className="mx-auto max-w-2xl sm:text-center"

@@ -9,7 +9,8 @@ const Navbar: React.FC = () => {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white shadow-md"
+      className="bg-white shadow-md "
+      id="navbar"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -26,8 +27,8 @@ const Navbar: React.FC = () => {
               {[
                 { href: "/", label: "Home" },
                 // { href: '/about', label: 'About' },
-                { href: "/login", label: "SignIn" },
-                { href: "/signUp", label: "SignUp" },
+                { href: "/login", label: "SignIn", id: "signIn" },
+                { href: "/signUp", label: "SignUp", id: "signUp" },
               ].map((link, index) => (
                 <motion.div
                   key={link.href}
@@ -38,6 +39,7 @@ const Navbar: React.FC = () => {
                   <Link
                     href={link.href}
                     className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md"
+                    id={link.id}
                   >
                     {link.label}
                   </Link>

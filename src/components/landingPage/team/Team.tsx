@@ -14,7 +14,7 @@ const people = [
 
 export default function Team() {
   return (
-    <div className="bg-white py-24 md:py-32">
+    <div className="bg-white py-24 md:py-32" id="team">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-20 px-6 lg:px-8 xl:grid-cols-5">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
