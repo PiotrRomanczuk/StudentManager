@@ -1,22 +1,23 @@
 import { Song } from "@/types/Song";
+import { createClient } from "@/utils/supabase/clients/client";
 
 export async function updateSong(song: Song) {
-  const response = await fetch(`/api/songs/${song.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(song),
-  });
+  const supabase = await createClient();
 
-  const data = await response.json();
+  console.log("song", song);
+  const { data, error } = await supabase
+    .from("songs")
+    .update(song)
+    .eq("id", song.id);
 
-  if (!response.ok) {
-    if (data.details) {
-      // Zod validation errors include details
-      throw new Error(`Validation error: ${JSON.stringify(data.details)}`);
-    }
-    throw new Error(data.error || "Failed to update song");
+  if (error) {
+    console.error("Error in updateSong:", error);
+
+    const errorMessage = error instanceof Error 
+      ? error.message 
+      : JSON.stringify(error, Object.getOwnPropertyNames(error));
+
+    throw new Error("Error updating song: " + errorMessage);
   }
 
   return data;

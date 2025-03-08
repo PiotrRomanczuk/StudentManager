@@ -1,23 +1,26 @@
+import { createClient } from "@/utils/supabase/clients/server";
 import SongEditClientForm from "./SongEditClientForm";
 
-type Params = Promise<{ slug: string }>;
+type Params = Promise<{ song: string }>;
 
 export default async function Page({ params }: { params: Params }) {
   const resolvedParams = await params;
-  const { slug } = resolvedParams;
-  const songResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/songs?title=${slug}`,
-  );
-  const song = await songResponse.json();
+  const { song: songId } = resolvedParams;
 
-  if (!song) {
+
+  const supabase = await createClient();
+  const { data: song, error } = await supabase
+    .from("songs")
+    .select("*")
+    .eq("id", songId);
+
+  if (error || !song) {
     return <div>Song not found</div>;
   }
 
   return (
     <div>
-      {song.data.Title}
-      <SongEditClientForm song={song.data} />
+      <SongEditClientForm song={song[0]} />
     </div>
   );
 }

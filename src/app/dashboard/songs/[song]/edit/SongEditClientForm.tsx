@@ -1,7 +1,7 @@
 "use client";
 
 import useSongForm from "@/hooks/useSongForm";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import React from "react";
 import { SongEditForm } from "./@components/SongEditForm";
 import { Song } from "@/types/Song";
@@ -9,7 +9,7 @@ import { updateSong } from "./updateSong";
 import { normalizeSongData } from "@/utils/normalizeSongData";
 
 const SongEditClientForm = ({ song }: { song: Song }) => {
-  const router = useRouter();
+
 
   const {
     // handleSubmit,
@@ -19,7 +19,7 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
     mode: "edit",
     songId: song.id,
     initialData: song,
-    onSuccess: () => router.push(`/songs/${song?.id}`),
+    onSuccess: () => redirect(`/dashboard/songs/${song.id}`),
   });
 
   return (
@@ -35,12 +35,19 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
           try {
             const formattedData = normalizeSongData(normalizedData, song);
             await updateSong(formattedData as Song); // Type assertion to fix type error
-            router.push(`/dashboard/songs/${song.id}`);
+            redirect(`/dashboard/songs/${song.id}`);
           } catch (error) {
-            throw new Error("Error updating song:" + error);
+            console.error("Error updating song:", error); // Log the error for debugging
+        
+            // Attempt to stringify the error object for better logging
+            const errorMessage = error instanceof Error 
+              ? error.message 
+              : JSON.stringify(error, Object.getOwnPropertyNames(error));
+        
+            throw new Error("Error updating song: " + errorMessage);
           }
         }}
-        onCancel={() => router.push(`/dashboard/songs/${song.id}`)}
+        onCancel={() => redirect(`/dashboard/songs/${song.id}`)}
       />
     </div>
   );

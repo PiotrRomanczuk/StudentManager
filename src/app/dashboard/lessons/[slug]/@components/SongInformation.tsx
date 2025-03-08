@@ -26,7 +26,7 @@ export default async function SongInformation({
   const { data: songs, error: songsError } = await supabase
     .from("songs")
     .select("*")
-    .in("id", lessonSongs.map((lessonSong) => lessonSong.song_id));
+    .in("id", lessonSongs.map((lessonSong: { song_id: string }) => lessonSong.song_id));
 
   if (lessonSongsError || songsError) {
     console.error("Failed to load songs:", lessonSongsError || songsError);
@@ -49,7 +49,7 @@ export default async function SongInformation({
     );
   }
 
-  const songMap = new Map(songs.map((song: Song) => [song.id, song]));
+  const songMap = new Map<string, Song>(songs.map((song: Song) => [song.id, song]));
 
   return (
     <Card className="flex-1">
@@ -78,6 +78,9 @@ export default async function SongInformation({
                   <div className="flex items-center gap-2">
                     <Music className="h-4 w-4 text-primary" />
                     <span className="font-medium">{song?.title || "No Title"}</span>
+                    <Link href={`/dashboard/songs/${lessonSong.song_id}`} className="ml-auto">
+                      <Button variant="link">View Song</Button>
+                    </Link>
                   </div>
                 </li>
               );
