@@ -38,11 +38,9 @@ export async function createLesson(formData: FormData) {
     // other_column: otherValue // Uncomment and replace with actual column name if needed
   });
 
-
   if (error) {
     throw new Error("Error creating lesson:" + error);
   } else {
     redirect("/dashboard/lessons");
   }
-
 }

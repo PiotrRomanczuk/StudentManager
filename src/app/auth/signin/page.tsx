@@ -1,8 +1,8 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { login, signInWithGoogle } from "./actions"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { login } from "./actions";
 
 export default function LoginPage() {
   return (
@@ -32,7 +32,9 @@ export default function LoginPage() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
-          <p className="text-sm text-muted-foreground">Enter your credentials to sign in to your account</p>
+          <p className="text-sm text-muted-foreground">
+            Enter your credentials to sign in to your account
+          </p>
         </div>
 
         <form className="space-y-5">
@@ -44,7 +46,7 @@ export default function LoginPage() {
               id="email"
               name="email"
               type="email"
-              placeholder="m@example.com"
+              placeholder="example@gmail.com"
               required
               autoComplete="email"
               className="h-11 transition-all focus-visible:ring-primary/70"
@@ -57,7 +59,7 @@ export default function LoginPage() {
                 Password
               </Label>
               <Link
-                href="/forgot-password"
+                href="/auth/forgot-password"
                 className="text-xs text-muted-foreground hover:text-primary transition-colors"
               >
                 Forgot password?
@@ -75,8 +77,8 @@ export default function LoginPage() {
 
           <Button
             formAction={async (formData: FormData) => {
-              "use server"
-              await login(formData)
+              "use server";
+              await login(formData);
             }}
             className="w-full h-11 font-medium transition-all hover:shadow-md"
           >
@@ -84,7 +86,9 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <div className="relative">
+        {/* TODO: Check the google sign in button */}
+
+        {/* <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t border-border" />
           </div>
@@ -96,7 +100,11 @@ export default function LoginPage() {
         <div className="grid gap-3">
           <Button
             variant="outline"
-            formAction={signInWithGoogle}
+            formAction={async () => {
+              "use server"
+              console.log("Button clicked, attempting to sign in with Google")
+              await signInWithGoogle()
+            }}
             className="w-full h-11 font-medium transition-all hover:bg-secondary/50 hover:border-border"
           >
             <svg
@@ -116,16 +124,18 @@ export default function LoginPage() {
             </svg>
             Sign in with Google
           </Button>
-        </div>
+        </div> */}
 
         <div className="text-center text-sm pt-2">
           Don&apos;t have an account?{" "}
-          <Link href="/signUp" className="font-medium text-primary hover:underline transition-all">
+          <Link
+            href="/auth/signup"
+            className="font-medium text-primary hover:underline transition-all"
+          >
             Sign up
           </Link>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

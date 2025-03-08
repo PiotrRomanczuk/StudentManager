@@ -20,15 +20,11 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
   if (error) {
     console.error(error);
-    return (
-     <LessonError error={error.message} />
-    );
+    return <LessonError error={error.message} />;
   }
 
   if (!lessons || lessons.length === 0) {
-    return (
-    <NoLesson />
-    );
+    return <NoLesson />;
   }
 
   const lesson = lessons[0];
@@ -56,7 +52,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
         </Button>
       </div>
 
-      <div className="flex flex-col gap-6 md:flex-row">
+      <div className="flex flex-col gap-6">
         <LessonInformation
           lesson={lesson}
           formattedDate={formattedDate}

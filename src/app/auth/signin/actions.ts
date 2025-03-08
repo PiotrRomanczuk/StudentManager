@@ -15,8 +15,6 @@ export async function login(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-
-
   const { error } = await supabase.auth.signInWithPassword(dataForm);
   if (error) {
     throw new Error("Error signing in:" + error);
@@ -27,7 +25,10 @@ export async function login(formData: FormData) {
 }
 
 export async function signInWithGoogle() {
+  console.log("signInWithGoogle function started");
   const supabase = await createClient();
+  console.log("Supabase client created");
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
@@ -35,12 +36,15 @@ export async function signInWithGoogle() {
     },
   });
 
-
   if (error) {
+    console.error("Error signing in with Google:", error);
     throw new Error("Error signing in with Google:" + error);
   }
 
+  console.log("Google sign-in data:", data);
+
   if (data.url) {
+    console.log("Redirecting to:", data.url);
     redirect(data.url);
   }
 }

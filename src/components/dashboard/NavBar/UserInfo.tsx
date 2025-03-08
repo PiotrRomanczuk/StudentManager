@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
-import { logout } from "@/app/(auth)/login/actions";
+import { logout } from "@/app/auth/signin/actions";
 
 const UserInfo = async () => {
   const supabase = await createClient();
