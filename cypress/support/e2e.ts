@@ -14,4 +14,8 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+<<<<<<< HEAD
 import "./commands";
+=======
+import './commands'
+>>>>>>> 6bc18ec07df4259f5ae3189c16e60fa91883aff2
