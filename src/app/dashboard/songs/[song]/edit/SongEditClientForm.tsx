@@ -12,7 +12,6 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
 
 
   const {
-    // handleSubmit,
     loading: formLoading,
     error: formError,
   } = useSongForm({
@@ -21,6 +20,8 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
     initialData: song,
     onSuccess: () => redirect(`/dashboard/songs/${song.id}`),
   });
+
+  console.log("song edit client form song", song);
 
   return (
     <div>
@@ -34,6 +35,7 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
         onSubmit={async (normalizedData) => {
           try {
             const formattedData = normalizeSongData(normalizedData, song);
+            console.log("formattedData", formattedData);
             await updateSong(formattedData as Song); // Type assertion to fix type error
             redirect(`/dashboard/songs/${song.id}`);
           } catch (error) {
@@ -44,7 +46,10 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
               ? error.message 
               : JSON.stringify(error, Object.getOwnPropertyNames(error));
         
-            throw new Error("Error updating song: " + errorMessage);
+            // Only throw an error if it's not a redirect
+            if (errorMessage !== 'NEXT_REDIRECT') {
+              throw new Error("Error updating song: " + errorMessage);
+            }
           }
         }}
         onCancel={() => redirect(`/dashboard/songs/${song.id}`)}

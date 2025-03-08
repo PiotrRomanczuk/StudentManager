@@ -1,8 +1,41 @@
 # Song Manager
 
-![Scheme Visualizer](./DBSchemeVisualiser.png)
-
 A modern web application for efficient song management and organization. This platform provides a seamless interface for managing your music collection with robust authentication, sorting capabilities, and an intuitive dashboard.
+
+## 🎵 Features
+
+### Authentication
+
+- Authentication is handled by Supabase
+- Protected routes and user sessions
+
+### Dashboard
+
+- Intuitive user interface for song management
+- Real-time data updates
+- Responsive design for all devices
+
+### Song Management
+
+- Comprehensive song listing and organization
+- Advanced sorting functionality for song tables
+- Data validation using Zod schemas
+- CRUD operations for song entries
+
+### Landing Page
+
+- Engaging hero section showcasing core features
+- Team section highlighting project contributors
+- Feature showcase section
+
+## 🛠️ Tech Stack
+
+- **Frontend Framework**: Next.js
+- **Database**: Supabase
+- **Authentication**: Supabase Auth
+- **Data Validation**: Zod
+- **Styling**: Tailwind CSS
+- **API**: RESTful endpoints with Next.js API routes
 
 ## Future Enhancements
 
@@ -54,42 +87,11 @@ Here are some potential features and improvements planned for future releases:
 10. **Internationalization**
     - Add support for multiple languages to reach
 
-## 🎵 Features
 
-### Authentication
 
-- Secure Google authentication integration using NextAuth.js
-- Protected routes and user sessions
-- Seamless login/logout functionality
+![Scheme Visualizer](./DBSchemeVisualiser.png)
 
-### Dashboard
 
-- Intuitive user interface for song management
-- Real-time data updates
-- Responsive design for all devices
-
-### Song Management
-
-- Comprehensive song listing and organization
-- Advanced sorting functionality for song tables
-- Data validation using Zod schemas
-- CRUD operations for song entries
-- API endpoints for song manipulation
-
-### Landing Page
-
-- Engaging hero section showcasing core features
-- Team section highlighting project contributors
-- Feature showcase section
-
-## 🛠️ Tech Stack
-
-- **Frontend Framework**: Next.js
-- **Database**: Supabase
-- **Authentication**: NextAuth.js with Google provider
-- **Data Validation**: Zod
-- **Styling**: [Your CSS solution]
-- **API**: RESTful endpoints with Next.js API routes
 
 ## 🚀 Getting Started
 

@@ -5,11 +5,11 @@ export interface Song {
   level: "beginner" | "intermediate" | "advanced";
   key: string;
   chords?: string;
-  audioFiles?: string;
-  ultimateGuitarLink?: string;
-  shortTitle?: string;
-  createdAt: string;
-  updatedAt: string;
+  audio_files?: string;
+  ultimate_guitar_link?: string;
+  short_title?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export type CreateSongDTO = Omit<Song, "Id" | "CreatedAt" | "UpdatedAt">;

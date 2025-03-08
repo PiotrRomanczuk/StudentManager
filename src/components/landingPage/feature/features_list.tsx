@@ -1,47 +1,47 @@
 import {
-  ArrowPathIcon,
-  CloudArrowUpIcon,
-  Cog6ToothIcon,
-  FingerPrintIcon,
-  LockClosedIcon,
-  ServerIcon,
+  UserGroupIcon,
+  ChartBarIcon,
+  CalendarIcon,
+  ClipboardDocumentCheckIcon,
+  ChatBubbleLeftRightIcon,
+  AcademicCapIcon,
 } from "@heroicons/react/20/solid";
 
 export const features_list = [
   {
-    name: "Push to deploy.",
+    name: "Student Records",
     description:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
-    icon: CloudArrowUpIcon,
+      "Maintain comprehensive digital records of student information, academic history, and personal details.",
+    icon: UserGroupIcon,
   },
   {
-    name: "SSL certificates.",
+    name: "Performance Analytics",
     description:
-      "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
-    icon: LockClosedIcon,
+      "Track and analyze student performance with intuitive charts and detailed progress reports.",
+    icon: ChartBarIcon,
   },
   {
-    name: "Simple queues.",
+    name: "Attendance Tracking",
     description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.",
-    icon: ArrowPathIcon,
+      "Monitor student attendance efficiently with automated tracking and notification systems.",
+    icon: CalendarIcon,
   },
   {
-    name: "Advanced security.",
+    name: "Grade Management",
     description:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
-    icon: FingerPrintIcon,
+      "Easily record, calculate, and manage grades with our comprehensive grading system.",
+    icon: ClipboardDocumentCheckIcon,
   },
   {
-    name: "Powerful API.",
+    name: "Communication Hub",
     description:
-      "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
-    icon: Cog6ToothIcon,
+      "Foster seamless communication between teachers, students, and parents through our integrated platform.",
+    icon: ChatBubbleLeftRightIcon,
   },
   {
-    name: "Database backups.",
+    name: "Academic Planning",
     description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. ",
-    icon: ServerIcon,
+      "Plan and organize curriculum, courses, and academic schedules with powerful planning tools.",
+    icon: AcademicCapIcon,
   },
 ];

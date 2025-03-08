@@ -1,6 +1,6 @@
 "use client"
 
-import { useForm } from "react-hook-form"
+import { useForm, UseFormRegister } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,7 +10,6 @@ import type { Song } from "@/types/Song"
 import { AlertCircle, Loader2 } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import type { SongFormProps } from "@/components/dashboard/forms/ISongForm"
-import { normalizeSongData } from "@/utils/normalizeSongData"
 import { Controller } from "react-hook-form"
 
 export function SongEditForm({ mode, song, loading, error, onSubmit, onCancel }: SongFormProps) {
@@ -25,8 +24,7 @@ export function SongEditForm({ mode, song, loading, error, onSubmit, onCancel }:
 
   const onSubmitForm = (data: Partial<Song>) => {
     if (!song) return
-    const normalizedData = normalizeSongData(data, song)
-    onSubmit(normalizedData)
+    onSubmit(data)
   }
 
   return (
@@ -69,16 +67,16 @@ export function SongEditForm({ mode, song, loading, error, onSubmit, onCancel }:
             </div>
 
             <FormInput label="Chords" id="chords" register={register} />
-            <FormInput label="Audio Files" id="audioFiles" register={register} />
+            <FormInput label="Audio Files" id="audio_files" register={register} />
             <FormInput
               label="Created At"
-              id="createdAt"
+              id="created_at"
               register={register}
               // required
-              error={errors.createdAt ? "Created At is required" : undefined}
+              error={errors.created_at ? "Created At is required" : undefined}
             />
-            <FormInput label="Ultimate Guitar Link" id="ultimateGuitarLink" register={register} />
-            <FormInput label="Short Title" id="shortTitle" register={register} />
+            <FormInput label="Ultimate Guitar Link" id="ultimate_guitar_link" register={register} />
+            <FormInput label="Short Title" id="short_title" register={register} />
           </div>
 
           {error && (
@@ -107,7 +105,7 @@ export function SongEditForm({ mode, song, loading, error, onSubmit, onCancel }:
 type FormInputProps = {
   label: string
   id: keyof Song
-  register: any
+  register: UseFormRegister<Partial<Song>>
   required?: boolean
   className?: string
   error?: string

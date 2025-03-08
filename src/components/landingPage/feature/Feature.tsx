@@ -12,21 +12,20 @@ export default function Feature() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-base/7 font-semibold text-indigo-600">
-            Everything you need
+            Comprehensive Management Tools
           </h2>
           <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl sm:text-balance">
-            No server? No problem.
+            Everything You Need to Manage Students
           </p>
           <p className="mt-6 text-lg/8 text-gray-600">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores
-            impedit perferendis suscipit eaque, iste dolor cupiditate
-            blanditiis.
+            Streamline your educational administration with our powerful suite of tools. 
+            From attendance tracking to grade management, we've got you covered.
           </p>
         </motion.div>
       </div>
       <div className="relative overflow-hidden pt-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <motion.img
+          {/* <motion.img
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -35,7 +34,7 @@ export default function Feature() {
             width={2432}
             height={1442}
             className="mb-[-12%] rounded-xl ring-1 shadow-2xl ring-gray-900/10"
-          />
+          /> */}
           <div aria-hidden="true" className="relative">
             <div className="absolute -inset-x-20 bottom-0 bg-linear-to-t from-white pt-[7%]" />
           </div>
