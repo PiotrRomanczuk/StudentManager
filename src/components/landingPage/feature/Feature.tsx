@@ -18,8 +18,9 @@ export default function Feature() {
             Everything You Need to Manage Students
           </p>
           <p className="mt-6 text-lg/8 text-gray-600">
-            Streamline your educational administration with our powerful suite of tools. 
-            From attendance tracking to grade management, we've got you covered.
+            Streamline your educational administration with our powerful suite
+            of tools. From attendance tracking to grade management, we've got
+            you covered.
           </p>
         </motion.div>
       </div>

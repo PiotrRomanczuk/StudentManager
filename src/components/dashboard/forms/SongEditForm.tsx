@@ -14,10 +14,27 @@ import { Label } from "@/components/ui/label";
 import { Song } from "@/types/Song";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  SongFormProps,
-  FORM_FIELDS,
-} from "@/components/dashboard/forms/ISongForm";
+
+const FORM_FIELDS = [
+  { id: "title", label: "Title", required: true },
+  { id: "author", label: "Author" },
+  { id: "level", label: "Level" },
+  { id: "key", label: "Key" },
+  { id: "chords", label: "Chords" },
+  { id: "audio_files", label: "Audio Files" },
+  { id: "ultimate_guitar_link", label: "Ultimate Guitar Link" },
+  { id: "short_title", label: "Short Title" },
+];
+
+export interface SongFormProps {
+  mode: "create" | "edit";
+  songId?: string;
+  song?: Song;
+  loading: boolean;
+  error: string | null;
+  onSubmit: (formData: Partial<Song>) => void;
+  onCancel: () => void;
+}
 
 export function SongEditForm({
   mode,
@@ -34,22 +51,12 @@ export function SongEditForm({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
+    console.log(formData);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Convert the form data to lowercase property names to match backend
-    const normalizedData = Object.entries(formData).reduce(
-      (acc, [key, value]) => {
-        return {
-          ...acc,
-          [key.toLowerCase()]: value,
-        };
-      },
-      {},
-    );
-
-    onSubmit(normalizedData);
+    onSubmit(formData);
   };
 
   return (

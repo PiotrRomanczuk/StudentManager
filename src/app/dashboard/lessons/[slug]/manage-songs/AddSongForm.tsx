@@ -1,6 +1,12 @@
-'use client'
+"use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { addSongToLesson } from "./actions";
 import type { Song } from "@/types/Song";
@@ -11,7 +17,11 @@ type AddSongFormProps = {
   slug: string;
 };
 
-export default function AddSongForm({ songs, assignedSongIds, slug }: AddSongFormProps) {
+export default function AddSongForm({
+  songs,
+  assignedSongIds,
+  slug,
+}: AddSongFormProps) {
   return (
     <div className="bg-card p-6 rounded-lg border">
       <h2 className="text-xl font-semibold mb-4">Add Song to Lesson</h2>

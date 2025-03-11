@@ -8,9 +8,9 @@ type Params = Promise<{ song: string }>;
 
 export default async function Page({ params }: { params: Params }) {
   const resolvedParams = await params;
-  console.log('Resolved Params:', resolvedParams);
+  console.log("Resolved Params:", resolvedParams);
   const { song: songId } = resolvedParams;
-  console.log('Song ID:', songId);
+  console.log("Song ID:", songId);
 
   const supabase = await createClient();
 
@@ -19,7 +19,6 @@ export default async function Page({ params }: { params: Params }) {
     .select("*")
     .eq("id", songId)
     .single();
-
 
   console.log(song);
   if (error || !song) {
@@ -31,7 +30,7 @@ export default async function Page({ params }: { params: Params }) {
       <div className="flex border border-black">
         <Link
           href="/dashboard/songs"
-          className='flex items-center mb-6 text-blue-500 hover:text-blue-600'
+          className="flex items-center mb-6 text-blue-500 hover:text-blue-600"
         >
           <ArrowLeft size={28} />
           <div className="text-xl text-black">Back to Songs</div>

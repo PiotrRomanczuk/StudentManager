@@ -20,8 +20,9 @@ export default function HeroHome() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="mt-6 text-lg leading-8 text-gray-600"
             >
-              Streamline your educational management with our comprehensive student tracking system. 
-              Effortlessly manage records, track progress, and enhance communication.
+              Streamline your educational management with our comprehensive
+              student tracking system. Effortlessly manage records, track
+              progress, and enhance communication.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}

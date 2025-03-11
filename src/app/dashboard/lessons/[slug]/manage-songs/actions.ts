@@ -1,10 +1,9 @@
-'use server'
+"use server";
 
 import { createClient } from "@/utils/supabase/clients/server";
 import { revalidatePath } from "next/cache";
 
 export async function addSongToLesson(formData: FormData, slug: string) {
-
   const songId = formData.get("songId") as string;
   if (!songId) return;
 
@@ -43,12 +42,17 @@ export async function removeSongFromLesson(formData: FormData, slug: string) {
     .eq("song_id", songId);
 
   if (fetchError) {
-    console.error("Error fetching current lesson songs:", fetchError.message || fetchError);
+    console.error(
+      "Error fetching current lesson songs:",
+      fetchError.message || fetchError,
+    );
   } else {
     console.log("Current lesson songs data:", currentData);
   }
 
-  console.log(`Attempting to delete song with ID ${songId} from lesson ${trimmedSlug}`);
+  console.log(
+    `Attempting to delete song with ID ${songId} from lesson ${trimmedSlug}`,
+  );
 
   const { data, error: lessonError } = await supabase
     .from("lesson_songs")
@@ -57,10 +61,17 @@ export async function removeSongFromLesson(formData: FormData, slug: string) {
     .eq("song_id", songId);
 
   if (lessonError) {
-    console.error("Error removing lesson song:", lessonError.message || lessonError);
-    throw new Error("Error removing lesson song:" + lessonError.message || lessonError);
+    console.error(
+      "Error removing lesson song:",
+      lessonError.message || lessonError,
+    );
+    throw new Error(
+      "Error removing lesson song:" + lessonError.message || lessonError,
+    );
   } else {
-    console.log(`Successfully removed song with ID ${songId} from lesson ${trimmedSlug}`);
+    console.log(
+      `Successfully removed song with ID ${songId} from lesson ${trimmedSlug}`,
+    );
     console.log("Deleted data:", data);
   }
 

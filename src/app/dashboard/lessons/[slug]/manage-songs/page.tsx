@@ -17,7 +17,8 @@ export default async function Page({ params }: { params: Params }) {
     .select("song_id")
     .eq("lesson_id", slug);
 
-  const assignedSongIds = lessonSongs?.map((ls: { song_id: string }) => ls.song_id) || [];
+  const assignedSongIds =
+    lessonSongs?.map((ls: { song_id: string }) => ls.song_id) || [];
 
   return (
     <div className="container py-8 space-y-6">
@@ -27,13 +28,25 @@ export default async function Page({ params }: { params: Params }) {
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error?.message || lessonSongsError?.message || "Failed to load data"}</AlertDescription>
+          <AlertDescription>
+            {error?.message ||
+              lessonSongsError?.message ||
+              "Failed to load data"}
+          </AlertDescription>
         </Alert>
       )}
 
       <div className="space-y-8">
-        <AddSongForm songs={songs} assignedSongIds={assignedSongIds} slug={slug} />
-        <AssignedSongsList songs={songs} assignedSongIds={assignedSongIds} slug={slug} />
+        <AddSongForm
+          songs={songs}
+          assignedSongIds={assignedSongIds}
+          slug={slug}
+        />
+        <AssignedSongsList
+          songs={songs}
+          assignedSongIds={assignedSongIds}
+          slug={slug}
+        />
       </div>
     </div>
   );

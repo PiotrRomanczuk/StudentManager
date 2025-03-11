@@ -19,10 +19,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this song?")) {
       const supabase = await createClient();
-      const { error } = await supabase
-        .from("songs")
-        .delete()
-        .eq("id", song.id);
+      const { error } = await supabase.from("songs").delete().eq("id", song.id);
 
       if (error) {
         console.error("Error deleting song:", error);
@@ -56,8 +53,8 @@ export default function SongDetails({ song }: SongDetailsProps) {
               <strong>Title:</strong> {song.title}
             </p>
             <p>
-							<strong>Short Title:</strong> {song.shortTitle || 'N/A'}
-						</p>
+              <strong>Short Title:</strong> {song.shortTitle || "N/A"}
+            </p>
             <p>
               <strong>Created At:</strong>{" "}
               {new Date(song.createdAt).toLocaleDateString()}

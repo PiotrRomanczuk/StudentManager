@@ -87,11 +87,7 @@ Here are some potential features and improvements planned for future releases:
 10. **Internationalization**
     - Add support for multiple languages to reach
 
-
-
 ![Scheme Visualizer](./DBSchemeVisualiser.png)
-
-
 
 ## 🚀 Getting Started
 

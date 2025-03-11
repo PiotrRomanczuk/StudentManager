@@ -1,25 +1,28 @@
-// import SongCreateClientForm from './SongCreateClientForm';
-type Params = Promise<{ slug: string }>;
+import { createClient } from "@/utils/supabase/clients/server";
+import SongCreateClientForm from "./SongCreateClientForm";
+
+type Params = Promise<{ song: string }>;
 
 export default async function Page({ params }: { params: Params }) {
-  const { slug } = await params;
-  const songResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/songs?title=${slug}`,
-  );
-  const song = await songResponse.json();
+  const { song: songId } = await params;
 
-  if (!song) {
-    return <div>Song not found</div>;
-  }
+  const supabase = await createClient();
+
+  const { data: song, error } = await supabase.from("songs").insert({
+    title: "Unknown",
+    author: "Unknown",
+    level: "Beginner",
+    key: "C",
+    chords: [],
+    audio_files: [],
+    ultimate_guitar_link: "",
+    short_title: "Unknown",
+    created_at: new Date().toISOString(),
+  });
 
   return (
     <div>
-      {slug}
-      {song}
+      <SongCreateClientForm song={song} />
     </div>
   );
 }
-
-// export default async function Page() {
-// 	return <div>Create Song</div>;
-// }
