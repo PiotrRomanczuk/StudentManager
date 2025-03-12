@@ -53,7 +53,7 @@ export function SongTable({
                 <TableCell>{song.level}</TableCell>
                 <TableCell>{song.key}</TableCell>
                 <TableCell>
-                  {new Date(song.createdAt).toLocaleString("en-US", {
+                  {new Date(song.created_at).toLocaleString("en-US", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",

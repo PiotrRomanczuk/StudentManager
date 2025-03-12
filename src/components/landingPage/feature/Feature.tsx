@@ -19,7 +19,7 @@ export default function Feature() {
           </p>
           <p className="mt-6 text-lg/8 text-gray-600">
             Streamline your educational administration with our powerful suite
-            of tools. From attendance tracking to grade management, we've got
+            of tools. From attendance tracking to grade management, weve got
             you covered.
           </p>
         </motion.div>

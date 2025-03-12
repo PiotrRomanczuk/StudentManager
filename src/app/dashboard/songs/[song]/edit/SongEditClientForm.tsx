@@ -12,7 +12,7 @@ const SongEditClientForm = ({
   mode: "create" | "edit";
 }) => {
   console.log("song edit client form song", song);
-
+  console.log("song edit client form mode", mode);
   return (
     <div>
       <h1 className="text-3xl font-bold pl-6 pt-4 mb-6">{song.title}</h1>

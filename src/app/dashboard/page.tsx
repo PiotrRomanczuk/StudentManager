@@ -1,20 +1,88 @@
 // import { useState } from 'react';
 import { Container } from "@/components/ui/container";
-import { LoadingComponent } from "./songs/@components/LoadingComponent";
 import { ShortSongTable } from "./@components/cards/ShortSongTable";
 import { createClient } from "@/utils/supabase/clients/server";
+import { ErrorComponent } from "./songs/@components/ErrorComponent";
+import NoSongsFound from "./songs/@components/NoSongsFound";
+import { Lesson } from "@/types/Lesson";
 
 export default async function Page() {
   const supabase = await createClient();
 
-  const { data: songs, error, loading } = await supabase.from("songs").select();
-
-  if (loading) {
-    return <LoadingComponent message="Loading songs..." />;
+  // Get user
+  const { data: user, error: userIdError } = await supabase.auth.getUser();
+  if (userIdError) {
+    return <ErrorComponent error="Authentication error" />;
   }
 
-  if (error) {
-    throw new Error("Error loading songs:" + error);
+  const { data: userIsAdmin, error: userIsAdminError } = await supabase
+    .from("profiles")
+    .select("isAdmin")
+    .eq("user_id", user.user.id)
+    .single();
+
+  if (userIsAdminError) {
+    return <ErrorComponent error="Error checking permissions" />;
+  }
+
+  // Get lessons
+  const { data: lessons, error: lessonsError } = await supabase
+    .from("lessons")
+    .select("*")
+    .eq("student_id", user.user.id);
+
+  if (lessonsError) {
+    return <ErrorComponent error="Error fetching lessons" />;
+  }
+
+  if (!lessons?.length) {
+    return <NoSongsFound />;
+  }
+
+  // Get lesson songs
+  const { data: lessonSongs, error: lessonSongsError } = await supabase
+    .from("lesson_songs")
+    .select("*")
+    .in(
+      "lesson_id",
+      lessons.map((lesson: Lesson) => lesson.id),
+    );
+
+  if (lessonSongsError) {
+    return <ErrorComponent error="Error fetching lesson songs" />;
+  }
+
+  if (!lessonSongs?.length) {
+    return <NoSongsFound />;
+  }
+
+  // Fix the songs fetching logic
+  let songs;
+  let songsError;
+
+    if (!userIsAdmin?.isAdmin) {
+    const response = await supabase
+    .from("songs")
+    .select("*")
+    .in(
+      "id",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      lessonSongs.map((song: any) => song.song_id),
+      );
+      songs = response.data;
+      songsError = response.error;
+    } else {
+    const response = await supabase.from("songs").select("*");
+    songs = response.data;
+    songsError = response.error;
+  }
+
+  if (songsError) {
+    return <ErrorComponent error="Error fetching songs" />;
+  }
+
+  if (!songs?.length) {
+    return <NoSongsFound />;
   }
 
   if (songs.length === 0) {

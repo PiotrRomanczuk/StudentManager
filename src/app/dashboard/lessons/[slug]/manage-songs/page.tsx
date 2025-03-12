@@ -6,7 +6,7 @@ import AssignedSongsList from "./AssignedSongsList";
 
 type Params = { slug: string };
 
-export default async function Page({ params }: { params: Params }) {
+export default async function Page({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
 
   const supabase = await createClient();

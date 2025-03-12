@@ -9,7 +9,7 @@ export async function createLesson(formData: FormData) {
   const teacherId = formData.get("teacher_id");
   const studentId = formData.get("student_id");
   const date = formData.get("date");
-  const hour_date = formData.get("time");
+  const time = formData.get("time");
 
   const {
     data: { user },
@@ -32,13 +32,14 @@ export async function createLesson(formData: FormData) {
     teacher_id: teacherId,
     student_id: studentId,
     date: date,
-    hour_date: hour_date,
+    time: time,
     creator_user_id: user?.id,
     lesson_number: lessonNumber,
     // other_column: otherValue // Uncomment and replace with actual column name if needed
   });
 
   if (error) {
+    console.error(error);
     throw new Error("Error creating lesson:" + error);
   } else {
     redirect("/dashboard/lessons");

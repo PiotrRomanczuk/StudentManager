@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PUT(request: NextRequest) {
   const supabase = await createClient();
   const body = await request.json();
-  
+
   // First check if the song exists
   const { data: existingData } = await supabase
     .from("songs")
@@ -18,7 +18,7 @@ export async function PUT(request: NextRequest) {
     console.error(`Song with ID ${body.id} not found in database`);
     return NextResponse.json(
       { error: "No song found with the specified ID" },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -31,7 +31,7 @@ export async function PUT(request: NextRequest) {
     level: body.level,
     key: body.key,
     chords: body.chords,
-    updated_at: new Date().toISOString()
+    updated_at: new Date().toISOString(),
   };
 
   console.log("Clean update data:", updateData);
@@ -50,15 +50,14 @@ export async function PUT(request: NextRequest) {
   // Check if we got any data back (data will be an array)
   if (!data || data.length === 0) {
     console.error("No song was updated. ID:", body.id);
-    return NextResponse.json(
-      { error: "No song was updated" },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: "No song was updated" }, { status: 404 });
   }
 
   const updatedSong = data[0]; // Get the first (and should be only) updated song
   console.log("Updated song data:", updatedSong);
 
-  console.log(`Song updated successfully: ${updatedSong.title || 'Unknown title'}`);
+  console.log(
+    `Song updated successfully: ${updatedSong.title || "Unknown title"}`,
+  );
   return NextResponse.json({ data: updatedSong }, { status: 200 });
 }

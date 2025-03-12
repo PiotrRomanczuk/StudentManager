@@ -6,14 +6,26 @@ import { SongEditForm } from "@/components/dashboard/forms/SongEditForm";
 import { CreateSongDTO, Song } from "@/types/Song";
 import { createGuid } from "@/utils/createGuid";
 
-type Params = { song: Song };
+const SongCreateClientForm = ({ song }: { song?: Song }) => {
+  const defaultSong: Song = {
+    id: "",
+    title: "",
+    author: "",
+    level: "beginner",
+    key: "",
+    chords: "",
+    audio_files: "",
+    ultimate_guitar_link: "",
+    short_title: "",
+    created_at: "",
+    updated_at: "",
+  };
 
-const SongCreateClientForm = ({ song }: { song: Song }) => {
   return (
     <div>
       <h1 className="text-3xl font-bold pl-6 pt-4 mb-6">New Song</h1>
       <SongEditForm
-        song={song}
+        song={song || defaultSong}
         mode="create"
         loading={false}
         error={null}

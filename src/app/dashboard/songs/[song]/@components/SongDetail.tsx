@@ -12,10 +12,6 @@ interface SongDetailsProps {
 }
 
 export default function SongDetails({ song }: SongDetailsProps) {
-  // const router = useRouter();
-
-  console.log(song);
-
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this song?")) {
       const supabase = await createClient();
@@ -53,15 +49,15 @@ export default function SongDetails({ song }: SongDetailsProps) {
               <strong>Title:</strong> {song.title}
             </p>
             <p>
-              <strong>Short Title:</strong> {song.shortTitle || "N/A"}
+              <strong>Short Title:</strong> {song.short_title || "N/A"}
             </p>
             <p>
               <strong>Created At:</strong>{" "}
-              {new Date(song.createdAt).toLocaleDateString()}
+              {new Date(song.created_at).toLocaleDateString()}
             </p>
             <p>
               <strong>Updated At:</strong>{" "}
-              {new Date(song.updatedAt).toLocaleDateString()}
+              {new Date(song.updated_at).toLocaleDateString()}
             </p>
           </CardContent>
         </Card>
@@ -120,7 +116,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
             <p>
               <strong>Ultimate Guitar:</strong>{" "}
               <a
-                href={song.ultimateGuitarLink}
+                href={song.ultimate_guitar_link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-500 hover:underline"
@@ -130,7 +126,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
             </p>
 
             <p>
-              <strong>Audio Files:</strong> {song.audioFiles}
+              <strong>Audio Files:</strong> {song.audio_files}
             </p>
           </CardContent>
         </Card>
