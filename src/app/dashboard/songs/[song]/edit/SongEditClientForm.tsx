@@ -1,27 +1,18 @@
 "use client";
 
-import useSongForm from "@/hooks/useSongForm";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { SongEditForm } from "./@components/SongEditForm";
-import { Song } from "@/types/Song";
-import { updateSong } from "./updateSong";
-import { normalizeSongData } from "@/utils/normalizeSongData";
+import { redirect } from "next/navigation";
+import { SongEditForm } from "@/components/dashboard/forms/SongEditForm";
+import { CreateSongDTO, Song } from "@/types/Song";
 
-const SongEditClientForm = ({ song }: { song: Song }) => {
-  const router = useRouter();
-
-  const {
-    // handleSubmit,
-    loading: formLoading,
-    error: formError,
-  } = useSongForm({
-    mode: "edit",
-    songId: song.id,
-    initialData: song,
-    onSuccess: () => router.push(`/songs/${song?.id}`),
-  });
-
+const SongEditClientForm = ({
+  song,
+  mode,
+}: {
+  song: Song;
+  mode: "create" | "edit";
+}) => {
+  console.log("song edit client form song", song);
+  console.log("song edit client form mode", mode);
   return (
     <div>
       <h1 className="text-3xl font-bold pl-6 pt-4 mb-6">{song.title}</h1>
@@ -29,18 +20,40 @@ const SongEditClientForm = ({ song }: { song: Song }) => {
         song={song}
         mode="edit"
         songId={song.id}
-        loading={formLoading}
-        error={formError}
-        onSubmit={async (normalizedData) => {
-          try {
-            const formattedData = normalizeSongData(normalizedData, song);
-            await updateSong(formattedData as Song); // Type assertion to fix type error
-            router.push(`/dashboard/songs/${song.id}`);
-            } catch (error) {
-              throw new Error("Error updating song:" + error);
+        loading={false}
+        error={null}
+        onSubmit={async (songToUpdate: Partial<Song>) => {
+          const newSong: CreateSongDTO = {
+            id: song.id,
+            created_at: song.created_at,
+            updated_at: new Date().toISOString(),
+            title: songToUpdate.title || "",
+            author: songToUpdate.author || "",
+            level: songToUpdate.level || "beginner",
+            key: songToUpdate.key || "",
+            chords: songToUpdate.chords || undefined,
+            audio_files: songToUpdate.audio_files || undefined,
+            ultimate_guitar_link:
+              songToUpdate.ultimate_guitar_link || undefined,
+            short_title: songToUpdate.short_title || undefined,
+          };
+
+          const response = await fetch(`/api/song/update`, {
+            method: "PUT",
+            body: JSON.stringify(newSong),
+          });
+
+          if (response.status === 404) {
+            console.error("Song not found");
+            return;
+          }
+
+          if (response.ok) {
+            console.log(`Song updated successfully: ${newSong.title}`);
+            redirect(`/dashboard/songs/${song.id}`);
           }
         }}
-        onCancel={() => router.push(`/dashboard/songs/${song.id}`)}
+        onCancel={() => redirect(`/dashboard/songs/${song.id}`)}
       />
     </div>
   );

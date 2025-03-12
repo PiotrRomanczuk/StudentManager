@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function NoLesson() {
   return (
-      <div className="flex h-full items-center justify-center">
+    <div className="flex h-full items-center justify-center">
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <div className="flex flex-col items-center justify-center space-y-2 text-center">

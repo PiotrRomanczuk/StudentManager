@@ -3,16 +3,16 @@ import React from "react";
 
 const SongNotFound = () => {
   return (
-    <div>
+    <>
       <Link
-        href="/dashboard/"
+        href="/dashboard/songs"
         className="flex items-center mb-6 text-blue-500 hover:text-blue-600"
       >
-        <ArrowLeft className="mr-20" size={24} />
-        Back to Songs
+        <ArrowLeft size={28} />
+        <div className="text-xl text-black">Back to Songs</div>
       </Link>
       Song not found
-    </div>
+    </>
   );
 };
 

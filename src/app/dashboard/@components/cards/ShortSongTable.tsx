@@ -14,6 +14,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import Link from "next/link";
 
 interface ShortSongTableProps {
   songs: Song[];
@@ -38,10 +39,11 @@ export function ShortSongTable({ songs }: ShortSongTableProps) {
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead className="font-semibold">Title</TableHead>
-              <TableHead className="font-semibold">Artist</TableHead>
+              {/* <TableHead className="font-semibold">Artist</TableHead>
               <TableHead className="font-semibold text-right">
                 Duration
-              </TableHead>
+              </TableHead> */}
+              <TableHead className="font-semibold">More Info</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -51,11 +53,19 @@ export function ShortSongTable({ songs }: ShortSongTableProps) {
                 className="hover:bg-muted/50 transition-colors"
               >
                 <TableCell className="font-medium">{song.title}</TableCell>
-                <TableCell className="text-muted-foreground">
+                {/* <TableCell className="text-muted-foreground">
                   {song.author}
                 </TableCell>
                 <TableCell className="text-right text-muted-foreground">
                   {song.key}
+                </TableCell> */}
+                <TableCell className="text-muted-foreground">
+                  <Link
+                    href={`/dashboard/songs/${song.id}`}
+                    className="text-blue-500 hover:text-blue-600 font-bold"
+                  >
+                    View
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}

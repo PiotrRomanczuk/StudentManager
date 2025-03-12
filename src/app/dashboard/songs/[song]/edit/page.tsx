@@ -1,23 +1,41 @@
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import SongEditClientForm from "./SongEditClientForm";
+import { createClient } from "@/utils/supabase/clients/server";
 
-type Params = Promise<{ slug: string }>;
+type Params = Promise<{ song: string }>;
 
-export default async function Page({ params }: { params: Params }) {
+export default async function EditPage({ params }: { params: Params }) {
   const resolvedParams = await params;
-  const { slug } = resolvedParams;
-  const songResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/songs?title=${slug}`,
-  );
-  const song = await songResponse.json();
+  console.log("Resolved Params:", resolvedParams);
+  const { song: songId } = resolvedParams;
+  console.log("Song ID:", songId);
 
-  if (!song) {
+  const supabase = await createClient();
+
+  const { data: song, error } = await supabase
+    .from("songs")
+    .select("*")
+    .eq("id", songId)
+    .single();
+
+  console.log(song);
+  if (error || !song) {
     return <div>Song not found</div>;
   }
 
   return (
-    <div>
-      {song.data.Title}
-      <SongEditClientForm song={song.data} />
-    </div>
+    <>
+      <div className="flex border border-black">
+        <Link
+          href="/dashboard/songs"
+          className="flex items-center mb-6 text-blue-500 hover:text-blue-600"
+        >
+          <ArrowLeft size={28} />
+          <div className="text-xl text-black">Back to Songs</div>
+        </Link>
+      </div>
+      <SongEditClientForm song={song} mode="edit" />
+    </>
   );
 }

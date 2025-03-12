@@ -1,4 +1,5 @@
 import { Song } from "./Song";
+import { User } from "./User";
 
 export interface Lesson {
   id: string;
@@ -9,7 +10,7 @@ export interface Lesson {
   updated_at: string;
   date: Date;
   hour_date: string;
-
+  profile?: User;
   songs: Song[];
   notes: string;
 }

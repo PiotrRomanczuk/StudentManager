@@ -2,45 +2,31 @@
 
 import { redirect } from "next/navigation";
 import { Music, BarChart, Key } from "lucide-react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Song } from "@/types/Song";
+import { createClient } from "@/utils/supabase/clients/client";
 
 interface SongDetailsProps {
   song: Song;
 }
 
 export default function SongDetails({ song }: SongDetailsProps) {
-  // const router = useRouter();
-
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this song?")) {
-      try {
-        const response = await fetch(
-          `/api/songs/title=${encodeURIComponent(song.title)}`,
-          {
-            method: "DELETE",
-          },
-        );
+      const supabase = await createClient();
+      const { error } = await supabase.from("songs").delete().eq("id", song.id);
 
-        if (response.ok) {
-          redirect("/dashboard/songs");
-        } else {
-          throw new Error("Failed to delete song");
-        }
-      } catch (error) {
-        throw new Error("Error deleting song:" + error);
+      if (error) {
+        console.error("Error deleting song:", error);
+      } else {
+        redirect("/dashboard/songs");
       }
     }
   };
 
   function handleUpdate() {
-    redirect(`/dashboard/songs/${encodeURIComponent(song.title)}/edit`);
+    redirect(`/dashboard/songs/${encodeURIComponent(song.id)}/edit`);
   }
 
   return (
@@ -62,16 +48,16 @@ export default function SongDetails({ song }: SongDetailsProps) {
             <p>
               <strong>Title:</strong> {song.title}
             </p>
-            {/* <p>
-							<strong>Short Title:</strong> {song.ShortTitle || 'N/A'}
-						</p> */}
+            <p>
+              <strong>Short Title:</strong> {song.short_title || "N/A"}
+            </p>
             <p>
               <strong>Created At:</strong>{" "}
-              {new Date(song.createdAt).toLocaleDateString()}
+              {new Date(song.created_at).toLocaleDateString()}
             </p>
             <p>
               <strong>Updated At:</strong>{" "}
-              {new Date(song.updatedAt).toLocaleDateString()}
+              {new Date(song.updated_at).toLocaleDateString()}
             </p>
           </CardContent>
         </Card>
@@ -130,7 +116,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
             <p>
               <strong>Ultimate Guitar:</strong>{" "}
               <a
-                href={song.ultimateGuitarLink}
+                href={song.ultimate_guitar_link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-500 hover:underline"
@@ -140,7 +126,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
             </p>
 
             <p>
-              <strong>Audio Files:</strong> {song.audioFiles}
+              <strong>Audio Files:</strong> {song.audio_files}
             </p>
           </CardContent>
         </Card>

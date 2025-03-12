@@ -11,10 +11,10 @@ export const normalizeSongData = (
     level: song.level || existingSong.level || "",
     key: song.key || existingSong.key || "Unknown",
     chords: song.chords || existingSong.chords || "",
-    audioFiles: song.audioFiles || "",
-    ultimateGuitarLink: song.ultimateGuitarLink || "",
-    shortTitle: song.shortTitle || "",
-    createdAt: existingSong.createdAt,
-    updatedAt: new Date().toISOString(),
+    audio_files: song.audio_files || "",
+    ultimate_guitar_link: song.ultimate_guitar_link || "",
+    short_title: song.short_title || "",
+    created_at: existingSong.created_at,
+    updated_at: new Date().toISOString(),
   };
 };
