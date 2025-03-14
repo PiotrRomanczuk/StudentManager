@@ -34,6 +34,6 @@ describe("Landing page", () => {
 
   it("signUp button should redirect to signUp page", () => {
     cy.get("#signUp").click();
-    cy.url().should("include", "/signUp");
+    cy.url().should("include", "/signup");
   });
 });

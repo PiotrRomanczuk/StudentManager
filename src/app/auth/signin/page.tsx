@@ -37,7 +37,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form className="space-y-5">
+        <form className="space-y-5" id="signInForm">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-sm font-medium">
               Email
