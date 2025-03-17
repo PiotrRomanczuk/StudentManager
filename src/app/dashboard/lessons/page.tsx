@@ -8,9 +8,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { LessonsTable } from "./LessonsTable";
 import type { User } from "@/types/User";
 import { ErrorComponent } from "../songs/@components/ErrorComponent";
+import { fetchUserAndAdmin } from "../@components/fetchUserAndAdmin";
+
 
 export default async function Page() {
   const supabase = await createClient();
+  const { user, userIsAdmin } = await fetchUserAndAdmin(supabase);
+
+
   const { data: lessons, error: lessonsError } = await supabase
     .from("lessons")
     .select("*")
@@ -69,23 +74,23 @@ export default async function Page() {
   });
 
 
- // Get user
- const { data: user, error: userIdError } = await supabase.auth.getUser();
- if (userIdError) {
-   return <ErrorComponent error="Authentication error" />;
- }
+//  // Get user
+//  const { data: user, error: userIdError } = await supabase.auth.getUser();
+//  if (userIdError) {
+//    return <ErrorComponent error="Authentication error" />;
+//  }
 
- const { data: userIsAdmin, error: userIsAdminError } = await supabase
-   .from("profiles")
-   .select("isAdmin")
-   .eq("user_id", user.user.id)
-   .single();
+//  const { data: userIsAdmin, error: userIsAdminError } = await supabase
+//    .from("profiles")
+//    .select("isAdmin")
+//    .eq("user_id", user.user.id)
+//    .single();
 
- if (userIsAdminError) {
-   return <ErrorComponent error="Error checking permissions" />;
- }
+//  if (userIsAdminError) {
+//    return <ErrorComponent error="Error checking permissions" />;
+//  }
 
- console.log("User is admin:", userIsAdmin);
+//  console.log("User is admin:", userIsAdmin);
 
 
   return (
