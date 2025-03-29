@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export async function fetchUserAndAdmin(supabase: any) {
     const { data: user, error: userIdError } = await supabase.auth.getUser();
     if (userIdError) throw new Error("Authentication error");
