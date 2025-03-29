@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -10,6 +12,8 @@ import Link from "next/link";
 import { Edit, CalendarDays, Clock, User } from "lucide-react";
 import { getUsername } from "@/utils/getUsername";
 import { Separator } from "@/components/ui/separator";
+import { createClient } from "@/utils/supabase/clients/client";
+import { redirect } from "next/navigation";
 
 type LessonInformationProps = {
   lesson: {
@@ -29,6 +33,23 @@ export default function LessonInformation({
   formattedDate,
   formattedTime,
 }: LessonInformationProps) {
+
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this song?")) {
+      const supabase = await createClient();
+      const { error } = await supabase.from("lessons").delete().eq("id", lesson.id);
+
+      if (error) {
+        console.error("Error deleting song:", error);
+      } else {
+        redirect("/dashboard/lessons");
+      }
+    }
+  };
+
+
+  console.log(formattedDate);
   return (
     <Card className="flex-1">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -39,6 +60,11 @@ export default function LessonInformation({
             Edit Lesson
           </Link>
         </Button>
+        <Button asChild size="sm" variant="outline" onClick={handleDelete}>
+          
+            <Edit className="mr-2 h-4 w-4" />
+            Delete Lesson
+          </Button>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

@@ -1,5 +1,18 @@
 # Development Tasks
 
+
+## Most Important
+- TODO: ✅ Adding lesssons only for teachers - this is important securtity bug right now!!!
+- TODO: Song Table filtration through students
+- TODO: Lesson Table filtration through students
+- TODO: CSS responsive styles for phones
+- TODO: Improve UX for adding lessons
+- TODO: Google Drive API integration
+- TODO: Adding lessons recursively
+- TODO: Updating the database songs
+
+- TODO: LLM Stuffs
+
 ## Authentication & User Management
 - TODO: Getting list of all users, and adding to favourite songs to other users
 - TODO: Fixing updating profile + avatar profile
@@ -22,6 +35,11 @@
 
 ## DevOps & Infrastructure
 - TODO: Contenerize app in Docker
+
+
+## 
+- TODO: Add filtration for students
+- TODO: Add delete button for songs
 
 ## AI & Learning Features
 - TODO: Adding LLM with Vercel.AI

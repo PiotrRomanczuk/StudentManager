@@ -5,6 +5,7 @@ import NoSongsFound from "./@components/NoSongsFound";
 import SongsClientComponent from "./@components/SongsClientComponent";
 import Link from "next/link";
 import { Lesson } from "@/types/Lesson";
+import { Song } from "@/types/Song";
 
 export default async function Page() {
   const supabase = await createClient();
@@ -25,7 +26,7 @@ export default async function Page() {
     return <ErrorComponent error="Error checking permissions" />;
   }
 
-  console.log("User is admin:", userIsAdmin);
+  // console.log("User is admin:", userIsAdmin);
 
   // Get lessons
   const { data: lessons, error: lessonsError } = await supabase
@@ -33,7 +34,7 @@ export default async function Page() {
     .select("*")
     .or(`student_id.eq.${user.user.id},teacher_id.eq.${user.user.id}`);
 
-  console.log("Lessons:", lessons);
+  // console.log("Lessons:", lessons);
   if (lessonsError) {
     return <ErrorComponent error="Error fetching lessons" />;
   }
@@ -55,7 +56,7 @@ export default async function Page() {
     return <ErrorComponent error="Error fetching lesson songs" />;
   }
 
-  console.log("Lesson songs:", lessonSongs);
+  // console.log("Lesson songs:", lessonSongs);
 
   if (!lessonSongs?.length) {
     return <NoSongsFound />;
@@ -73,7 +74,7 @@ export default async function Page() {
     .in(
       "id",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        lessonSongs.map((song: any) => song.song_id),
+        lessonSongs.map((song: Song) => song.id),
       );
     songs = response.data;
     songsError = response.error;
@@ -83,7 +84,7 @@ export default async function Page() {
     songsError = response.error;
   }
 
-  console.log("Songs:", songs);
+  // console.log("Songs:", songs);
 
   if (songsError) {
     return <ErrorComponent error="Error fetching songs" />;
@@ -92,6 +93,11 @@ export default async function Page() {
   if (!songs?.length) {
     return <NoSongsFound />;
   }
+
+  // Sort songs from property "update_at"
+  songs = songs.sort((a: Song, b: Song) => b.updated_at.getTime() - a.updated_at.getTime());
+
+  console.log("Songs:", songs);
 
   return (
     <div>

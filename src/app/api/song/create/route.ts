@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/clients/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  console.log(body);
+  // console.log(body);
 
   const supabase = await createClient();
 
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     throw Error(error.message);
   }
 
-  console.log(`Song created successfully:`);
-  console.log(data);
+  // console.log(`Song created successfully:`);
+  // console.log(data);
   return NextResponse.json({ data }, { status: 200 });
 }

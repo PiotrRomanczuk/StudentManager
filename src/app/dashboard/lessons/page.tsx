@@ -16,18 +16,22 @@ export default async function Page() {
   const { user, userIsAdmin } = await fetchUserAndAdmin(supabase);
 
 
+
+  console.log("User is admin:", user,  userIsAdmin);
+
+
   const { data: lessons, error: lessonsError } = await supabase
     .from("lessons")
     .select("*")
     .order("created_at", { ascending: false });
-  console.log("Lessons:", lessons);
+  // console.log("Lessons:", lessons);
   // get profiles for each lesson
   const { data: profiles, error: profilesError } = await supabase
     .from("profiles")
     .select("*")
     .in("user_id", lessons?.map((lesson: Lesson) => lesson.student_id) || []);
 
-  console.log("Profiles:", profiles);
+  // console.log("Profiles:", profiles);
 
   // map profiles to lessons
   const lessonsWithProfiles = lessons?.map((lesson: Lesson) => {
@@ -35,36 +39,36 @@ export default async function Page() {
     return { ...lesson, profile };
   });
 
-  console.log("Lessons with profiles:", lessonsWithProfiles);
+  // console.log("Lessons with profiles:", lessonsWithProfiles);
 
-  if (lessonsError || profilesError) {
-    console.error(lessonsError || profilesError);
+  // if (lessonsError || profilesError) {
+  //   console.error(lessonsError || profilesError);
 
-    return (
-      <div className="container mx-auto py-6">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Lessons</h1>
-          {/* <Button asChild>
-            <Link href="/dashboard/lessons/create">
-              <Plus className="mr-2 h-4 w-4" />
-              Create Lesson
-            </Link>
-          </Button> */}
-        </div>
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-10">
-            <p className="text-lg font-medium">Error loading lessons</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Please try again later
-            </p>
-            {/* <Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>
-              Retry
-            </Button> */}
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  //   return (
+  //     <div className="container mx-auto py-6">
+  //       <div className="mb-6 flex items-center justify-between">
+  //         <h1 className="text-3xl font-bold">Lessons</h1>
+  //         {/* <Button asChild>
+  //           <Link href="/dashboard/lessons/create">
+  //             <Plus className="mr-2 h-4 w-4" />
+  //             Create Lesson
+  //           </Link>
+  //         </Button> */}
+  //       </div>
+  //       <Card>
+  //         <CardContent className="flex flex-col items-center justify-center py-10">
+  //           <p className="text-lg font-medium">Error loading lessons</p>
+  //           <p className="text-sm text-muted-foreground mt-1">
+  //             Please try again later
+  //           </p>
+  //           {/* <Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>
+  //             Retry
+  //           </Button> */}
+  //         </CardContent>
+  //       </Card>
+  //     </div>
+  //   );
+  // }
 
   // Pre-fetch all user data to avoid multiple calls
   const userIds = new Set<string>();
@@ -80,24 +84,17 @@ export default async function Page() {
 //    return <ErrorComponent error="Authentication error" />;
 //  }
 
-//  const { data: userIsAdmin, error: userIsAdminError } = await supabase
-//    .from("profiles")
-//    .select("isAdmin")
-//    .eq("user_id", user.user.id)
-//    .single();
 
-//  if (userIsAdminError) {
-//    return <ErrorComponent error="Error checking permissions" />;
-//  }
 
-//  console.log("User is admin:", userIsAdmin);
+
+
 
 
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Lessons</h1>
-        {userIsAdmin?.isAdmin && (
+        {userIsAdmin && (
           <Button asChild>
             <Link href="/dashboard/lessons/create">
               <Plus className="mr-2 h-4 w-4" />
@@ -112,14 +109,18 @@ export default async function Page() {
           <CardContent className="flex flex-col items-center justify-center py-10">
             <p className="text-lg font-medium">No lessons found</p>
             <p className="text-sm text-muted-foreground mt-1">
-              Create your first lesson to get started
+              {userIsAdmin 
+                ? "Create your first lesson to get started"
+                : "No lessons available at the moment"}
             </p>
-            <Button asChild className="mt-4">
-              <Link href="/dashboard/lessons/create">
-                <Plus className="mr-2 h-4 w-4" />
-                Create Lesson
-              </Link>
-            </Button>
+            {userIsAdmin && (
+              <Button asChild className="mt-4">
+                <Link href="/dashboard/lessons/create">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create Lesson
+                </Link>
+              </Button>
+            )}
           </CardContent>
         </Card>
       ) : (

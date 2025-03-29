@@ -8,8 +8,8 @@ export interface Song {
   audio_files?: string;
   ultimate_guitar_link?: string;
   short_title?: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export type CreateSongDTO = Omit<Song, "Id" | "CreatedAt" | "UpdatedAt">;

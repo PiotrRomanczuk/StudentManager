@@ -12,7 +12,7 @@ export async function PUT(request: NextRequest) {
     .eq("id", body.id)
     .single();
 
-  console.log("existingData", existingData);
+  // console.log("existingData", existingData);
 
   if (!existingData) {
     console.error(`Song with ID ${body.id} not found in database`);
@@ -22,7 +22,7 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  console.log("Attempting to update song with body:", body);
+  // console.log("Attempting to update song with body:", body);
 
   // Create a clean update object with only the fields we want to update
   const updateData = {
@@ -34,7 +34,7 @@ export async function PUT(request: NextRequest) {
     updated_at: new Date().toISOString(),
   };
 
-  console.log("Clean update data:", updateData);
+  // console.log("Clean update data:", updateData);
 
   const { data, error } = await supabase
     .from("songs")
@@ -54,10 +54,10 @@ export async function PUT(request: NextRequest) {
   }
 
   const updatedSong = data[0]; // Get the first (and should be only) updated song
-  console.log("Updated song data:", updatedSong);
+  // console.log("Updated song data:", updatedSong);
 
-  console.log(
-    `Song updated successfully: ${updatedSong.title || "Unknown title"}`,
-  );
+  // console.log(
+  //   `Song updated successfully: ${updatedSong.title || "Unknown title"}`,
+  // );
   return NextResponse.json({ data: updatedSong }, { status: 200 });
 }
