@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+<<<<<<< HEAD
 import { Toaster } from "@/components/ui/sonner";
+=======
+>>>>>>> 3cdce2a (FEAT: Added vercel analytics)
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>{children}
+<<<<<<< HEAD
         <Toaster />
+=======
+>>>>>>> 3cdce2a (FEAT: Added vercel analytics)
         <Analytics />
       </body>
     </html>
