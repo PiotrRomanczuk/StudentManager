@@ -10,12 +10,16 @@ import { fetchUserAndAdmin } from '../@components/fetchUserAndAdmin';
 import SearchBar from './Search-bar';
 import NoLesson from './[slug]/@components/NoLesson';
 
+type Params = {
+	user_id: string;
+};
+
 export default async function Page({
 	searchParams,
 }: {
-	searchParams: { user_id: string };
+	searchParams: Promise<Params>;
 }) {
-	const userId = searchParams.user_id;
+	const { user_id } = await searchParams;
 
 	const supabase = await createClient();
 	const { user, userIsAdmin } = await fetchUserAndAdmin(supabase);
@@ -25,13 +29,13 @@ export default async function Page({
 	let lessons;
 	let lessonsError;
 
-	if (userId) {
+	if (user_id) {
 		const response = await supabase
 			.from('lessons')
 			.select('*')
 			.order('created_at', { ascending: false })
-			.eq('student_id', userId)
-			.or(`student_id.eq.${userId},teacher_id.eq.${userId}`);
+			.eq('student_id', user_id)
+			.or(`student_id.eq.${user_id},teacher_id.eq.${user_id}`);
 		lessons = response.data;
 		lessonsError = response.error;
 	} else {
