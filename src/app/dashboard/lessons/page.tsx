@@ -4,29 +4,52 @@ import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { LessonsTable } from './LessonsTable';
 import type { User } from '@/types/User';
 import { fetchUserAndAdmin } from '../@components/fetchUserAndAdmin';
+import SearchBar from './Search-bar';
+import NoLesson from './[slug]/@components/NoLesson';
 
-export default async function Page() {
+export default async function Page({
+	searchParams,
+}: {
+	searchParams: { user_id: string };
+}) {
+	const userId = searchParams.user_id;
+
 	const supabase = await createClient();
 	const { user, userIsAdmin } = await fetchUserAndAdmin(supabase);
 
 	console.log('User is admin:', user, userIsAdmin);
 
-	const { data: lessons, error: lessonsError } = await supabase
-		.from('lessons')
-		.select('*')
-		.order('created_at', { ascending: false });
+	let lessons;
+	let lessonsError;
+
+	if (userId) {
+		const response = await supabase
+			.from('lessons')
+			.select('*')
+			.order('created_at', { ascending: false })
+			.eq('student_id', userId)
+			.or(`student_id.eq.${userId},teacher_id.eq.${userId}`);
+		lessons = response.data;
+		lessonsError = response.error;
+	} else {
+		const response = await supabase
+			.from('lessons')
+			.select('*')
+			.order('created_at', { ascending: false });
+		lessons = response.data;
+		lessonsError = response.error;
+	}
 
 	// get profiles for each lesson
 	const { data: profiles, error: profilesError } = await supabase
 		.from('profiles')
-		.select('*')
-		.in('user_id', lessons?.map((lesson: Lesson) => lesson.student_id) || []);
+		.select('*');
+	// .in('user_id', lessons?.map((lesson: Lesson) => lesson.student_id) || []);
 
-	// console.log("Profiles:", profiles);
+	console.log('Profiles:', profiles);
 
 	if (lessonsError || profilesError) {
 		return <>There is a lesson or profile problem</>;
@@ -61,28 +84,13 @@ export default async function Page() {
 					</Button>
 				)}
 			</div>
-
 			{!lessons || lessons.length === 0 ? (
-				<Card>
-					<CardContent className='flex flex-col items-center justify-center py-10'>
-						<p className='text-lg font-medium'>No lessons found</p>
-						<p className='text-sm text-muted-foreground mt-1'>
-							{userIsAdmin
-								? 'Create your first lesson to get started'
-								: 'No lessons available at the moment'}
-						</p>
-						{userIsAdmin && (
-							<Button asChild className='mt-4'>
-								<Link href='/dashboard/lessons/create'>
-									<Plus className='mr-2 h-4 w-4' />
-									Create Lesson
-								</Link>
-							</Button>
-						)}
-					</CardContent>
-				</Card>
+				<NoLesson />
 			) : (
-				<LessonsTable lessons={lessonsWithProfiles} />
+				<>
+					{userIsAdmin && <SearchBar profiles={profiles} />}
+					<LessonsTable lessons={lessonsWithProfiles} />
+				</>
 			)}
 		</div>
 	);
