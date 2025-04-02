@@ -1,13 +1,13 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
-
 import LessonInformation from "./@components/LessonInformation";
 import SongInformation from "./@components/SongInformation";
 import NoLesson from "./@components/NoLesson";
 import LessonError from "./@components/LessonError";
-import DeleteButton from "./@components/DeleteButton"; // Updated import
+import DeleteButton from "./@components/DeleteButton";
+import { formatLessonDate, formatLessonTime } from "../utils/date-formatters";
+import { createSerializableLesson } from "../utils/lesson-helpers";
 
 type Params = { slug: string };
 
@@ -24,24 +24,25 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     return <LessonError error={error.message} />;
   }
 
-  if (!lessons || lessons.length === 0) {
+  if (!lessons?.length) {
     return <NoLesson />;
   }
 
   const lesson = lessons[0];
-  const formattedDate = new Date(lesson.date).toLocaleDateString(undefined, {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 
-  const formattedTime = new Date(lesson.time).toLocaleTimeString(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  // Fetch usernames
+  const { data: student } = await supabase
+    .from("profiles")
+    .select("email")
+    .eq("user_id", lesson.student_id)
+    .single();
 
-  console.log(formattedDate);
+  const { data: teacher } = await supabase
+    .from("profiles")
+    .select("email")
+    .eq("user_id", lesson.teacher_id)
+    .single();
+
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6 flex items-center justify-between">
@@ -56,11 +57,12 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
       <div className="flex flex-col gap-6">
         <LessonInformation
-          lesson={lesson}
-          formattedDate={formattedDate}
-          formattedTime={formattedTime}
+          lesson={createSerializableLesson(lesson)}
+          formattedDate={formatLessonDate(lesson.date)}
+          formattedTime={formatLessonTime(lesson.time)}
+          studentUsername={student?.email || "Unknown"}
+          teacherUsername={teacher?.email || "Unknown"}
         />
-
         <SongInformation lesson={lesson} />
       </div>
     </div>

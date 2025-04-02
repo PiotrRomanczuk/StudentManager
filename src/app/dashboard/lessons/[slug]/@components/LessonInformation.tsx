@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Edit, CalendarDays, Clock, User } from "lucide-react";
-import { getUsername } from "@/utils/getUsername";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/clients/client";
 import { redirect } from "next/navigation";
@@ -26,30 +25,30 @@ type LessonInformationProps = {
   };
   formattedDate: string;
   formattedTime: string;
+  studentUsername: string;
+  teacherUsername: string;
 };
 
 export default function LessonInformation({
   lesson,
   formattedDate,
   formattedTime,
+  studentUsername,
+  teacherUsername,
 }: LessonInformationProps) {
-
-
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this song?")) {
+    if (window.confirm("Are you sure you want to delete this lesson?")) {
       const supabase = await createClient();
       const { error } = await supabase.from("lessons").delete().eq("id", lesson.id);
 
       if (error) {
-        console.error("Error deleting song:", error);
+        console.error("Error deleting lesson:", error);
       } else {
         redirect("/dashboard/lessons");
       }
     }
   };
 
-
-  console.log(formattedDate);
   return (
     <Card className="flex-1">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -60,11 +59,10 @@ export default function LessonInformation({
             Edit Lesson
           </Link>
         </Button>
-        <Button asChild size="sm" variant="outline" onClick={handleDelete}>
-          
-            <Edit className="mr-2 h-4 w-4" />
-            Delete Lesson
-          </Button>
+        <Button size="sm" variant="outline" onClick={handleDelete}>
+          <Edit className="mr-2 h-4 w-4" />
+          Delete Lesson
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -74,14 +72,14 @@ export default function LessonInformation({
                 <User className="h-4 w-4" />
                 <span>Student</span>
               </div>
-              <p className="font-medium">{getUsername(lesson.student_id)}</p>
+              <p className="font-medium">{studentUsername}</p>
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <User className="h-4 w-4" />
                 <span>Teacher</span>
               </div>
-              <p className="font-medium">{getUsername(lesson.teacher_id)}</p>
+              <p className="font-medium">{teacherUsername}</p>
             </div>
           </div>
 
