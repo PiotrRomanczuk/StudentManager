@@ -19,7 +19,7 @@ export default async function Page() {
 		.from('lessons')
 		.select('*')
 		.order('created_at', { ascending: false });
-	// console.log("Lessons:", lessons);
+
 	// get profiles for each lesson
 	const { data: profiles, error: profilesError } = await supabase
 		.from('profiles')
@@ -32,44 +32,13 @@ export default async function Page() {
 		return <>There is a lesson or profile problem</>;
 	}
 
-	// map profiles to lessons
+	// map profiles to lessonst
 	const lessonsWithProfiles = lessons?.map((lesson: Lesson) => {
 		const profile = profiles?.find(
 			(profile: User) => profile.user_id === lesson.student_id
 		);
 		return { ...lesson, profile };
 	});
-
-	// console.log("Lessons with profiles:", lessonsWithProfiles);
-
-	// if (lessonsError || profilesError) {
-	//   console.error(lessonsError || profilesError);
-
-	//   return (
-	//     <div className="container mx-auto py-6">
-	//       <div className="mb-6 flex items-center justify-between">
-	//         <h1 className="text-3xl font-bold">Lessons</h1>
-	//         {/* <Button asChild>
-	//           <Link href="/dashboard/lessons/create">
-	//             <Plus className="mr-2 h-4 w-4" />
-	//             Create Lesson
-	//           </Link>
-	//         </Button> */}
-	//       </div>
-	//       <Card>
-	//         <CardContent className="flex flex-col items-center justify-center py-10">
-	//           <p className="text-lg font-medium">Error loading lessons</p>
-	//           <p className="text-sm text-muted-foreground mt-1">
-	//             Please try again later
-	//           </p>
-	//           {/* <Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>
-	//             Retry
-	//           </Button> */}
-	//         </CardContent>
-	//       </Card>
-	//     </div>
-	//   );
-	// }
 
 	// Pre-fetch all user data to avoid multiple calls
 	const userIds = new Set<string>();
@@ -78,17 +47,12 @@ export default async function Page() {
 		userIds.add(lesson.teacher_id);
 	});
 
-	//  // Get user
-	//  const { data: user, error: userIdError } = await supabase.auth.getUser();
-	//  if (userIdError) {
-	//    return <ErrorComponent error="Authentication error" />;
-	//  }
-
+	console.log(userIsAdmin);
 	return (
 		<div className='container mx-auto py-6'>
 			<div className='mb-6 flex items-center justify-between'>
 				<h1 className='text-3xl font-bold'>Lessons</h1>
-				{userIsAdmin && (
+				{userIsAdmin == true && (
 					<Button asChild>
 						<Link href='/dashboard/lessons/create'>
 							<Plus className='mr-2 h-4 w-4' />

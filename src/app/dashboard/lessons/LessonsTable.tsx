@@ -30,14 +30,6 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
 		});
 	}
 
-	// function formatTime(dateString: string) {
-	//   const date = new Date(dateString);
-	//   return date.toLocaleTimeString(undefined, {
-	//     hour: "2-digit",
-	//     minute: "2-digit",
-	//   });
-	// }
-
 	// write a dunction that gets an email adress and leave only the first part before @
 	function getEmail(email: string) {
 		return email.split('@')[0];
