@@ -97,8 +97,7 @@ export default async function Page({
 				<NoLesson />
 			) : (
 				<>
-					{userIsAdmin == true }
-					<SearchBar profiles={profiles} />
+					{userIsAdmin && <SearchBar profiles={profiles} />}
 					<LessonsTable lessons={lessonsWithProfiles} />
 				</>
 			)}
