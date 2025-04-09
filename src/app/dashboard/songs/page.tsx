@@ -6,6 +6,7 @@ import SongsClientComponent from "./@components/SongsClientComponent";
 import Link from "next/link";
 import { Lesson } from "@/types/Lesson";
 import { Song } from "@/types/Song";
+import SearchBar from "@/components/Search-bar";
 
 export default async function Page() {
   const supabase = await createClient();
@@ -93,11 +94,22 @@ export default async function Page() {
   if (!songs?.length) {
     return <NoSongsFound />;
   }
-
-  // Sort songs from property "update_at"
-  songs = songs.sort((a: Song, b: Song) => b.updated_at.getTime() - a.updated_at.getTime());
+  // Sort songs by updated_at timestamp
+  songs = songs.sort((a: Song, b: Song) => {
+    const dateA = new Date(a.updated_at);
+    const dateB = new Date(b.updated_at);
+    return dateB.getTime() - dateA.getTime();
+  });
 
   console.log("Songs:", songs);
+
+  const { data: profiles, error: profilesError } = await supabase
+  .from('profiles')
+  .select('*');
+
+  if (profilesError) {
+    return <ErrorComponent error="Error fetching profiles" />;
+  }
 
   return (
     <div>
@@ -105,14 +117,15 @@ export default async function Page() {
         <div className="my-8">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Songs</h1>
-            {userIsAdmin?.isAdmin && (
+            {userIsAdmin?.isAdmin && (<>
               <Link
                 href="/dashboard/songs/create"
                 className="text-blue-500 hover:text-blue-600 font-bold"
               >
                 Add New Song
               </Link>
-            )}
+              <SearchBar profiles={profiles} />
+              </>)}
           </div>
           <SongsClientComponent songs={songs} />
         </div>

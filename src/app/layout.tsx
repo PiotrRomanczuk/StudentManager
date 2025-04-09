@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
 import { Toaster } from '@/components/ui/sonner';
+// import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -19,6 +20,7 @@ export default function RootLayout({
 				{children}
 				<Toaster />
 				<Analytics />
+				{/* <SpeedInsights /> */}
 			</body>
 		</html>
 	);

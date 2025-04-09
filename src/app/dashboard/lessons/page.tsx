@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { LessonsTable } from './LessonsTable';
 import type { User } from '@/types/User';
 import { fetchUserAndAdmin } from '../@components/fetchUserAndAdmin';
-import SearchBar from './Search-bar';
+import SearchBar from '@/components/Search-bar';
 import NoLesson from './[slug]/@components/NoLesson';
 
 type Params = {
@@ -21,6 +21,7 @@ export default async function Page({
 }) {
 	const { user_id } = await searchParams;
 
+	console.time(user_id);
 	const supabase = await createClient();
 	const { user, userIsAdmin } = await fetchUserAndAdmin(supabase);
 
@@ -53,7 +54,7 @@ export default async function Page({
 		.select('*');
 	// .in('user_id', lessons?.map((lesson: Lesson) => lesson.student_id) || []);
 
-	console.log('Profiles:', profiles);
+	// console.log('Profiles:', profiles);
 
 	if (lessonsError || profilesError) {
 		return <>There is a lesson or profile problem</>;
@@ -74,25 +75,30 @@ export default async function Page({
 		userIds.add(lesson.teacher_id);
 	});
 
-	console.log(userIsAdmin);
+	// console.log(userIsAdmin);
 	return (
 		<div className='container mx-auto py-6'>
 			<div className='mb-6 flex items-center justify-between'>
 				<h1 className='text-3xl font-bold'>Lessons</h1>
 				{userIsAdmin == true && (
-					<Button asChild>
-						<Link href='/dashboard/lessons/create'>
-							<Plus className='mr-2 h-4 w-4' />
+					<>
+					Hello
+						<SearchBar profiles={profiles} />
+						<Button asChild>
+							<Link href='/dashboard/lessons/create'>
+								<Plus className='mr-2 h-4 w-4' />
 							Create Lesson
 						</Link>
 					</Button>
+					</>
 				)}
 			</div>
 			{!lessons || lessons.length === 0 ? (
 				<NoLesson />
 			) : (
 				<>
-					{userIsAdmin == true && <SearchBar profiles={profiles} />}
+					{userIsAdmin == true }
+					<SearchBar profiles={profiles} />
 					<LessonsTable lessons={lessonsWithProfiles} />
 				</>
 			)}
