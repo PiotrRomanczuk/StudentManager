@@ -29,6 +29,9 @@ export default function SearchBar({ profiles }: { profiles: User[] }) {
 	// URL -> `/dashboard?search=my-project`
 	// `search` -> 'my-project'
 	console.log(search);
+
+	console.log(profiles);
+
 	return (
 		<Select
 			onValueChange={handleValueChange}

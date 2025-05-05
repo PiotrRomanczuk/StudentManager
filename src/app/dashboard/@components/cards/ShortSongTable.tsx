@@ -53,12 +53,12 @@ export function ShortSongTable({ songs }: ShortSongTableProps) {
                 className="hover:bg-muted/50 transition-colors"
               >
                 <TableCell className="font-medium">{song.title}</TableCell>
-                {/* <TableCell className="text-muted-foreground">
+                <TableCell className="text-muted-foreground">
                   {song.author}
                 </TableCell>
                 <TableCell className="text-right text-muted-foreground">
                   {song.key}
-                </TableCell> */}
+                </TableCell>
                 <TableCell className="text-muted-foreground">
                   <Link
                     href={`/dashboard/songs/${song.id}`}

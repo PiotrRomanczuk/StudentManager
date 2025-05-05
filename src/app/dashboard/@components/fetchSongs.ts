@@ -38,8 +38,8 @@ export async function fetchSongs(
 		.select('*')
 		.in(
 			'id',
-			lessonSongs.map((song: Song) => song.id)
+			lessonSongs.map((lessonSong: { song_id: string }) => lessonSong.song_id)
 		);
-	if (songsError) throw new Error('Error fetching songs');
+	if (songsError) throw new Error(songsError.message);
 	return songs;
 }

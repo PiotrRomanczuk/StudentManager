@@ -13,6 +13,11 @@ export default async function Page() {
 
 	try {
 		const { user, userIsAdmin } = await fetchUserAndAdmin(supabase);
+		
+		if (!user?.user?.id) {
+			return <ErrorComponent error="Please sign in to view your dashboard" />;
+		}
+
 		const songs = await fetchSongs(supabase, user.user.id, userIsAdmin.isAdmin);
 
 		if (!songs?.length) {
@@ -30,6 +35,7 @@ export default async function Page() {
 			</div>
 		);
 	} catch (error) {
+		console.error('Dashboard error:', error);
 		return <ErrorComponent error={(error as Error).message} />;
 	}
 }

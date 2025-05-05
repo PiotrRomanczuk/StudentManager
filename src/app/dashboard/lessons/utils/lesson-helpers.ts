@@ -1,4 +1,6 @@
-export const createSerializableLesson = (lesson: any) => ({
+import { Lesson } from "@/types/Lesson";
+
+export const createSerializableLesson = (lesson: Lesson) => ({
   id: lesson.id,
   student_id: lesson.student_id,
   teacher_id: lesson.teacher_id,

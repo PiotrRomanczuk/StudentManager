@@ -1,8 +1,23 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { createLesson } from "./actions";
 import { User } from "@/types/User";
+
+function getCurrentDateTime() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  
+  return {
+    date: `${year}-${month}-${day}`,
+    time: `${hours}:00`
+  };
+}
+
 export default async function Page() {
   const supabase = await createClient();
+  const { date, time } = getCurrentDateTime();
 
   const { data: students, error: studentsError } = await supabase
     .from("profiles")
@@ -41,10 +56,10 @@ export default async function Page() {
         </select>
         <br />
         Date:
-        <input type="date" name="date" />
+        <input type="date" name="date" defaultValue={date} />
         <br />
         Time:
-        <input type="time" name="time" />
+        <input type="time" name="time" defaultValue={time} />
         <br />
         <button type="submit">Create Lesson</button>
       </form>

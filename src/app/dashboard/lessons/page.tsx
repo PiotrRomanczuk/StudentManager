@@ -40,7 +40,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Par
 		<div className='container mx-auto py-6'>
 			<div className='mb-6 flex items-center justify-between'>
 				<h1 className='text-3xl font-bold'>Lessons</h1>
-				{userIsAdmin && (
+				{userIsAdmin == true && (
 					<>
 						<SearchBar profiles={profiles} />
 						<Button asChild>

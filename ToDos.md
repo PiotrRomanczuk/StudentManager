@@ -4,13 +4,18 @@ adding songs that student wants
 
 ## Most Important
 - TODO: ✅ Adding lesssons only for teachers - this is important securtity bug right now!!!
+
+- TODO: TASKS for students!!! IMP
+
 - TODO: Song Table filtration through students
 - TODO: Lesson Table filtration through students
 - TODO: CSS responsive styles for phones
+
+- TODO: Updating the database songs
+
 - TODO: Improve UX for adding lessons
 - TODO: Google Drive API integration
 - TODO: Adding lessons recursively
-- TODO: Updating the database songs
 
 - TODO: LLM Stuffs
 

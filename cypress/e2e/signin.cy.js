@@ -22,7 +22,7 @@ describe('Login Page', () => {
   
       // Add assertions based on what should happen after successful login
       // For example, if it redirects to dashboard:
-      // cy.url().should('include', '/dashboard')
+      cy.url().should('include', '/dashboard')
     })
   
     it('should show validation for required fields', () => {

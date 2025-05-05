@@ -11,105 +11,70 @@ import SearchBar from "@/components/Search-bar";
 export default async function Page() {
   const supabase = await createClient();
 
-  // Get user
-  const { data: user, error: userIdError } = await supabase.auth.getUser();
-  if (userIdError) {
-    return <ErrorComponent error="Authentication error" />;
-  }
+  // Fetch current user
+  const { data: user, error: userError } = await supabase.auth.getUser();
+  if (userError || !user?.user) return <ErrorComponent error="Authentication error" />;
 
-  const { data: userIsAdmin, error: userIsAdminError } = await supabase
+  const userId = user.user.id;
+
+  // Fetch user role
+  const { data: userProfile, error: profileError } = await supabase
     .from("profiles")
     .select("isAdmin")
-    .eq("user_id", user.user.id)
+    .eq("user_id", userId)
     .single();
 
-  if (userIsAdminError) {
-    return <ErrorComponent error="Error checking permissions" />;
-  }
+  if (profileError) return <ErrorComponent error="Error checking permissions" />;
 
-  // console.log("User is admin:", userIsAdmin);
+  const isAdmin = userProfile?.isAdmin;
 
-  // Get lessons
+  // Fetch lessons where user is either student or teacher
   const { data: lessons, error: lessonsError } = await supabase
     .from("lessons")
     .select("*")
-    .or(`student_id.eq.${user.user.id},teacher_id.eq.${user.user.id}`);
+    .or(`student_id.eq.${userId},teacher_id.eq.${userId}`);
 
-  // console.log("Lessons:", lessons);
-  if (lessonsError) {
-    return <ErrorComponent error="Error fetching lessons" />;
-  }
+  if (lessonsError) return <ErrorComponent error="Error fetching lessons" />;
+  if (!lessons?.length) return <NoSongsFound />;
 
-  if (!lessons?.length) {
-    return <NoSongsFound />;
-  }
+  const lessonIds = lessons.map((lesson: Lesson) => lesson.id);
 
-  // Get lesson songs
+  // Fetch lesson songs
   const { data: lessonSongs, error: lessonSongsError } = await supabase
     .from("lesson_songs")
     .select("*")
-    .in(
-      "lesson_id",
-      lessons.map((lesson: Lesson) => lesson.id),
-    );
+    .in("lesson_id", lessonIds);
 
-  if (lessonSongsError) {
-    return <ErrorComponent error="Error fetching lesson songs" />;
-  }
+  if (lessonSongsError) return <ErrorComponent error="Error fetching lesson songs" />;
+  if (!lessonSongs?.length) return <NoSongsFound />;
 
-  // console.log("Lesson songs:", lessonSongs);
-
-  if (!lessonSongs?.length) {
-    return <NoSongsFound />;
-  }
-
-  // Fix the songs fetching logic
-  let songs;
+  // Fetch songs
+  let songs: Song[] | null = [];
   let songsError;
 
-  if (!userIsAdmin?.isAdmin) {
-    // make a lint exception for any song.song_id
-    const response = await supabase
-    .from("songs")
-    .select("*")
-    .in(
-      "id",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        lessonSongs.map((song: Song) => song.id),
-      );
-    songs = response.data;
-    songsError = response.error;
+  if (isAdmin) {
+    const res = await supabase.from("songs").select("*");
+    songs = res.data;
+    songsError = res.error;
   } else {
-    const response = await supabase.from("songs").select("*");
-    songs = response.data;
-    songsError = response.error;
+    const songIds = lessonSongs.map((song: { song_id: string }) => song.song_id);
+    const res = await supabase.from("songs").select("*").in("id", songIds);
+    songs = res.data;
+    songsError = res.error;
   }
 
-  // console.log("Songs:", songs);
+  if (songsError) return <ErrorComponent error="Error fetching songs" />;
+  if (!songs?.length) return <NoSongsFound />;
 
-  if (songsError) {
-    return <ErrorComponent error="Error fetching songs" />;
-  }
+  // Sort songs by updated_at
+  songs.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 
-  if (!songs?.length) {
-    return <NoSongsFound />;
-  }
-  // Sort songs by updated_at timestamp
-  songs = songs.sort((a: Song, b: Song) => {
-    const dateA = new Date(a.updated_at);
-    const dateB = new Date(b.updated_at);
-    return dateB.getTime() - dateA.getTime();
-  });
-
-  console.log("Songs:", songs);
-
+  // Fetch all profiles (for admin search)
   const { data: profiles, error: profilesError } = await supabase
-  .from('profiles')
-  .select('*');
+    .from("profiles")
+    .select("*");
 
-  if (profilesError) {
-    return <ErrorComponent error="Error fetching profiles" />;
-  }
+  if (profilesError) return <ErrorComponent error="Error fetching profiles" />;
 
   return (
     <div>
@@ -117,15 +82,17 @@ export default async function Page() {
         <div className="my-8">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Songs</h1>
-            {userIsAdmin?.isAdmin && (<>
-              <Link
-                href="/dashboard/songs/create"
-                className="text-blue-500 hover:text-blue-600 font-bold"
-              >
-                Add New Song
-              </Link>
-              <SearchBar profiles={profiles} />
-              </>)}
+            {isAdmin && (
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/dashboard/songs/create"
+                  className="text-blue-500 hover:text-blue-600 font-bold"
+                >
+                  Add New Song
+                </Link>
+                <SearchBar profiles={profiles} />
+              </div>
+            )}
           </div>
           <SongsClientComponent songs={songs} />
         </div>
@@ -133,58 +100,3 @@ export default async function Page() {
     </div>
   );
 }
-// const { data: songs, error } = await supabase.from("songs").select("*");
-
-// const { data: user, error: userIdError } = await supabase.auth.getUser();
-
-// console.log(user?.user?.id);
-// if (userIdError) {
-//   console.error("Error fetching user:", userIdError);
-//   return <ErrorComponent error="Authentication error" />;
-// }
-
-// if (!user?.user?.id) {
-//   console.error("No user ID found");
-//   return <ErrorComponent error="Not authenticated" />;
-// }
-
-// const { data: userIsAdmin, error: userIsAdminError } = await supabase
-//   .from("profiles")
-//   .select("isAdmin")
-//   .eq("user_id", user.user.id)
-//   .single();
-
-// if (userIsAdminError) {
-//   console.error("Error fetching user admin status:", userIsAdminError);
-//   return <ErrorComponent error="Error checking permissions" />;
-// }
-
-// console.log("User is admin:", userIsAdmin);
-
-// const { data: lessons, error: lessonsError } = await supabase
-//   .from("lessons")
-//   .select("*")
-//   .eq("student_id", user.user.id);
-
-// if (lessonsError) {
-//   console.error("Error fetching lessons:", lessonsError);
-//   return <ErrorComponent error="Error fetching lessons" />;
-// }
-
-// const { data: lessonSongs, error: songsError } = await supabase
-//   .from("lesson_songs")
-//   .select("*")
-//   .in("lesson_id", lessons?.map((lesson: any) => lesson.id) || []);
-
-// console.log("Lesson songs:", lessonSongs);
-
-// if (songsError) {
-//   console.error("Error fetching songs:", songsError);
-//   return <ErrorComponent error="Error fetching songs" />;
-// }
-
-// console.log("Lessons:", lessons);
-
-// if (!songs || songs.length === 0) {
-//   return <NoSongsFound />;
-// }
