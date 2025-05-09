@@ -12,7 +12,7 @@ export async function fetchSongs(
 	if (isAdmin) {
 		const { data, error } = await supabase.from('songs').select('*');
 		if (error) throw new Error('Error fetching songs');
-		return data;
+		return data as Song[];
 	}
 
 	// Get user's lessons and associated songs
@@ -41,5 +41,5 @@ export async function fetchSongs(
 			lessonSongs.map((lessonSong: { song_id: string }) => lessonSong.song_id)
 		);
 	if (songsError) throw new Error(songsError.message);
-	return songs;
+	return songs as Song[];
 }

@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import DASHBOARD_LIST from "./DASHBOARD_LIST";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -47,18 +50,25 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         </div>
 
         <nav className="mt-4">
-          {DASHBOARD_LIST.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100"
-            >
-              {item.icon}
-              <span className={`${isSidebarOpen ? "ml-3" : "hidden"}`}>
-                {item.name}
-              </span>
-            </Link>
-          ))}
+          {DASHBOARD_LIST.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`flex items-center px-4 py-3 ${
+                  isActive
+                    ? "bg-blue-50 text-blue-600 border-r-4 border-blue-600"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                {item.icon}
+                <span className={`${isSidebarOpen ? "ml-3" : "hidden"}`}>
+                  {item.name}
+                </span>
+              </Link>
+            );
+          })}
         </nav>
       </aside>
 

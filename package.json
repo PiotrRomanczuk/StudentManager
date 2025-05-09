@@ -14,6 +14,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@google-cloud/local-auth": "^3.0.1",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^3.10.0",
     "@mui/material": "^6.2.1",
@@ -32,6 +33,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.4.1",
     "google-one-tap": "^1.0.6",
+    "googleapis": "^148.0.0",
     "heroicons": "^2.2.0",
     "lucide-react": "^0.468.0",
     "next": "15.1.4",

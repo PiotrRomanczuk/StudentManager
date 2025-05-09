@@ -3,6 +3,8 @@
 adding songs that student wants
 
 ## Most Important
+
+- TODO: QUIZES for chords diagrams!
 - TODO: ✅ Adding lesssons only for teachers - this is important securtity bug right now!!!
 
 - TODO: TASKS for students!!! IMP
