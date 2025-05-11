@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import DASHBOARD_LIST from "./DASHBOARD_LIST";
+import { usePathname } from "next/navigation";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
+  const pathname = usePathname();
   
 
   return (

@@ -1,12 +1,18 @@
 import { lessons } from './data';
-
+import Image from 'next/image';
 export const Lessons = () => {
   return (
     <div className="grid md:grid-cols-3 gap-4 mb-8">
       {lessons.map((lesson) => (
         <div key={lesson.name} className={`rounded-xl shadow p-5 ${lesson.color} flex flex-col gap-2`}>
           <div className="flex items-center gap-3 mb-2">
-            <img src={lesson.avatar} alt={lesson.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" />
+            <Image 
+              src={lesson.avatar} 
+              alt={lesson.name} 
+              width={48}
+              height={48}
+              className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" 
+            />
             <div>
               <div className="font-semibold text-lg">{lesson.name}</div>
               <div className="text-gray-500 text-xs">{lesson.instrument} • {lesson.duration}</div>

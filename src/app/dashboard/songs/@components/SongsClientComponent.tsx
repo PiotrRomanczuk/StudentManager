@@ -7,7 +7,7 @@ import { Song } from "@/types/Song";
 
 export default function SongsClientComponent({ songs }: { songs: Song[] }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 24;
   const totalPages = Math.ceil(songs.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {

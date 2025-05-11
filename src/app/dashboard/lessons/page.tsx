@@ -44,10 +44,13 @@ export default async function Page({ searchParams }: { searchParams: Promise<Par
 				{userIsAdmin  && (
 					<>
 						<SearchBar profiles={profiles} />
-						<Button asChild>
-							<Link href='/dashboard/lessons/create'>
-								<Plus className='mr-2 h-4 w-4' />
-								Create Lesson
+						<Button 
+							asChild 
+							className="bg-primary hover:bg-primary/90 text-white font-medium transition-all duration-200 shadow-md hover:shadow-lg"
+						>
+							<Link href='/dashboard/lessons/create' className="flex items-center gap-2 px-4 py-2">
+								<Plus className='h-5 w-5 text-black' />
+								<span className='hidden md:block text-black'>Create Lesson</span>
 							</Link>
 						</Button>
 					</>

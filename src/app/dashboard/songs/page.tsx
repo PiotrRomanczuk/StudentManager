@@ -31,7 +31,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Par
   const isAdmin = userProfile?.isAdmin;
 
   try {
-    const { songs, lessonSongs } = await fetchUserSongs(userId, user_id);
+    const { songs } = await fetchUserSongs(userId, user_id);
     if (!songs?.length) return <NoSongsFound />;
 
     const profiles = await fetchAllProfiles();

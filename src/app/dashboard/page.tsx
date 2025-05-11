@@ -1,6 +1,4 @@
 // import { useState } from 'react';
-import { Container } from '@/components/ui/container';
-import { ShortSongTable } from './@components/cards/ShortSongTable';
 import { createClient } from '@/utils/supabase/clients/server';
 import { ErrorComponent } from './songs/@components/ErrorComponent';
 import NoSongsFound from './songs/@components/NoSongsFound';

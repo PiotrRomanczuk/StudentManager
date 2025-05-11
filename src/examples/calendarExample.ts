@@ -1,5 +1,14 @@
 import { GoogleCalendarService } from '../services/googleCalendar';
 
+type Event = {
+  summary: string;
+  description: string;
+  start: {
+    dateTime: string;
+    date?: string;
+  };
+};
+
 async function main() {
   const calendarService = new GoogleCalendarService();
   
@@ -14,7 +23,7 @@ async function main() {
     // List upcoming events
     const events = await calendarService.listEvents(5);
     console.log('Upcoming events:');
-    events.forEach((event: any) => {
+    events.forEach((event: Event) => {
       console.log(`${event.summary} (${event.start.dateTime || event.start.date})`);
     });
 

@@ -36,70 +36,95 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
 	}
 
 	return (
-		<div className='rounded-md border'>
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead>Lesson</TableHead>
-						<TableHead>Date</TableHead>
-						<TableHead>Student</TableHead>
-						<TableHead>Teacher</TableHead>
-						<TableHead>Time</TableHead>
-						<TableHead>Last Updated</TableHead>
-						<TableHead className='text-right'>Actions</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{lessons.map((lesson: Lesson) => (
-						<TableRow key={lesson.id}>
-							<TableCell className='font-medium'>
-								{lesson.lesson_number
-									? `Lesson ${lesson.lesson_number}`
-									: 'Lesson'}
-							</TableCell>
-							<TableCell>
-								<Badge variant='outline'>
-									{lesson.date
-										? formatDate(lesson.date.toString())
-										: formatDate(lesson.created_at)}
-								</Badge>
-							</TableCell>
-							<TableCell>
-								<div className='flex items-center gap-2'>
-									<User className='h-4 w-4 text-muted-foreground' />
-									<span>{getEmail(lesson.profile?.email || '')}</span>
-								</div>
-							</TableCell>
-							<TableCell>
-								<div className='flex items-center gap-2'>
-									<User className='h-4 w-4 text-muted-foreground' />
-									<span>{getEmail('p.romanczuk@gmail.com')}</span>
-								</div>
-							</TableCell>
-							<TableCell>
-								{lesson.time ? (
-									<div className='flex items-center gap-2'>
-										<Clock className='h-4 w-4 text-muted-foreground' />
-										<span>{lesson.time.toString()}</span>
-									</div>
-								) : (
-									<span className='text-muted-foreground'>—</span>
-								)}
-							</TableCell>
-							<TableCell className='text-muted-foreground text-sm'>
-								{formatDate(lesson.updated_at)}
-							</TableCell>
-							<TableCell className='text-right'>
-								<Button asChild size='sm' variant='secondary'>
-									<Link href={`/dashboard/lessons/${lesson.id}`}>
-										View Details
-									</Link>
-								</Button>
-							</TableCell>
+		<div className="bg-white rounded-lg shadow-md p-6">
+			<div className="overflow-x-auto">
+				<Table>
+					<TableHeader>
+						<TableRow className="bg-gray-50 hover:bg-gray-50">
+							<TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lesson</TableHead>
+							<TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</TableHead>
+							<TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</TableHead>
+							<TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teacher</TableHead>
+							<TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</TableHead>
+							<TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Updated</TableHead>
+							<TableHead className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</TableHead>
 						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+					</TableHeader>
+					<TableBody>
+						{lessons.map((lesson: Lesson) => (
+							<TableRow 
+								key={lesson.id}
+								className="hover:bg-gray-50 transition-colors"
+							>
+								<TableCell className="px-6 py-4">
+									<div className="flex items-center">
+										<div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+											<span className="text-blue-600 font-medium">L{lesson.lesson_number || '?'}</span>
+										</div>
+										<div className="ml-4">
+											<div className="text-sm font-medium text-gray-900">
+												{lesson.lesson_number ? `Lesson ${lesson.lesson_number}` : 'Lesson'}
+											</div>
+										</div>
+									</div>
+								</TableCell>
+								<TableCell className="px-6 py-4">
+									<Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+										{lesson.date
+											? formatDate(lesson.date.toString())
+											: formatDate(lesson.created_at)}
+									</Badge>
+								</TableCell>
+								<TableCell className="px-6 py-4">
+									<div className="flex items-center gap-2">
+										<div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center">
+											<User className="h-4 w-4 text-purple-600" />
+										</div>
+										<span className="text-sm font-medium text-gray-900">{getEmail(lesson.profile?.email || '')}</span>
+									</div>
+								</TableCell>
+								<TableCell className="px-6 py-4">
+									<div className="flex items-center gap-2">
+										<div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
+											<User className="h-4 w-4 text-green-600" />
+										</div>
+										<span className="text-sm font-medium text-gray-900">{getEmail('p.romanczuk@gmail.com')}</span>
+									</div>
+								</TableCell>
+								<TableCell className="px-6 py-4">
+									{lesson.time ? (
+										<div className="flex items-center gap-2">
+											<div className="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center">
+												<Clock className="h-4 w-4 text-orange-600" />
+											</div>
+											<span className="text-sm font-medium text-gray-900">{lesson.time.toString()}</span>
+										</div>
+									) : (
+										<span className="text-muted-foreground">—</span>
+									)}
+								</TableCell>
+								<TableCell className="px-6 py-4">
+									<span className="text-sm text-gray-500">
+										{formatDate(lesson.updated_at)}
+									</span>
+								</TableCell>
+								<TableCell className="px-6 py-4 text-right">
+									<Button 
+										asChild 
+										size="sm" 
+										variant="outline"
+										className="bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"
+									>
+										<Link href={`/dashboard/lessons/${lesson.id}`}>
+											View Details
+										</Link>
+									</Button>
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</div>
 		</div>
 	);
 }
