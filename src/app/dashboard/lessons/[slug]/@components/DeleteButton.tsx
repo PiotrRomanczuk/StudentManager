@@ -26,11 +26,7 @@ export default function DeleteButton({ lessonId }: DeleteButtonProps) {
   };
 
   return (
-    <Button
-      onClick={handleDelete}
-      disabled={isDeleting}
-      variant="destructive"
-    >
+    <Button onClick={handleDelete} disabled={isDeleting} variant="destructive">
       {isDeleting ? "Deleting..." : "Delete Lesson"}
     </Button>
   );

@@ -5,17 +5,25 @@ import NoSongsFound from "./@components/NoSongsFound";
 import SongsClientComponent from "./@components/SongsClientComponent";
 import Link from "next/link";
 import SearchBar from "@/components/Search-bar";
-import { fetchUserSongs, fetchAllProfiles } from "@/app/dashboard/songs/songService";
+import {
+  fetchUserSongs,
+  fetchAllProfiles,
+} from "@/app/dashboard/songs/songService";
 
 type Params = { user_id: string };
 
-export default async function Page({ searchParams }: { searchParams: Promise<Params> }) {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Params>;
+}) {
   const { user_id } = await searchParams;
   const supabase = await createClient();
 
   // Fetch current user
   const { data: user, error: userError } = await supabase.auth.getUser();
-  if (userError || !user?.user) return <ErrorComponent error="Authentication error" />;
+  if (userError || !user?.user)
+    return <ErrorComponent error="Authentication error" />;
 
   const userId = user.user.id;
 
@@ -26,7 +34,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<Par
     .eq("user_id", userId)
     .single();
 
-  if (profileError) return <ErrorComponent error="Error checking permissions" />;
+  if (profileError)
+    return <ErrorComponent error="Error checking permissions" />;
 
   const isAdmin = userProfile?.isAdmin;
 
@@ -60,6 +69,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<Par
       </div>
     );
   } catch (error) {
-    return <ErrorComponent error={error instanceof Error ? error.message : "An error occurred"} />;
+    return (
+      <ErrorComponent
+        error={error instanceof Error ? error.message : "An error occurred"}
+      />
+    );
   }
 }

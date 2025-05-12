@@ -7,4 +7,4 @@ export const createSerializableLesson = (lesson: Lesson) => ({
   notes: lesson.notes,
   created_at: lesson.created_at,
   updated_at: lesson.updated_at,
-}); 
+});

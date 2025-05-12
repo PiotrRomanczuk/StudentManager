@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Song } from "@/types/Song";
 import React, { useState } from "react";
 import { ShortSongTable } from "../cards/ShortSongTable";
@@ -53,7 +53,9 @@ const UserPage = ({ songs }: UserPageProps) => {
           <button
             key={tab}
             className={`pb-2 px-1 text-lg font-medium border-b-2 transition-colors ${
-              activeTab === idx ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-blue-600"
+              activeTab === idx
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-blue-600"
             }`}
             onClick={() => setActiveTab(idx)}
           >
@@ -66,19 +68,25 @@ const UserPage = ({ songs }: UserPageProps) => {
       {activeTab === 0 && (
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-xl font-semibold mb-4">My Lessons</h3>
-          <div className="text-gray-400 italic text-center py-10">Your upcoming lessons will appear here...</div>
+          <div className="text-gray-400 italic text-center py-10">
+            Your upcoming lessons will appear here...
+          </div>
         </div>
       )}
       {activeTab === 1 && (
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-xl font-semibold mb-4">Assignments</h3>
-          <div className="text-gray-400 italic text-center py-10">Your assignments will appear here...</div>
+          <div className="text-gray-400 italic text-center py-10">
+            Your assignments will appear here...
+          </div>
         </div>
       )}
       {activeTab === 2 && (
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-xl font-semibold mb-4">Progress</h3>
-          <div className="text-gray-400 italic text-center py-10">Your progress tracking will appear here...</div>
+          <div className="text-gray-400 italic text-center py-10">
+            Your progress tracking will appear here...
+          </div>
         </div>
       )}
 

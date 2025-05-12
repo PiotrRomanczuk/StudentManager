@@ -8,9 +8,7 @@ type Params = Promise<{ song: string }>;
 
 export default async function Page({ params }: { params: Params }) {
   const resolvedParams = await params;
-  console.log("Resolved Params:", resolvedParams);
   const { song: songId } = resolvedParams;
-  console.log("Song ID:", songId);
 
   const supabase = await createClient();
 
@@ -20,23 +18,25 @@ export default async function Page({ params }: { params: Params }) {
     .eq("id", songId)
     .single();
 
-  console.log(song);
   if (error || !song) {
     return <SongNotFound />;
   }
 
   return (
-    <>
-      <div className="flex border border-black">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mb-8">
         <Link
           href="/dashboard/songs"
-          className="flex items-center mb-6 text-blue-500 hover:text-blue-600"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200 hover:border-gray-300"
         >
-          <ArrowLeft size={28} />
-          <div className="text-xl text-black">Back to Songs</div>
+          <ArrowLeft className="w-5 h-5 text-gray-600" />
+          <span className="text-gray-700 font-medium">Back to Songs</span>
         </Link>
       </div>
-      <SongDetails song={song} />
-    </>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <SongDetails song={song} />
+      </div>
+    </div>
   );
 }

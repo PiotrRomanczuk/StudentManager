@@ -1,12 +1,16 @@
-import { APIError } from './api-helpers';
+import { APIError } from "./api-helpers";
 
-export type Result<T, E = Error> = 
+export type Result<T, E = Error> =
   | { success: true; data: T }
   | { success: false; error: E };
 
 export type AsyncResult<T, E = Error> = Promise<Result<T, E>>;
 
-export function createError(message: string, code?: string, status?: number): Error {
+export function createError(
+  message: string,
+  code?: string,
+  status?: number,
+): Error {
   if (status) {
     return new APIError(message, status, code);
   }
@@ -22,7 +26,7 @@ export function handleError(error: unknown): Error {
 
 export function withErrorHandling<T>(
   fn: () => Promise<T>,
-  errorHandler?: (error: Error) => void
+  errorHandler?: (error: Error) => void,
 ): AsyncResult<T> {
   return fn()
     .then((data) => ({ success: true as const, data }))
@@ -38,4 +42,4 @@ export function unwrapResult<T>(result: Result<T>): T {
     return result.data;
   }
   throw result.error;
-} 
+}

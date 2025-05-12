@@ -40,7 +40,9 @@ export async function createLesson(formData: FormData) {
 
   if (error) {
     console.error(error);
-    throw new Error(`Error creating lesson: ${error.message || JSON.stringify(error)}`);
+    throw new Error(
+      `Error creating lesson: ${error.message || JSON.stringify(error)}`,
+    );
   } else {
     redirect("/dashboard/lessons");
   }

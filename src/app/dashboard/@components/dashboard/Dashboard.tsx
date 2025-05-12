@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const pathname = usePathname();
-  
 
   return (
     <div className="flex h-screen bg-gray-100">

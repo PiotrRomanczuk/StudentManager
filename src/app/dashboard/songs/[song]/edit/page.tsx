@@ -21,21 +21,29 @@ export default async function EditPage({ params }: { params: Params }) {
 
   console.log(song);
   if (error || !song) {
-    return <div>Song not found</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-xl text-gray-600">Song not found</div>
+      </div>
+    );
   }
 
   return (
-    <>
-      <div className="flex border border-black">
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="mb-8">
         <Link
           href="/dashboard/songs"
-          className="flex items-center mb-6 text-blue-500 hover:text-blue-600"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200 text-gray-700 hover:text-gray-900"
         >
-          <ArrowLeft size={28} />
-          <div className="text-xl text-black">Back to Songs</div>
+          <ArrowLeft size={20} />
+          <span className="font-medium">Back to Songs</span>
         </Link>
       </div>
-      <SongEditClientForm song={song} mode="edit" />
-    </>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-6">Edit Song</h1>
+        <SongEditClientForm song={song} mode="edit" />
+      </div>
+    </div>
   );
 }

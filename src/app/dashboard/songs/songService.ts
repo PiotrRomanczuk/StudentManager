@@ -51,7 +51,9 @@ export async function fetchUserSongs(userId: string, targetUserId?: string) {
     songs = res.data;
     songsError = res.error;
   } else {
-    const songIds = lessonSongs.map((song: { song_id: string }) => song.song_id);
+    const songIds = lessonSongs.map(
+      (song: { song_id: string }) => song.song_id,
+    );
     const res = await supabase.from("songs").select("*").in("id", songIds);
     songs = res.data;
     songsError = res.error;
@@ -61,7 +63,10 @@ export async function fetchUserSongs(userId: string, targetUserId?: string) {
   if (!songs?.length) return { songs: [], lessonSongs: [] };
 
   // Sort songs by updated_at
-  songs.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+  songs.sort(
+    (a, b) =>
+      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+  );
 
   return { songs, lessonSongs };
 }
@@ -74,4 +79,4 @@ export async function fetchAllProfiles() {
 
   if (profilesError) throw new Error("Error fetching profiles");
   return profiles;
-} 
+}

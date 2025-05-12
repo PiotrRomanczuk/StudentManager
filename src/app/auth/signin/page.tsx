@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,9 +5,6 @@ import { Label } from "@/components/ui/label";
 import { login } from "./actions";
 
 export default function LoginPage() {
-
-
-  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/10 p-4">
       <div className="w-full max-w-[420px] space-y-8 bg-card rounded-xl shadow-lg p-8 border border-border/40 animate-in fade-in duration-500">

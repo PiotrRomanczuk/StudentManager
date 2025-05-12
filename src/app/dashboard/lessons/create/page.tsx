@@ -5,13 +5,13 @@ import { User } from "@/types/User";
 function getCurrentDateTime() {
   const now = new Date();
   const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+
   return {
     date: `${year}-${month}-${day}`,
-    time: `${hours}:00`
+    time: `${hours}:00`,
   };
 }
 
@@ -38,12 +38,17 @@ export default async function Page() {
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Create New Lesson</h1>
-          
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">
+            Create New Lesson
+          </h1>
+
           <form className="space-y-6" action={createLesson}>
             <div className="space-y-4">
               <div>
-                <label htmlFor="teacher_id" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="teacher_id"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Teacher
                 </label>
                 <select
@@ -60,7 +65,10 @@ export default async function Page() {
               </div>
 
               <div>
-                <label htmlFor="student_id" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="student_id"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Student
                 </label>
                 <select
@@ -78,7 +86,10 @@ export default async function Page() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="date"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Date
                   </label>
                   <input
@@ -91,7 +102,10 @@ export default async function Page() {
                 </div>
 
                 <div>
-                  <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="time"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Time
                   </label>
                   <input

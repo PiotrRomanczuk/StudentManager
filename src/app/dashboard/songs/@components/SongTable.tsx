@@ -30,7 +30,9 @@ export function SongTable({
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">Songs Library</h3>
+        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+          Songs Library
+        </h3>
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
@@ -51,18 +53,21 @@ export function SongTable({
             </TableHeader>
             <TableBody>
               {currentSongs.map((song, index) => (
-                <TableRow 
+                <TableRow
                   key={`${song.id}-${index}`}
                   className="hover:bg-gray-50 transition-colors"
                 >
                   <TableCell className="px-6 py-4">
                     <div className="flex items-center">
                       <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                        <span className="text-blue-600 font-medium">{song.title.charAt(0)}</span>
+                        <span className="text-blue-600 font-medium">
+                          {song.title.charAt(0)}
+                        </span>
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{song.title}</div>
-                        <div className="text-sm text-gray-500">{song.author}</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {song.title}
+                        </div>
                       </div>
                     </div>
                   </TableCell>

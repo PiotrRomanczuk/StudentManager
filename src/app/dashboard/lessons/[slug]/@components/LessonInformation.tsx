@@ -39,7 +39,10 @@ export default function LessonInformation({
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this lesson?")) {
       const supabase = await createClient();
-      const { error } = await supabase.from("lessons").delete().eq("id", lesson.id);
+      const { error } = await supabase
+        .from("lessons")
+        .delete()
+        .eq("id", lesson.id);
 
       if (error) {
         console.error("Error deleting lesson:", error);

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Song } from "@/types/Song";
 import React, { useState } from "react";
 import { Stats } from "../admin/Stats";
@@ -42,7 +42,9 @@ const AdminPage = ({ songs }: AdminPageProps) => {
           <button
             key={tab}
             className={`pb-2 px-1 text-lg font-medium border-b-2 transition-colors ${
-              activeTab === idx ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-blue-600"
+              activeTab === idx
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-blue-600"
             }`}
             onClick={() => setActiveTab(idx)}
           >
@@ -56,14 +58,22 @@ const AdminPage = ({ songs }: AdminPageProps) => {
       {activeTab === 1 && (
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">Students</h3>
+            <h3 className="text-xl font-semibold mb-4 text-gray-800">
+              Students
+            </h3>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Progress
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -74,8 +84,12 @@ const AdminPage = ({ songs }: AdminPageProps) => {
                           <span className="text-blue-600 font-medium">JD</span>
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">John Doe</div>
-                          <div className="text-sm text-gray-500">john@example.com</div>
+                          <div className="text-sm font-medium text-gray-900">
+                            John Doe
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            john@example.com
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -86,7 +100,10 @@ const AdminPage = ({ songs }: AdminPageProps) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <div className="w-full bg-gray-200 rounded-full h-2.5">
-                        <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '75%' }}></div>
+                        <div
+                          className="bg-blue-600 h-2.5 rounded-full"
+                          style={{ width: "75%" }}
+                        ></div>
                       </div>
                     </td>
                   </tr>
@@ -97,7 +114,9 @@ const AdminPage = ({ songs }: AdminPageProps) => {
         </div>
       )}
       {activeTab === 2 && (
-        <div className="text-gray-400 italic text-center py-10">Upcoming schedule feature coming soon...</div>
+        <div className="text-gray-400 italic text-center py-10">
+          Upcoming schedule feature coming soon...
+        </div>
       )}
 
       {/* Recent Assignments */}

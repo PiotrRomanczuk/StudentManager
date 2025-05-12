@@ -7,7 +7,9 @@ export default async function Page() {
   // Get user
   const { data: user, error: userIdError } = await supabase.auth.getUser();
   if (userIdError) {
-    return <ErrorComponent error={`Authentication error: ${userIdError.message}`} />;
+    return (
+      <ErrorComponent error={`Authentication error: ${userIdError.message}`} />
+    );
   }
 
   const { data: userIsAdmin, error: userIsAdminError } = await supabase
@@ -17,7 +19,11 @@ export default async function Page() {
     .single();
 
   if (userIsAdminError) {
-    return <ErrorComponent error={`Error checking permissions: ${userIsAdminError.message}`} />;
+    return (
+      <ErrorComponent
+        error={`Error checking permissions: ${userIsAdminError.message}`}
+      />
+    );
   }
 
   if (!userIsAdmin?.isAdmin) {

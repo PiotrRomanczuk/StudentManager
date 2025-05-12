@@ -1,5 +1,6 @@
 import NavBar from "@/components/dashboard/NavBar/NavBar";
 import Dashboard from "./@components/dashboard/Dashboard";
+import { UserProvider } from "@/context/userContext";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,8 +10,10 @@ interface LayoutProps {
 export default function RootLayout({ children }: LayoutProps) {
   return (
     <div>
-      <NavBar />
-      <Dashboard>{children}</Dashboard>
+      {/* <UserProvider> */}
+        <NavBar />
+        <Dashboard>{children}</Dashboard>
+      {/* </UserProvider> */}
     </div>
   );
 }

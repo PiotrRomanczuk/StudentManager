@@ -19,7 +19,5 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     throw new Error("Failed to load lesson data.");
   }
 
-
-
   return <LessonEditForm lesson={lesson} slug={slug} />;
 }
