@@ -85,8 +85,8 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                   >
                     <TableCell className="px-3 sm:px-6 py-4">
                       <div className="flex items-center">
-                        <div className="h-8 sm:h-10 w-8 sm:w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                          <span className="text-blue-600 font-medium text-sm sm:text-base">
+                        <div className="h-8 sm:h-10 w-8 sm:w-10 rounded-full bg-lesson-blue-bg flex items-center justify-center">
+                          <span className="text-lesson-blue-text font-medium text-sm sm:text-base">
                             L{lesson.lesson_number || "?"}
                           </span>
                         </div>
@@ -107,7 +107,7 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                     <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
                       <Badge
                         variant="outline"
-                        className="bg-blue-50 text-blue-700 border-blue-200"
+                        className="bg-lesson-blue-bg text-lesson-blue-text border-lesson-blue-border"
                       >
                         {lesson.date
                           ? formatDate(lesson.date.toString())
@@ -116,8 +116,8 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                     </TableCell>
                     <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center">
-                          <User className="h-4 w-4 text-purple-600" />
+                        <div className="h-8 w-8 rounded-full bg-lesson-purple-bg flex items-center justify-center">
+                          <User className="h-4 w-4 text-lesson-purple-text" />
                         </div>
                         <span className="text-sm font-medium text-gray-900">
                           {getEmail(lesson.profile?.email || "")}
@@ -126,8 +126,8 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                     </TableCell>
                     <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                          <User className="h-4 w-4 text-green-600" />
+                        <div className="h-8 w-8 rounded-full bg-lesson-green-bg flex items-center justify-center">
+                          <User className="h-4 w-4 text-lesson-green-text" />
                         </div>
                         <span className="text-sm font-medium text-gray-900">
                           {getEmail("p.romanczuk@gmail.com")}
@@ -137,8 +137,8 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                     <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
                       {lesson.time ? (
                         <div className="flex items-center gap-2">
-                          <div className="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center">
-                            <Clock className="h-4 w-4 text-orange-600" />
+                          <div className="h-8 w-8 rounded-full bg-lesson-orange-bg flex items-center justify-center">
+                            <Clock className="h-4 w-4 text-lesson-orange-text" />
                           </div>
                           <span className="text-sm font-medium text-gray-900">
                             {lesson.time.toString()}
@@ -158,7 +158,7 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                         asChild
                         size="sm"
                         variant="outline"
-                        className="bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"
+                        className="bg-lesson-blue-bg hover:bg-lesson-blue-bg/80 text-lesson-blue-text border-lesson-blue-border"
                       >
                         <Link href={`/dashboard/lessons/${lesson.id}`}>
                           View Details

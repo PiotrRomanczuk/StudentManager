@@ -44,14 +44,14 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     .single();
 
   return (
-    <div className="flex flex-col h-full bg-gray-100">
-      <div className="bg-white shadow-sm border-b border-gray-200">
+    <div className="flex flex-col h-full bg-lesson-blue-bg">
+      <div className="bg-white shadow-sm border-b border-lesson-blue-border">
         <div className="container mx-auto py-4 px-6">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">Lesson Details</h1>
+            <h1 className="text-2xl font-bold text-lesson-blue-text">Lesson Details</h1>
             <div className="flex gap-3">
-              <DeleteButton lessonId={lesson.id} />
-              <Button asChild variant="outline" className="hover:bg-gray-100">
+              {/* <DeleteButton lessonId={lesson.id} /> */}
+              <Button asChild variant="outline" className="hover:bg-lesson-blue-bg">
                 <Link href="/dashboard/lessons">Back to Lessons</Link>
               </Button>
             </div>
@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
       <div className="flex-1 container mx-auto py-6 px-6">
         <div className="grid gap-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-lesson-blue-border p-6">
             <LessonInformation
               lesson={createSerializableLesson(lesson)}
               formattedDate={formatLessonDate(lesson.date)}
@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
               teacherUsername={teacher?.email || "Unknown"}
             />
           </div>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-lesson-blue-border p-6">
             <SongInformation lesson={lesson} />
           </div>
         </div>

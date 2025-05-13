@@ -174,6 +174,40 @@ export default function SongDetails({ song }: SongDetailsProps) {
           </CardContent>
         </Card>
       </div>
+
+      {/* Large Content Section */}
+      <div className="mt-8">
+        <Card className="hover:shadow-lg transition-shadow">
+          <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50">
+            <CardTitle className="flex items-center text-purple-700">
+              <Music className="mr-2" size={20} />
+              Song Content
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm text-gray-500 mb-2">Chords & Notes</p>
+                <div className="p-6 bg-gray-50 rounded-lg min-h-[300px]">
+                  <div className="prose max-w-none">
+                    <div className="whitespace-pre-wrap font-mono text-sm">
+                      {song.chords || "No chord progression available"}
+                    </div>
+                    {song.comments && (
+                      <>
+                        <Separator className="my-4" />
+                        <div className="whitespace-pre-wrap text-sm">
+                          {song.comments}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </motion.div>
   );
 }

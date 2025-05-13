@@ -2,6 +2,11 @@
 
 adding songs that student wants
 
+## BUGS:
+
+ - TODO: Can't delete the song from lesson
+ 
+
 ## Most Important
 
 - TODO: QUIZES for chords diagrams!

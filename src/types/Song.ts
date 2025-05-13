@@ -8,6 +8,7 @@ export interface Song {
   audio_files?: string;
   ultimate_guitar_link?: string;
   short_title?: string;
+  comments?: string;
   created_at: Date;
   updated_at: Date;
 }

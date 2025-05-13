@@ -34,11 +34,11 @@ export default async function SongInformation({
   if (lessonSongsError || songsError) {
     console.error("Failed to load songs:", lessonSongsError || songsError);
     return (
-      <Card className="flex-1">
+      <Card className="flex-1 border-lesson-blue-border">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-bold">Songs</CardTitle>
-            <Badge variant="outline" className="ml-2">
+            <CardTitle className="text-xl font-bold text-lesson-blue-text">Songs</CardTitle>
+            <Badge variant="outline" className="ml-2 border-lesson-blue-border text-lesson-blue-text">
               0
             </Badge>
           </div>
@@ -59,11 +59,11 @@ export default async function SongInformation({
   );
 
   return (
-    <Card className="flex-1">
+    <Card className="flex-1 border-lesson-blue-border">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-bold">Songs</CardTitle>
-          <Badge variant="outline" className="ml-2">
+          <CardTitle className="text-xl font-bold text-lesson-blue-text">Songs</CardTitle>
+          <Badge variant="outline" className="ml-2 border-lesson-blue-border text-lesson-blue-text">
             {lessonSongs.length}
           </Badge>
         </div>
@@ -71,8 +71,8 @@ export default async function SongInformation({
       <CardContent>
         {lessonSongs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-6 text-center">
-            <Music className="mb-2 h-8 w-8 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">
+            <Music className="mb-2 h-8 w-8 text-lesson-blue-text" />
+            <p className="text-sm text-lesson-blue-text">
               No songs added to this lesson yet.
             </p>
           </div>
@@ -84,10 +84,10 @@ export default async function SongInformation({
                 return (
                   <li
                     key={`${lessonSong.song_id}-${index}`}
-                    className="rounded-md border p-3"
+                    className="rounded-md border border-lesson-blue-border p-3 hover:bg-lesson-blue-bg transition-colors"
                   >
                     <div className="flex items-center gap-2">
-                      <Music className="h-4 w-4 text-primary" />
+                      <Music className="h-4 w-4 text-lesson-blue-text" />
                       <span className="font-medium">
                         {song?.title || "No Title"}
                       </span>
@@ -95,7 +95,9 @@ export default async function SongInformation({
                         href={`/dashboard/songs/${lessonSong.song_id}`}
                         className="ml-auto"
                       >
-                        <Button variant="link">View Song</Button>
+                        <Button variant="link" className="text-lesson-blue-text hover:text-lesson-blue-text/80">
+                          View Song
+                        </Button>
                       </Link>
                     </div>
                   </li>
@@ -106,7 +108,7 @@ export default async function SongInformation({
         )}
       </CardContent>
       <CardFooter>
-        <Button asChild variant="outline" className="w-full">
+        <Button asChild variant="outline" className="w-full border-lesson-blue-border hover:bg-lesson-blue-bg hover:text-lesson-blue-text">
           <Link href={`/dashboard/lessons/${lesson.id}/manage-songs`}>
             Manage Songs
           </Link>

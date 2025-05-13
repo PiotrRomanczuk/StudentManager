@@ -16,10 +16,10 @@ export default function AssignedSongsList({
   slug,
 }: AssignedSongsListProps) {
   return (
-    <div className="bg-card p-6 rounded-lg border">
-      <h2 className="text-xl font-semibold mb-4">Assigned Songs</h2>
+    <div className="bg-admin-gray-lightest p-6 rounded-lg border border-admin-gray-light">
+      <h2 className="text-xl font-semibold mb-4 text-admin-gray-darker">Assigned Songs</h2>
       {assignedSongIds.length === 0 ? (
-        <p className="text-muted-foreground">
+        <p className="text-admin-gray-DEFAULT">
           No songs assigned to this lesson yet.
         </p>
       ) : (
@@ -29,16 +29,16 @@ export default function AssignedSongsList({
             .map((song: Song) => (
               <li
                 key={song.id}
-                className="flex items-center justify-between p-3 bg-muted rounded-md"
+                className="flex items-center justify-between p-3 bg-admin-blue-light rounded-md border border-admin-gray-light hover:bg-admin-blue-light/80 transition-colors"
               >
-                <span>{song.title}</span>
+                <span className="text-admin-gray-darker font-medium">{song.title}</span>
                 <form
                   action={async (formData) => {
                     await removeSongFromLesson(formData, slug);
                   }}
                 >
                   <input type="hidden" name="songId" value={song.id} />
-                  <Button variant="destructive" size="sm" type="submit">
+                  <Button variant="destructive" size="sm" type="submit" className="hover:bg-destructive/90">
                     Remove
                   </Button>
                 </form>

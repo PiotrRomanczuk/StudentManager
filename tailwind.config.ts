@@ -50,6 +50,43 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        lesson: {
+          blue: {
+            bg: "#EFF6FF",
+            text: "#2563EB",
+            border: "#BFDBFE",
+          },
+          purple: {
+            bg: "#F3E8FF",
+            text: "#9333EA",
+          },
+          green: {
+            bg: "#DCFCE7",
+            text: "#16A34A",
+          },
+          orange: {
+            bg: "#FFF7ED",
+            text: "#EA580C",
+          },
+        },
+        admin: {
+          blue: {
+            light: "#EFF6FF", // blue-100
+            DEFAULT: "#2563EB", // blue-600
+            dark: "#1D4ED8", // blue-700
+          },
+          gray: {
+            lightest: "#F9FAFB", // gray-50
+            light: "#E5E7EB", // gray-200
+            DEFAULT: "#6B7280", // gray-500
+            dark: "#1F2937", // gray-800
+            darker: "#111827", // gray-900
+          },
+          green: {
+            light: "#D1FAE5", // green-100
+            dark: "#065F46", // green-800
+          },
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
