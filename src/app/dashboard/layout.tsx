@@ -1,6 +1,6 @@
 import NavBar from "@/components/dashboard/NavBar/NavBar";
 import Dashboard from "./@components/dashboard/Dashboard";
-import { UserProvider } from "@/context/userContext";
+// import { UserProvider } from "@/context/userContext";
 
 interface LayoutProps {
   children: React.ReactNode;

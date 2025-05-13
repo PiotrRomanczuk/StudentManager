@@ -5,7 +5,6 @@ import LessonInformation from "./@components/LessonInformation";
 import SongInformation from "./@components/SongInformation";
 import NoLesson from "./@components/NoLesson";
 import LessonError from "./@components/LessonError";
-import DeleteButton from "./@components/DeleteButton";
 import { formatLessonDate, formatLessonTime } from "../utils/date-formatters";
 import { createSerializableLesson } from "../utils/lesson-helpers";
 

@@ -28,7 +28,7 @@ export default function Team() {
             Meet the Team
           </h2>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            We're a passionate team dedicated to revolutionizing student management through technology.
+            We&apos;re a passionate team dedicated to revolutionizing student management through technology.
           </p>
         </motion.div>
 

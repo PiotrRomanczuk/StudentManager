@@ -1,17 +1,16 @@
 "use client";
-import { Song } from "@/types/Song";
+// import { Song } from "@/types/Song";
 import React, { useState } from "react";
 import { Stats } from "../admin/Stats";
 import { Lessons } from "../admin/Lessons";
-import { Students } from "../admin/Students";
 import { Assignments } from "../admin/Assignments";
 import { tabList } from "../admin/data";
 
-interface AdminPageProps {
-  songs: Song[];
-}
+// interface AdminPageProps {
+//   songs: Song[];
+// }
 
-const AdminPage = ({ songs }: AdminPageProps) => {
+const AdminPage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",

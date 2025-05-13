@@ -5,10 +5,13 @@ adding songs that student wants
 ## BUGS:
 
  - TODO: Can't delete the song from lesson
- 
+ - TODO: Dashboard doesnt show active Link inside the child site
+ - TODO: Lessons shows number form students, but not for teacher
+
 
 ## Most Important
 
+- TODO: Responsive Tables for mobile!!!
 - TODO: QUIZES for chords diagrams!
 - TODO: ✅ Adding lesssons only for teachers - this is important securtity bug right now!!!
 

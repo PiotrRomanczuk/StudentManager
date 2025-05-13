@@ -8,13 +8,13 @@ const testimonials = [
     imageUrl: "/testimonial-1.jpg"
   },
   {
-    content: "As a private guitar instructor, I've been able to streamline my administrative tasks and focus more on teaching. The student management features are exactly what I needed.",
+    content: "As a private guitar instructor, I&apos;ve been able to streamline my administrative tasks and focus more on teaching. The student management features are exactly what I needed.",
     author: "Michael Chen",
     role: "Guitar Instructor",
     imageUrl: "/testimonial-2.jpg"
   },
   {
-    content: "The communication tools have made it so much easier to keep parents informed about their children's progress. It's been a game-changer for my teaching practice.",
+    content: "The communication tools have made it so much easier to keep parents informed about their children&apos;s progress. It&apos;s been a game-changer for my teaching practice.",
     author: "Emma Rodriguez",
     role: "Piano Teacher",
     imageUrl: "/testimonial-3.jpg"
@@ -37,7 +37,7 @@ export default function Testimonials() {
             What Our Users Say
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Don't just take our word for it. Here's what educators are saying about our platform.
+            Don&apos;t just take our word for it. Here&apos;s what educators are saying about our platform.
           </p>
         </motion.div>
 
@@ -68,7 +68,7 @@ export default function Testimonials() {
                   </div>
                 </div>
                 <p className="mt-6 text-base leading-7 text-gray-600">
-                  "{testimonial.content}"
+                  &ldquo;{testimonial.content}&rdquo;
                 </p>
               </div>
             </motion.div>
