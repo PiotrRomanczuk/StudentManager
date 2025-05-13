@@ -46,7 +46,7 @@ export default function HeroHome() {
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-2xl">
                 <Image
-                  src="/dashboard-preview.png"
+                  src="/MOCKUP UI.png"
                   alt="Dashboard Preview"
                   fill
                   className="object-cover"
