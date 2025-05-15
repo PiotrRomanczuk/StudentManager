@@ -28,20 +28,26 @@ export default function SongsClientComponent({ songs }: { songs: Song[] }) {
   };
 
   return (
-    <div className="space-y-4">
-      <SongSearchBar songs={songs} onSearch={setSearchQuery} />
-      <SongTable
-        songs={filteredSongs}
-        currentPage={currentPage}
-        itemsPerPage={itemsPerPage}
-        onPageChange={handlePageChange}
-      />
-      {totalPages > 1 && (
-        <PaginationComponent
+    <div className="w-full px-4 sm:px-6 lg:px-8 space-y-4">
+      <div className="w-full max-w-full sm:max-w-md">
+        <SongSearchBar songs={songs} onSearch={setSearchQuery} />
+      </div>
+      <div className="w-full overflow-hidden">
+        <SongTable
+          songs={filteredSongs}
           currentPage={currentPage}
-          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
           onPageChange={handlePageChange}
         />
+      </div>
+      {totalPages > 1 && (
+        <div className="w-full flex justify-center">
+          <PaginationComponent
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       )}
     </div>
   );

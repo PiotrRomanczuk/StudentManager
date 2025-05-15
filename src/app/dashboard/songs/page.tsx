@@ -49,17 +49,19 @@ export default async function Page({
       <div>
         <Container className="max-w-4xl">
           <div className="my-8">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <h1 className="text-2xl font-bold">Songs</h1>
               {isAdmin && (
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
                   <Link
                     href="/dashboard/songs/create"
-                    className="text-blue-500 hover:text-blue-600 font-bold"
+                    className="text-blue-500 hover:text-blue-600 font-bold whitespace-nowrap"
                   >
                     Add New Song
                   </Link>
-                  <SearchBar profiles={profiles} />
+                  <div className="w-full sm:w-auto">
+                    <SearchBar profiles={profiles} />
+                  </div>
                 </div>
               )}
             </div>

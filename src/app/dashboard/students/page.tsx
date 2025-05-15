@@ -1,54 +1,124 @@
 import { createClient } from "@/utils/supabase/clients/client";
 import { ErrorComponent } from "../songs/@components/ErrorComponent";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { LoadingState } from "@/components/ui/loading-state";
+import type { User } from "@/types/User";
+import Link from "next/link";
 
-export default async function Page() {
+const SORTABLE_FIELDS = [
+  { key: "email", label: "Email" },
+  { key: "username", label: "Username" },
+  { key: "firstName", label: "First Name" },
+  { key: "lastName", label: "Last Name" },
+  { key: "role", label: "Role" },
+  { key: "created_at", label: "Created At" },
+];
+
+function getNextSort(currentField: string, currentDir: string, field: string) {
+  if (currentField !== field) return "asc";
+  return currentDir === "asc" ? "desc" : "asc";
+}
+
+export default async function Page({ searchParams }: { searchParams: { sort?: string; dir?: string } }) {
   const supabase = createClient();
 
-  // Get user
-  const { data: user, error: userIdError } = await supabase.auth.getUser();
-  if (userIdError) {
-    return (
-      <ErrorComponent error={`Authentication error: ${userIdError.message}`} />
-    );
+  // Determine sort field and direction
+  const sortField = searchParams?.sort || "email";
+  const sortDir = searchParams?.dir === "desc" ? "desc" : "asc";
+
+  // Get user profiles
+  let data: any[] | null = null;
+  let error: any = null;
+  try {
+    let query = supabase.from("profiles").select("*");
+    if (sortField === "role") {
+      query = query.order("isAdmin", { ascending: sortDir === "asc" });
+      query = query.order("isTeacher", { ascending: sortDir === "asc" });
+      query = query.order("isStudent", { ascending: sortDir === "asc" });
+    } else {
+      query = query.order(sortField, { ascending: sortDir === "asc" });
+    }
+    const res = await query;
+    data = res.data;
+    error = res.error;
+  } catch (e: any) {
+    error = e;
   }
-
-  const { data: userIsAdmin, error: userIsAdminError } = await supabase
-    .from("profiles")
-    .select("isAdmin")
-    .eq("user_id", user.user.id)
-    .single();
-
-  if (userIsAdminError) {
-    return (
-      <ErrorComponent
-        error={`Error checking permissions: ${userIsAdminError.message}`}
-      />
-    );
-  }
-
-  if (!userIsAdmin?.isAdmin) {
-    return (
-      <ErrorComponent error="You are not authorized to access this page" />
-    );
-  }
-
-  const { data: profiles, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("isStudent", true);
 
   if (error) {
-    throw new Error("Error loading student profiles:" + error);
+    let errorMsg = "Error loading profiles: ";
+    if (error.message && error.message.includes("does not exist")) {
+      errorMsg += `A column is missing in your database: ${error.message}`;
+    } else {
+      errorMsg += error.message || error;
+    }
+    return <ErrorComponent error={errorMsg} />;
+  }
+
+  if (!data) {
+    return <LoadingState message="Loading students..." />;
+  }
+
+  if (data.length === 0) {
+    return <div className="p-8 text-center text-muted-foreground">No students found.</div>;
+  }
+
+  function sortIndicator(field: string) {
+    if (sortField !== field) return null;
+    return sortDir === "asc" ? " ↑" : " ↓";
+  }
+
+  function getRole(user: any) {
+    if (user.isAdmin) return "Admin";
+    if (user.isTeacher) return "Teacher";
+    if (user.isStudent) return "Student";
+    return "-";
   }
 
   return (
-    <div>
-      {profiles?.map((profile) => (
-        <div key={profile.id}>
-          <h1>{profile.email}</h1>
-          <p>Student ID: {profile.id}</p>
-        </div>
-      ))}
+    <div className="container mx-auto max-w-6xl py-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Students</CardTitle>
+          <CardDescription>List of all student profiles</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {SORTABLE_FIELDS.map(({ key, label }) => (
+                  <TableHead key={key}>
+                    <Link
+                      href={`?sort=${key}&dir=${getNextSort(sortField, sortDir, key)}`}
+                      className="hover:underline cursor-pointer flex items-center gap-1"
+                    >
+                      {label}
+                      <span>{sortIndicator(key)}</span>
+                    </Link>
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell>
+                    <Link href={`/dashboard/students/${user.id}`} className="text-blue-600 hover:underline">
+                      {user.email || "-"}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{user.username || "-"}</TableCell>
+                  <TableCell>{user.firstName || "-"}</TableCell>
+                  <TableCell>{user.lastName || "-"}</TableCell>
+                  <TableCell>{getRole(user)}</TableCell>
+                  <TableCell>{user.created_at ? new Date(user.created_at).toLocaleString() : "-"}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -20,13 +20,13 @@ export function PaginationComponent({
 }: PaginationComponentProps) {
   return (
     <Pagination>
-      <PaginationContent>
+      <PaginationContent className="flex-wrap">
         <PaginationItem>
           <PaginationPrevious
             onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-            className={
+            className={`text-sm sm:text-base ${
               currentPage === 1 ? "pointer-events-none opacity-50" : ""
-            }
+            }`}
           />
         </PaginationItem>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -34,6 +34,7 @@ export function PaginationComponent({
             <PaginationLink
               onClick={() => onPageChange(page)}
               isActive={currentPage === page}
+              className="text-sm sm:text-base"
             >
               {page}
             </PaginationLink>
@@ -42,9 +43,9 @@ export function PaginationComponent({
         <PaginationItem>
           <PaginationNext
             onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-            className={
+            className={`text-sm sm:text-base ${
               currentPage === totalPages ? "pointer-events-none opacity-50" : ""
-            }
+            }`}
           />
         </PaginationItem>
       </PaginationContent>

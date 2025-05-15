@@ -1,17 +1,35 @@
-import { createClient } from "@/utils/supabase/clients/server";
+'use client';
+
+import { createClient } from "@/utils/supabase/clients/client";
 import { Button } from "@/components/ui/button";
 import { LogOut, User } from "lucide-react";
 import { logout } from "@/app/auth/signin/actions";
+import { useEffect, useState } from "react";
 
-const UserInfo = async () => {
-  const supabase = await createClient();
+const UserInfo = () => {
+  const [user, setUser] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase.auth.getUser();
+        if (error) throw error;
+        setUser(data?.user);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (error || !user) {
     return (
       <div className="text-red-500 flex items-center gap-2">
         <User className="h-4 w-4" />
-        No user {error?.message}
+        No user {error}
       </div>
     );
   }
@@ -20,7 +38,7 @@ const UserInfo = async () => {
     <div className="flex items-center gap-4 bg-secondary/20 px-4 py-2 rounded-lg text-white">
       <div className="flex items-center gap-2">
         <User className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm font-medium">{data.user?.email}</span>
+        <span className="text-sm font-medium">{user.email}</span>
       </div>
       <Button 
         variant="ghost" 

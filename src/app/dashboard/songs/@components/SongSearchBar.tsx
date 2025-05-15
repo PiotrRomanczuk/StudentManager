@@ -47,26 +47,26 @@ export function SongSearchBar({ songs, onSearch }: SongSearchBarProps) {
   };
 
   return (
-    <div className="w-full max-w-md relative" ref={dropdownRef}>
+    <div className="w-full relative" ref={dropdownRef}>
       <input
         type="text"
         placeholder="Search songs..."
         value={searchQuery}
         onChange={handleSearchChange}
         onFocus={() => setIsDropdownOpen(true)}
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       {isDropdownOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-[300px] overflow-y-auto">
           {alphabeticallySortedSongs.map((song) => (
             <div
               key={song.id}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              className="px-3 sm:px-4 py-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => handleSongSelect(song.title)}
             >
               <div className="flex flex-col">
-                <span className="font-medium">{song.title}</span>
-                <span className="text-sm text-gray-500">{song.author}</span>
+                <span className="font-medium text-sm sm:text-base truncate">{song.title}</span>
+                <span className="text-xs sm:text-sm text-gray-500 truncate">{song.author}</span>
               </div>
             </div>
           ))}

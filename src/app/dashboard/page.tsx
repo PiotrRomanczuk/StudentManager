@@ -25,7 +25,7 @@ export default async function Page() {
     }
 
     if (userIsAdmin.isAdmin) {
-      return <AdminPage songs={songs} />;
+      return <AdminPage />;
     }
 
     return <UserPage songs={songs} />;

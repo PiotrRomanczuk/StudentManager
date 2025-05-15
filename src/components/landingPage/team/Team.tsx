@@ -4,7 +4,7 @@ import Image from "next/image";
 const people = [
   {
     name: "Piotr Romanczuk",
-    role: "Co-Founder / CEO",
+    role: "Founder / CEO",
     imageUrl: "/My_Picture.jpg",
     bio: "Experienced developer and guitar teacher with years of expertise in the music industry. Skilled in crafting both clean, efficient code and captivating songs. Well-versed in identifying and addressing the common challenges students face when learning guitar.",
     xUrl: "#",
@@ -56,7 +56,7 @@ export default function Team() {
                 </h3>
                 <p className="text-base leading-7 text-indigo-600">{person.role}</p>
                 <p className="mt-6 text-base leading-7 text-gray-600">{person.bio}</p>
-                <ul role="list" className="mt-6 flex gap-x-6">
+                {/* <ul role="list" className="mt-6 flex gap-x-6">
                   <li>
                     <a
                       href={person.xUrl}
@@ -93,7 +93,7 @@ export default function Team() {
                       </svg>
                     </a>
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </motion.div>
           ))}
