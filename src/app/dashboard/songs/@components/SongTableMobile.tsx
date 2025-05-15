@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SongsTableProps } from "./types/tableTypes";
 import { useSongTable } from "./hooks/useSongTable";
-import { Song } from "@/types/Song";
 
 export function SongTableMobile({
   songs,

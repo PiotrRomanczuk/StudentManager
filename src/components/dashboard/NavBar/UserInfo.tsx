@@ -6,8 +6,20 @@ import { LogOut, User } from "lucide-react";
 import { logout } from "@/app/auth/signin/actions";
 import { useEffect, useState } from "react";
 
+interface UserMetadata {
+  name?: string;
+  avatar_url?: string;
+  [key: string]: string | undefined;
+}
+
+interface UserData {
+  id: string;
+  email?: string;
+  user_metadata?: UserMetadata;
+}
+
 const UserInfo = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<UserData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

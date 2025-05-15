@@ -3,8 +3,19 @@ import { ErrorComponent } from "../songs/@components/ErrorComponent";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { LoadingState } from "@/components/ui/loading-state";
-import type { User } from "@/types/User";
 import Link from "next/link";
+
+interface Profile {
+  id: string;
+  email: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  isAdmin: boolean;
+  isTeacher: boolean;
+  isStudent: boolean;
+  created_at: string;
+}
 
 const SORTABLE_FIELDS = [
   { key: "email", label: "Email" },
@@ -28,8 +39,8 @@ export default async function Page({ searchParams }: { searchParams: { sort?: st
   const sortDir = searchParams?.dir === "desc" ? "desc" : "asc";
 
   // Get user profiles
-  let data: any[] | null = null;
-  let error: any = null;
+  let data: Profile[] | null = null;
+  let error: Error | null = null;
   try {
     let query = supabase.from("profiles").select("*");
     if (sortField === "role") {
@@ -42,8 +53,8 @@ export default async function Page({ searchParams }: { searchParams: { sort?: st
     const res = await query;
     data = res.data;
     error = res.error;
-  } catch (e: any) {
-    error = e;
+  } catch (e) {
+    error = e instanceof Error ? e : new Error('An unknown error occurred');
   }
 
   if (error) {
@@ -51,7 +62,7 @@ export default async function Page({ searchParams }: { searchParams: { sort?: st
     if (error.message && error.message.includes("does not exist")) {
       errorMsg += `A column is missing in your database: ${error.message}`;
     } else {
-      errorMsg += error.message || error;
+      errorMsg += error.message || error.toString();
     }
     return <ErrorComponent error={errorMsg} />;
   }
@@ -69,7 +80,7 @@ export default async function Page({ searchParams }: { searchParams: { sort?: st
     return sortDir === "asc" ? " ↑" : " ↓";
   }
 
-  function getRole(user: any) {
+  function getRole(user: Profile) {
     if (user.isAdmin) return "Admin";
     if (user.isTeacher) return "Teacher";
     if (user.isStudent) return "Student";
