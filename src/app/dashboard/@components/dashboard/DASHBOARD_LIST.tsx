@@ -3,6 +3,7 @@ interface SidebarItem {
   icon: React.ReactNode;
   href: string;
   forStudent: boolean;
+  isAdmin: boolean;
 }
 
 const DASHBOARD_LIST: SidebarItem[] = [
@@ -26,6 +27,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
     ),
     href: "/dashboard",
     forStudent: true,
+    isAdmin: false,
   },
   {
     name: "Songs",
@@ -47,6 +49,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
     ),
     href: "/dashboard/songs",
     forStudent: true,
+    isAdmin: false,
   },
   {
     name: "Lessons",
@@ -68,6 +71,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
     ),
     href: "/dashboard/lessons",
     forStudent: true,
+    isAdmin: false,
   },
   {
     name: "Students",
@@ -89,6 +93,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
     ),
     href: "/dashboard/students",
     forStudent: false,
+    isAdmin: true,
   },
   {
     name: "Assignements",
@@ -110,6 +115,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
     ),
     href: "/dashboard/assignements",
     forStudent: false,
+    isAdmin: false,
   },
   {
     name: "Settings",
@@ -137,6 +143,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
     ),
     href: "/dashboard/settings",
     forStudent: false,
+    isAdmin: false,
   },
   {
     name: "Testing",
@@ -164,6 +171,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
     ),
     href: "/dashboard/testing",
     forStudent: false,
+    isAdmin: true,
   },
 ];
 

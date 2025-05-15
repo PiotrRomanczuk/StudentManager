@@ -2,7 +2,14 @@ import { createClient } from "@/utils/supabase/clients/client";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { ErrorComponent } from "../../songs/@components/ErrorComponent";
 
-export default async function StudentDetailPage({ params }: { params: { id: string } }) {
+type Props = {
+  params: {
+    id: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default async function StudentDetailPage({ params }: Props) {
   const supabase = createClient();
   const { data: user, error } = await supabase
     .from("profiles")

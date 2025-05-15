@@ -2,21 +2,21 @@ import { motion } from "framer-motion";
 
 const testimonials = [
   {
-    content: "This platform has completely transformed how I manage my music students. The attendance tracking and progress monitoring features are invaluable.",
+    content: "This platform has revolutionized how I manage my guitar students. The progress tracking and repertoire management features have made it so much easier to keep track of each student's journey.",
     author: "Sarah Johnson",
-    role: "Music School Director",
+    role: "Guitar School Director",
     imageUrl: "/testimonial-1.jpg"
   },
   {
-    content: "As a private guitar instructor, I&apos;ve been able to streamline my administrative tasks and focus more on teaching. The student management features are exactly what I needed.",
+    content: "As a private guitar instructor, I've been able to streamline my lesson planning and student tracking. The platform helps me focus more on teaching and less on administration.",
     author: "Michael Chen",
-    role: "Guitar Instructor",
+    role: "Professional Guitar Instructor",
     imageUrl: "/testimonial-2.jpg"
   },
   {
-    content: "The communication tools have made it so much easier to keep parents informed about their children&apos;s progress. It&apos;s been a game-changer for my teaching practice.",
+    content: "The communication tools have made it so much easier to keep parents informed about their children's guitar progress. It's been a game-changer for my teaching studio.",
     author: "Emma Rodriguez",
-    role: "Piano Teacher",
+    role: "Guitar Teacher",
     imageUrl: "/testimonial-3.jpg"
   }
 ];

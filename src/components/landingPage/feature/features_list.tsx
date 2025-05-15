@@ -4,44 +4,44 @@ import {
   CalendarIcon,
   ClipboardDocumentCheckIcon,
   ChatBubbleLeftRightIcon,
-  AcademicCapIcon,
+  MusicalNoteIcon,
 } from "@heroicons/react/20/solid";
 
 export const features_list = [
   {
-    name: "Student Records",
+    name: "Guitar Progress Tracking",
     description:
-      "Maintain comprehensive digital records of student information, academic history, and personal details.",
+      "Monitor each student's guitar journey with detailed tracking of techniques, scales, and song mastery.",
     icon: UserGroupIcon,
   },
   {
     name: "Performance Analytics",
     description:
-      "Track and analyze student performance with intuitive charts and detailed progress reports.",
+      "Track practice time, skill development, and repertoire progress with detailed metrics and insights.",
     icon: ChartBarIcon,
   },
   {
-    name: "Attendance Tracking",
+    name: "Lesson Scheduling",
     description:
-      "Monitor student attendance efficiently with automated tracking and notification systems.",
+      "Efficiently manage your guitar teaching schedule with automated booking and lesson planning tools.",
     icon: CalendarIcon,
   },
   {
-    name: "Grade Management",
+    name: "Repertoire Management",
     description:
-      "Easily record, calculate, and manage grades with our comprehensive grading system.",
+      "Organize and track student song lists, exercises, and learning materials in one central location.",
     icon: ClipboardDocumentCheckIcon,
   },
   {
-    name: "Communication Hub",
+    name: "Student Communication",
     description:
-      "Foster seamless communication between teachers, students, and parents through our integrated platform.",
+      "Stay connected with students and parents through our integrated messaging and progress update system.",
     icon: ChatBubbleLeftRightIcon,
   },
   {
-    name: "Academic Planning",
+    name: "Guitar Curriculum",
     description:
-      "Plan and organize curriculum, courses, and academic schedules with powerful planning tools.",
-    icon: AcademicCapIcon,
+      "Create and manage structured guitar lesson plans, from beginner basics to advanced techniques.",
+    icon: MusicalNoteIcon,
   },
 ];

@@ -15,10 +15,10 @@ export default function HeroHome() {
               className="text-left"
             >
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Streamline Your <span className="text-indigo-600">Student Management</span>
+                Master the Art of <span className="text-indigo-600">Guitar Teaching</span>
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                Effortlessly manage student records, track progress, and enhance communication with our comprehensive platform. Designed for educators who want to focus on teaching.
+                Transform your guitar teaching studio with our comprehensive platform. Track student progress, manage lessons, and focus on what matters most - inspiring the next generation of guitarists.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
                 <motion.a
