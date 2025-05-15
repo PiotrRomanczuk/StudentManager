@@ -42,6 +42,7 @@ export default async function Page({
   const lessonsWithProfiles = lessons?.map((lesson: Lesson) => ({
     ...lesson,
     profile: profiles?.find((p: User) => p.user_id === lesson.student_id),
+    teacher_profile: profiles?.find((p: User) => p.user_id === lesson.teacher_id),
   }));
 
   return (

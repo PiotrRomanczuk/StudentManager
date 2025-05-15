@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SongTable } from "./SongTable";
+import { SongTableMobile } from "./SongTableMobile";
 import { PaginationComponent } from "./PaginationComponent";
 import { SongSearchBar } from "./SongSearchBar";
 import { Song } from "@/types/Song";
@@ -33,12 +34,24 @@ export default function SongsClientComponent({ songs }: { songs: Song[] }) {
         <SongSearchBar songs={songs} onSearch={setSearchQuery} />
       </div>
       <div className="w-full overflow-hidden">
-        <SongTable
-          songs={filteredSongs}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
-          onPageChange={handlePageChange}
-        />
+        {/* Mobile view */}
+        <div className="block sm:hidden">
+          <SongTableMobile
+            songs={filteredSongs}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+        {/* Desktop view */}
+        <div className="hidden sm:block">
+          <SongTable
+            songs={filteredSongs}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
       {totalPages > 1 && (
         <div className="w-full flex justify-center">

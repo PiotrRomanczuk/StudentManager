@@ -84,8 +84,8 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
 
       {/* Main Content */}
       <main
-        className={`flex-1 transition-all duration-300 p-4 md:p-8 ${
-          isSidebarOpen ? "md:ml-64" : "md:ml-0"
+        className={`flex-1 transition-all duration-300 p-4 md:p-8 h-full ${
+          isSidebarOpen ? "md:ml-4" : "md:ml-0"
         }`}
       >
         {children}
