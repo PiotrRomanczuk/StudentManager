@@ -11,10 +11,6 @@ export default async function TestingPage() {
     scope: SCOPE,
   });
 
-  const response = await fetch(authUrl);
-
-  const data = await response.json();
-
 
 
   return <div>Testing
