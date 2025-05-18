@@ -1,13 +1,10 @@
 # Development Tasks
 
-adding songs that student wants
-
 ## BUGS:
 
- - TODO: Can't delete the song from lesson
- - TODO: Dashboard doesnt show active Link inside the child site
- - TODO: Lessons shows number form students, but not for teacher
-
+- TODO: Can't delete the song from lesson
+- TODO: Dashboard doesnt show active Link inside the child site
+- TODO: Lessons shows number form students, but not for teacher
 
 ## Most Important
 

@@ -1,20 +1,11 @@
-import oAuth2Client from "@/utils/google/google-auth";
-import Link from "next/link";
-
+import GoogleDrive from './google-drive';
+import GoogleLogin from './google-login';
 
 export default async function TestingPage() {
-
-  const SCOPE = ['https://www.googleapis.com/auth/drive.file'];
-
-  const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: SCOPE,
-  });
-
-
-
-  return <div>Testing
-    <Link href={authUrl}>Login with Google</Link>
-  </div>;
+	return (
+		<>
+			<GoogleLogin />
+			<GoogleDrive />
+		</>
+	);
 }
-
