@@ -2,6 +2,7 @@ import oAuth2Client from '@/utils/google/google-auth';
 // import { google } from 'googleapis';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { FaGoogle } from 'react-icons/fa';
 
 export default async function GoogleLogin() {
 	const SCOPE = ['https://www.googleapis.com/auth/drive.readonly'];
@@ -9,6 +10,7 @@ export default async function GoogleLogin() {
 	const code = cookieStore.get('code')?.value;
 
 	let tokens;
+	let errorMsg = '';
 	if (code) {
 		try {
 			tokens = await oAuth2Client.getToken(code);
@@ -17,6 +19,7 @@ export default async function GoogleLogin() {
 			// and implement proper token refresh logic
 			console.log('Successfully obtained tokens:', tokens);
 		} catch (error) {
+			errorMsg = 'Failed to exchange code for tokens.';
 			console.error('Error exchanging code for tokens:', error);
 		}
 	}
@@ -27,15 +30,21 @@ export default async function GoogleLogin() {
 	});
 
 	const googleAccessToken = cookieStore.get('google_access_token')?.value;
+	const isLoggedIn = Boolean(googleAccessToken);
+
 	return (
-		<>
-			<div>
-				Testing
-				<Link href={authUrl}>Login with Google</Link>
-			</div>
-			<div>
-				<p>Google Access Token: {googleAccessToken}</p>
-			</div>
-		</>
+		<div className="mb-6 text-center">
+			{isLoggedIn ? (
+				<div className="mb-2 text-green-600 font-semibold">Logged in with Google</div>
+			) : (
+				<Link
+					href={authUrl}
+					className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition-colors font-medium"
+				>
+					<FaGoogle /> Login with Google
+				</Link>
+			)}
+			{errorMsg && <div className="text-red-500 mt-2">{errorMsg}</div>}
+		</div>
 	);
 }

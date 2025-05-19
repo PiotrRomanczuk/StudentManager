@@ -8,6 +8,7 @@ import SearchBar from "@/components/Search-bar";
 import {
   fetchUserSongs,
   fetchAllProfiles,
+  fetchUserFavoriteSongsAsAdmin,
 } from "@/app/dashboard/songs/songService";
 
 type Params = { user_id: string };
@@ -40,7 +41,13 @@ export default async function Page({
   const isAdmin = userProfile?.isAdmin;
 
   try {
-    const { songs } = await fetchUserSongs(userId, user_id);
+    let songs;
+    if (isAdmin && user_id) {
+      songs = await fetchUserFavoriteSongsAsAdmin(userId, user_id);
+    } else {
+      const result = await fetchUserSongs(userId, user_id);
+      songs = result.songs;
+    }
     if (!songs?.length) return <NoSongsFound />;
 
     const profiles = await fetchAllProfiles();

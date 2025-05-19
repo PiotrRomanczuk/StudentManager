@@ -80,3 +80,67 @@ export async function fetchAllProfiles() {
   if (profilesError) throw new Error("Error fetching profiles");
   return profiles;
 }
+
+export async function fetchAdminUserFavoriteSongs(userId: string) {
+  const supabase = await createClient();
+
+  // Check if the user is an admin
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("isAdmin")
+    .eq("user_id", userId)
+    .single();
+
+  if (profileError) {
+    throw new Error("Error fetching user profile");
+  }
+  if (!profile?.isAdmin) {
+    throw new Error("User is not an admin");
+  }
+
+  // Fetch songs favorited by this user (using relationships)
+  const { data, error } = await supabase
+    .from("user_favorites")
+    .select("song:song_id(*), profiles!inner(isAdmin, user_id)")
+    .eq("user_id", userId)
+    .eq("profiles.isAdmin", true);
+
+  if (error) {
+    throw new Error("Error fetching songs: " + error.message);
+  }
+
+  // Return only the songs
+  const songs = data?.map((fav: any) => fav.song) || [];
+  return songs;
+}
+
+export async function fetchUserFavoriteSongsAsAdmin(currentUserId: string, targetUserId: string) {
+  const supabase = await createClient();
+
+  // Check if the current user is an admin
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("isAdmin")
+    .eq("user_id", currentUserId)
+    .single();
+
+  if (profileError) {
+    throw new Error("Error fetching user profile");
+  }
+  if (!profile?.isAdmin) {
+    throw new Error("User is not an admin");
+  }
+
+  // Fetch songs favorited by the target user
+  const { data, error } = await supabase
+    .from("user_favorites")
+    .select("song:song_id(*)")
+    .eq("user_id", targetUserId);
+
+  if (error) {
+    throw new Error("Error fetching songs: " + error.message);
+  }
+
+  const songs = data?.map((fav: any) => fav.song) || [];
+  return songs;
+}
