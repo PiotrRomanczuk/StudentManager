@@ -110,7 +110,7 @@ export async function fetchAdminUserFavoriteSongs(userId: string) {
   }
 
   // Return only the songs
-  const songs = data?.map((fav: any) => fav.song) || [];
+  const songs = data?.map((fav: unknown) => (fav as { song: Song }).song) || [];
   return songs;
 }
 
@@ -141,6 +141,6 @@ export async function fetchUserFavoriteSongsAsAdmin(currentUserId: string, targe
     throw new Error("Error fetching songs: " + error.message);
   }
 
-  const songs = data?.map((fav: any) => fav.song) || [];
+  const songs = data?.map((fav: unknown) => (fav as { song: Song }).song) || [];
   return songs;
 }

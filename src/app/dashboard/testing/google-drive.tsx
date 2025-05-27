@@ -3,6 +3,7 @@ import { google } from 'googleapis';
 import oAuth2Client from '@/utils/google/google-auth';
 import { AxiosError } from 'axios';
 import { FaFileAlt, FaFileImage, FaFilePdf, FaFileWord, FaFileExcel, FaFilePowerpoint, FaFileArchive, FaFileVideo, FaFileAudio, FaFileCode } from 'react-icons/fa';
+import Image from "next/image";
 
 interface DriveFile {
 	id: string;
@@ -84,7 +85,7 @@ export default async function GoogleDrive() {
 		return (
 			<div className="p-4 text-center">
 				<h2 className="text-xl font-semibold mb-4">Google Drive Files</h2>
-				<img src="/no-files.svg" alt="No files" className="mx-auto mb-2 w-24 h-24 opacity-60" />
+				<Image src="/no-files.svg" alt="No files" width={96} height={96} className="mx-auto mb-2 w-24 h-24 opacity-60" />
 				<p className="text-gray-500">No files found in your Google Drive.</p>
 				<p className="text-sm text-gray-400 mt-2">If you believe this is an error, please try logging out and logging back in.</p>
 			</div>

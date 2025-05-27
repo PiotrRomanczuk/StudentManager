@@ -68,7 +68,7 @@ export function SongTable({
                   >
                     {/* Status */}
                     <TableCell className="px-6 py-4" aria-label="Status">
-                      <Badge variant={statusVariant as any} title={status}>{status}</Badge>
+                      <Badge variant={statusVariant as "default" | "secondary" | "outline"} title={status}>{status}</Badge>
                     </TableCell>
                     {/* Title & Author */}
                     <TableCell className="px-6 py-4" aria-label="Title and Author">

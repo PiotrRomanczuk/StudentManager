@@ -2,7 +2,7 @@ import oAuth2Client from '@/utils/google/google-auth';
 // import { google } from 'googleapis';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { redirect as _redirect } from 'next/navigation';
 import { FaGoogle } from 'react-icons/fa';
 
 export default async function GoogleLogin() {

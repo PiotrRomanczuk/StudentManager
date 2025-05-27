@@ -23,8 +23,8 @@ export default function LoginPage() {
     try {
       await login(formData);
       // If successful, redirect will happen server-side
-    } catch (err: any) {
-      setError(err.message?.replace("Error signing in:", "") || "Login failed");
+    } catch (err: unknown) {
+      setError((err as Error)?.message?.replace("Error signing in:", "") || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -34,10 +34,10 @@ export default function LoginPage() {
     setGoogleLoading(true);
     setError("");
     try {
-      // @ts-ignore
+      // @ts-expect-error
       await signInWithGoogle();
-    } catch (err: any) {
-      setError(err.message?.replace("Error signing in with Google:", "") || "Google sign-in failed");
+    } catch (err: unknown) {
+      setError((err as Error)?.message?.replace("Error signing in with Google:", "") || "Google sign-in failed");
       setGoogleLoading(false);
     }
   }
