@@ -5,6 +5,7 @@ export interface SongsTableProps {
   currentPage: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
+  isAdmin?: boolean;
 }
 
 export interface SortConfig {

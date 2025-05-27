@@ -9,7 +9,7 @@ import {
   fetchUserSongs,
   fetchAllProfiles,
   fetchUserFavoriteSongsAsAdmin,
-} from "@/app/dashboard/songs/songService";
+} from "@/app/services/songService";
 
 type Params = { user_id: string };
 
@@ -72,7 +72,7 @@ export default async function Page({
                 </div>
               )}
             </div>
-            <SongsClientComponent songs={songs} />
+            <SongsClientComponent songs={songs} isAdmin={isAdmin} />
           </div>
         </Container>
       </div>

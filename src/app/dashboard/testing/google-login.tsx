@@ -2,10 +2,11 @@ import oAuth2Client from '@/utils/google/google-auth';
 // import { google } from 'googleapis';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { FaGoogle } from 'react-icons/fa';
 
 export default async function GoogleLogin() {
-	const SCOPE = ['https://www.googleapis.com/auth/drive.readonly'];
+	const SCOPES = ['https://www.googleapis.com/auth/drive.readonly', 'https://www.googleapis.com/auth/calendar.readonly'];
 	const cookieStore = await cookies();
 	const code = cookieStore.get('code')?.value;
 
@@ -26,16 +27,26 @@ export default async function GoogleLogin() {
 
 	const authUrl = oAuth2Client.generateAuthUrl({
 		access_type: 'offline',
-		scope: SCOPE,
+		scope: SCOPES,
 	});
 
 	const googleAccessToken = cookieStore.get('google_access_token')?.value;
 	const isLoggedIn = Boolean(googleAccessToken);
 
+
+
 	return (
 		<div className="mb-6 text-center">
 			{isLoggedIn ? (
-				<div className="mb-2 text-green-600 font-semibold">Logged in with Google</div>
+				<>
+					<div className="mb-2 text-green-600 font-semibold">Logged in with Google</div>
+					<a
+						href="/api/auth/signout"
+						className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 transition-colors font-medium"
+					>
+						<FaGoogle /> Sign Out
+					</a>
+				</>
 			) : (
 				<Link
 					href={authUrl}

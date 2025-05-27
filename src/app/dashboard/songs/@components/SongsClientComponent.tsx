@@ -7,7 +7,12 @@ import { PaginationComponent } from "./PaginationComponent";
 import { SongSearchBar } from "./SongSearchBar";
 import { Song } from "@/types/Song";
 
-export default function SongsClientComponent({ songs }: { songs: Song[] }) {
+interface SongsClientComponentProps {
+  songs: Song[];
+  isAdmin?: boolean;
+}
+
+export default function SongsClientComponent({ songs, isAdmin }: SongsClientComponentProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 24;
@@ -41,6 +46,7 @@ export default function SongsClientComponent({ songs }: { songs: Song[] }) {
             currentPage={currentPage}
             itemsPerPage={itemsPerPage}
             onPageChange={handlePageChange}
+            isAdmin={isAdmin}
           />
         </div>
         {/* Desktop view */}
@@ -50,6 +56,7 @@ export default function SongsClientComponent({ songs }: { songs: Song[] }) {
             currentPage={currentPage}
             itemsPerPage={itemsPerPage}
             onPageChange={handlePageChange}
+            isAdmin={isAdmin}
           />
         </div>
       </div>
