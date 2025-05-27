@@ -34,7 +34,6 @@ export default function LoginPage() {
     setGoogleLoading(true);
     setError("");
     try {
-      // @ts-expect-error
       await signInWithGoogle();
     } catch (err: unknown) {
       setError((err as Error)?.message?.replace("Error signing in with Google:", "") || "Google sign-in failed");
