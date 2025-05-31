@@ -54,7 +54,7 @@ export default async function Page({
 
     return (
       <div>
-        <Container className="max-w-4xl">
+        <Container className="max-w-7xl">
           <div className="my-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <h1 className="text-2xl font-bold">Songs</h1>
