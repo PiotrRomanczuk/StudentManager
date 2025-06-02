@@ -12,7 +12,7 @@ export interface Song {
   created_at: Date;
   updated_at: Date;
   is_favorite?: boolean;
-  status?: "to learn" | "started" | "remembered" | "with author" | "mastered"
+  status?: "to learn" | "started" | "remembered" | "with author" | "mastered";
 }
 
 export type CreateSongDTO = Omit<Song, "Id" | "CreatedAt" | "UpdatedAt">;

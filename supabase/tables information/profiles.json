@@ -1,0 +1,81 @@
+{
+  "table": "profiles",
+  "columns": [
+    {
+      "name": "id",
+      "type": "bigint",
+      "constraints": "GENERATED ALWAYS AS IDENTITY NOT NULL, PRIMARY KEY"
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "constraints": "NULL, UNIQUE"
+    },
+    {
+      "name": "username",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "bio",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "constraints": "NULL DEFAULT now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "constraints": "NULL DEFAULT now()"
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "isStudent",
+      "type": "boolean",
+      "constraints": "NULL DEFAULT true"
+    },
+    {
+      "name": "isTeacher",
+      "type": "boolean",
+      "constraints": "NULL DEFAULT false"
+    },
+    {
+      "name": "isAdmin",
+      "type": "boolean",
+      "constraints": "NOT NULL DEFAULT false"
+    },
+    {
+      "name": "firstName",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "lastName",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "canEdit",
+      "type": "boolean",
+      "constraints": "NOT NULL DEFAULT false"
+    },
+    {
+      "name": "isTest",
+      "type": "boolean",
+      "constraints": "NULL"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_profiles_user_id",
+      "columns": ["user_id"]
+    }
+  ]
+}

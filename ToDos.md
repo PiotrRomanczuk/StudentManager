@@ -2,9 +2,9 @@
 
 ## BUGS:
 
-- TODO: Can't delete the song from lesson
-- TODO: Dashboard doesnt show active Link inside the child site
 - TODO: Lessons shows number form students, but not for teacher
+- TODO: Students have access to edit/delete lessons
+- TODO: Add infinity scroll for mobile tables
 
 ## Most Important
 

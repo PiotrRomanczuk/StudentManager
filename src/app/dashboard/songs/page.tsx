@@ -1,83 +1,60 @@
 import { Container } from "@/components/ui/container";
-import { ErrorComponent } from "./@components/ErrorComponent";
-import { createClient } from "@/utils/supabase/clients/server";
-import NoSongsFound from "./@components/NoSongsFound";
+import { ErrorComponent } from "../../../components/dashboard/ErrorComponent";
 import SongsClientComponent from "./@components/SongsClientComponent";
-import Link from "next/link";
-import SearchBar from "@/components/Search-bar";
-import {
-  fetchUserSongs,
-  fetchAllProfiles,
-  fetchUserFavoriteSongsAsAdmin,
-} from "@/app/services/songService";
+import { AdminControls } from "./@components/AdminControls";
+import { cookies } from "next/headers";
+import { getUserAndAdmin } from "../@utils/getUserAndAdmin";
+import { createClient } from "@/utils/supabase/clients/server";
+import { BASE_URL } from "@/constants/BASE_URL";
 
-type Params = { user_id: string };
-
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<Params>;
-}) {
-  const { user_id } = await searchParams;
-  const supabase = await createClient();
-
-  // Fetch current user
-  const { data: user, error: userError } = await supabase.auth.getUser();
-  if (userError || !user?.user)
-    return <ErrorComponent error="Authentication error" />;
-
-  const userId = user.user.id;
-
-  // Fetch user role
-  const { data: userProfile, error: profileError } = await supabase
-    .from("profiles")
-    .select("isAdmin")
-    .eq("user_id", userId)
-    .single();
-
-  if (profileError)
-    return <ErrorComponent error="Error checking permissions" />;
-
-  const isAdmin = userProfile?.isAdmin;
-
+export default async function Page() {
   try {
-    let songs;
-    if (isAdmin && user_id) {
-      songs = await fetchUserFavoriteSongsAsAdmin(userId, user_id);
-    } else {
-      const result = await fetchUserSongs(userId, user_id);
-      songs = result.songs;
-    }
-    if (!songs?.length) return <NoSongsFound />;
+    const supabase = await createClient();
+    const { user, isAdmin } = await getUserAndAdmin(supabase);
+    const cookieHeader = (await cookies()).toString();
 
-    const profiles = await fetchAllProfiles();
+    const songs_res = await fetch(
+      `${BASE_URL}/api/song/user-songs${user?.id ? `?userId=${user.id}` : ""}`,
+      {
+        cache: "no-store",
+        // credentials: "include",
+        headers: { Cookie: cookieHeader },
+      },
+    );
+    if (!songs_res.ok) {
+      return (
+        <ErrorComponent error={(await songs_res.json()).error || "Failed to fetch songs"} />
+      );
+    }
+    const { songs } = await songs_res.json();
+
+    const profiles_res = await fetch(
+      `${BASE_URL}/api/profiles`,
+      {
+        cache: "no-store",
+        // credentials: "include",
+        headers: { Cookie: cookieHeader },
+      },
+    );
+    if (!profiles_res.ok) {
+      return (
+        <ErrorComponent error={(await profiles_res.json()).error || "Failed to fetch profiles"} />
+      );
+    }
+    const { profiles } = await profiles_res.json();
 
     return (
-      <div>
-        <Container className="max-w-7xl">
-          <div className="my-8">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <h1 className="text-2xl font-bold">Songs</h1>
-              {isAdmin && (
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
-                  <Link
-                    href="/dashboard/songs/create"
-                    className="text-blue-500 hover:text-blue-600 font-bold whitespace-nowrap"
-                  >
-                    Add New Song
-                  </Link>
-                  <div className="w-full sm:w-auto">
-                    <SearchBar profiles={profiles} />
-                  </div>
-                </div>
-              )}
-            </div>
-            <SongsClientComponent songs={songs} isAdmin={isAdmin} />
+      <Container className="max-w-3xl border">
+        <div className="my-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mx-8 mb-4">
+            <h1 className="text-2xl x-4 font-bold">Songs</h1>
+            {isAdmin && <AdminControls profiles={profiles} />}
           </div>
-        </Container>
-      </div>
+          <SongsClientComponent songs={songs} isAdmin={isAdmin} />
+        </div>
+      </Container>
     );
-  } catch (error) {
+  } catch (error: unknown) {
     return (
       <ErrorComponent
         error={error instanceof Error ? error.message : "An error occurred"}

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import UserInfo from "./UserInfo";
 import { Music, Menu } from "lucide-react";
@@ -9,14 +9,22 @@ const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 w-full shadow-md backdrop-blur-lg bg-slate-900/80 border-b border-slate-700">
+    <nav
+      style={{ zIndex: 9999 }}
+      className="sticky top-0 w-full shadow-md backdrop-blur-lg bg-slate-900/80 border-b border-slate-700"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <Link href="/dashboard" className="flex items-center space-x-2 hover:opacity-90 transition-opacity">
+            <Link
+              href="/dashboard"
+              className="flex items-center space-x-2 hover:opacity-90 transition-opacity"
+            >
               <Music className="h-6 w-6 text-indigo-400" />
-              <span className="text-lg font-bold text-white">Songs Manager</span>
+              <span className="text-lg font-bold text-white">
+                Songs Manager
+              </span>
             </Link>
           </div>
 
@@ -42,7 +50,7 @@ const NavBar = () => {
         </div>
 
         {/* Mobile Navigation Menu */}
-        <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
+        <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <MobileNavItem href="/dashboard" label="Dashboard" />
             <MobileNavItem href="/dashboard/songs" label="Songs" />

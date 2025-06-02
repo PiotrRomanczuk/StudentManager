@@ -25,7 +25,9 @@ const AdminPage = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 sm:mb-6 gap-3 sm:gap-4">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold">Dashboard</h2>
-          <div className="text-admin-gray-DEFAULT text-xs sm:text-sm">Today: {today}</div>
+          <div className="text-admin-gray-DEFAULT text-xs sm:text-sm">
+            Today: {today}
+          </div>
         </div>
         <button className="bg-admin-blue-DEFAULT hover:bg-admin-blue-dark text-white font-semibold px-3 sm:px-5 py-2 rounded-lg shadow flex items-center gap-2 self-start md:self-auto text-xs sm:text-base transition-colors">
           + Add New Student
@@ -82,7 +84,9 @@ const AdminPage = () => {
                     <td className="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-full bg-admin-blue-light flex items-center justify-center">
-                          <span className="text-admin-blue-DEFAULT font-medium text-xs sm:text-base">JD</span>
+                          <span className="text-admin-blue-DEFAULT font-medium text-xs sm:text-base">
+                            JD
+                          </span>
                         </div>
                         <div className="ml-2 sm:ml-4">
                           <div className="text-xs sm:text-sm font-medium text-admin-gray-darker">

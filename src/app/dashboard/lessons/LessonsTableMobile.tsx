@@ -22,14 +22,17 @@ interface LessonsTableMobileProps {
   isLoading?: boolean;
 }
 
-export function LessonsTableMobile({ lessons, isLoading = false }: LessonsTableMobileProps) {
+export function LessonsTableMobile({
+  lessons,
+  isLoading = false,
+}: LessonsTableMobileProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(lessons.length / itemsPerPage);
 
   const paginatedLessons = lessons.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   function formatDate(dateString: string) {
@@ -151,7 +154,9 @@ export function LessonsTableMobile({ lessons, isLoading = false }: LessonsTableM
                     <div className="h-8 w-8 rounded-full bg-lesson-orange-bg flex items-center justify-center">
                       <Clock className="h-4 w-4 text-lesson-orange-text" />
                     </div>
-                    <span className="text-gray-900">{lesson.time.toString()}</span>
+                    <span className="text-gray-900">
+                      {lesson.time.toString()}
+                    </span>
                   </div>
                 )}
 
@@ -177,4 +182,4 @@ export function LessonsTableMobile({ lessons, isLoading = false }: LessonsTableM
       )}
     </div>
   );
-} 
+}

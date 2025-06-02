@@ -1,36 +1,40 @@
-// import { useState } from 'react';
-import { createClient } from "@/utils/supabase/clients/server";
-import { ErrorComponent } from "./songs/@components/ErrorComponent";
-import NoSongsFound from "./songs/@components/NoSongsFound";
-// import { Lesson } from "@/types/Lesson";
-import { fetchSongs } from "./@components/fetchSongs";
-import { fetchUserAndAdmin } from "./@components/fetchUserAndAdmin";
+import { ErrorComponent } from "../../components/dashboard/ErrorComponent";
+import NoSongsFound from "../../components/dashboard/NoSongsFound";
 import UserPage from "./@components/main/userPage";
 import AdminPage from "./@components/main/adminPage";
-
+import { getUserAndAdmin } from "./@utils/getUserAndAdmin";
+import { createClient } from "@/utils/supabase/clients/server";
+import { BASE_URL } from "@/constants/BASE_URL";
 export default async function Page() {
   const supabase = await createClient();
+  const { user, isAdmin } = await getUserAndAdmin(supabase);
 
-  try {
-    const { user, userIsAdmin } = await fetchUserAndAdmin(supabase);
-
-    if (!user?.user?.id) {
-      return <ErrorComponent error="Please sign in to view your dashboard" />;
-    }
-
-    const songs = await fetchSongs(supabase, user.user.id, userIsAdmin.isAdmin);
-
-    if (!songs?.length) {
-      return <NoSongsFound />;
-    }
-
-    if (userIsAdmin.isAdmin) {
-      return <AdminPage />;
-    }
-
-    return <UserPage songs={songs} />;
-  } catch (error) {
-    console.error("Dashboard error:", error);
-    return <ErrorComponent error={(error as Error).message} />;
+  if (!user?.id) {
+    return <ErrorComponent error="Please sign in to view your dashboard" />;
   }
+
+  if (isAdmin) {
+    return <AdminPage />;
+  }
+
+  console.log("user", user);
+  // Fetch songs for the user from the API
+
+  const response = await fetch(
+    `${BASE_URL}/api/song/user-songs?userId=${user.id}`,
+  );
+
+  const data = await response.json();
+
+  if (response.status !== 200) {
+    return <ErrorComponent error={data.error || "Failed to fetch songs"} />;
+  }
+
+  const songs = data;
+
+  if (!songs?.length) {
+    return <NoSongsFound />;
+  }
+
+  return <UserPage songs={songs} />;
 }

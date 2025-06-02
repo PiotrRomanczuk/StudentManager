@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { createClient } from "@/utils/supabase/clients/client";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ const UserInfo = () => {
         if (error) throw error;
         setUser(data?.user);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : "An error occurred");
       }
     };
 
@@ -52,13 +52,13 @@ const UserInfo = () => {
         <User className="h-4 w-4 text-muted-foreground" />
         <span className="text-sm font-medium">{user.email}</span>
       </div>
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         size="sm"
         onClick={logout}
         className="hover:bg-destructive/10 hover:text-destructive transition-all duration-300 ease-in-out hover:scale-105 hover:translate-x-1"
       >
-        <LogOut className="h-4 w-4 mr-2" /> 
+        <LogOut className="h-4 w-4 mr-2" />
         Log out
       </Button>
     </div>

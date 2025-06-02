@@ -2,19 +2,36 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import SongDetails from "./@components/SongDetail";
 import SongNotFound from "./@components/SongNotFound";
-import { createClient } from "@/utils/supabase/clients/server";
-export default async function Page({ params }: { params: { song: string } }) {
-  const { song: songId } = params;
+import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
+import { cookies } from "next/headers";
+import { BASE_URL } from "@/constants/BASE_URL";
 
-  const supabase = await createClient();
+export default async function Page({ params }: { params: Promise<{ song: string }> }) {
+  const { song: songId } = await params;
+  const cookieHeader = (await cookies()).toString();
 
-  const { data: song, error } = await supabase
-    .from("songs")
-    .select("*")
-    .eq("id", songId)
-    .single();
+  let song = null;
+  let error = null;
 
-  if (error || !song) {
+  try {
+    const res = await fetch(`${BASE_URL}/api/song/${songId}`, {
+      cache: "no-store",
+      headers: { Cookie: cookieHeader },
+    });
+    if (res.ok) {
+      song = await res.json();
+    } else {
+      error = `Status ${res.status}`;
+    }
+  } catch (e: unknown) {
+    error = e instanceof Error ? e.message : "Unknown error";
+  }
+
+  if (error) {
+    return <ErrorComponent error={`Failed to fetch song: ${error}`} />;
+  }
+
+  if (!song) {
     return <SongNotFound />;
   }
 

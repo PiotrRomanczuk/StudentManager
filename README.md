@@ -5,12 +5,14 @@ A modern web application for efficient student, lesson, assignment, and song man
 ## 🎓 Features
 
 ### Student Management
+
 - Centralized student profiles with personal and progress information
 - Role-based access (Admin, Teacher, Student)
 - Add, edit, and view student details
 - Track student progress, practice hours, and lesson history
 
 ### Lesson Management
+
 - Schedule, create, edit, and delete lessons
 - Assign students and teachers to lessons
 - Attach notes and track lesson focus
@@ -18,11 +20,13 @@ A modern web application for efficient student, lesson, assignment, and song man
 - View upcoming and past lessons
 
 ### Assignment & Task Management
+
 - Create, assign, and track assignments for students
 - Status tracking (completed, in progress, overdue)
 - Due dates and progress monitoring
 
 ### Song & Repertoire Management
+
 - Add, edit, and organize songs with metadata (title, author, level, key, chords, links)
 - Assign songs to lessons and students
 - Advanced sorting and filtering
@@ -30,29 +34,35 @@ A modern web application for efficient student, lesson, assignment, and song man
 - CRUD operations for song entries
 
 ### Analytics & Progress Tracking
+
 - Visualize student progress and practice statistics
 - Performance analytics for students and teachers
 - Dashboard with key stats (total students, lessons, assignments, progress rate)
 
 ### Communication
+
 - Integrated messaging and progress updates for students and parents
 - Notifications for assignments, lessons, and updates
 
 ### Authentication & User Management
+
 - Supabase Auth for secure sign-up, sign-in, and session management
 - Google OAuth integration
 - Protected routes and user sessions
 
 ### Integrations
+
 - Google Drive integration for sharing resources
 - Planned: Spotify API for song metadata
 
 ### Responsive Dashboard
+
 - Intuitive, modern dashboard for admins, teachers, and students
 - Mobile-friendly, responsive design
 - Role-based navigation and access
 
 ### Additional Features
+
 - Engaging landing page with hero, features, team, testimonials, and pricing
 - Settings page for user preferences (future)
 - Testing page for integration checks
@@ -63,10 +73,12 @@ A modern web application for efficient student, lesson, assignment, and song man
 ## 🖼️ Visual Preview
 
 ### Landing Page
+
 ![Landing Page Screenshot 1](public/LandingPage%201.png)
 ![Landing Page Screenshot 2](public/LandingPage%202.png)
 
 ### Dashboard Mockup UI
+
 ![Dashboard Mockup UI](public/MOCKUP%20UI.png)
 
 ---

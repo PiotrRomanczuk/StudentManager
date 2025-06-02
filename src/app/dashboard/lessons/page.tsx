@@ -6,7 +6,8 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { LessonsTable } from "./LessonsTable";
-import { fetchUserAndAdmin } from "../@components/fetchUserAndAdmin";
+import { LessonsTableMobile } from "./LessonsTableMobile";
+import { getUserAndAdmin } from "../@utils/getUserAndAdmin";
 import SearchBar from "@/components/Search-bar";
 import NoLesson from "./[slug]/@components/NoLesson";
 
@@ -19,9 +20,9 @@ export default async function Page({
 }) {
   const { user_id } = await searchParams;
   const supabase = await createClient();
-  const { userIsAdmin } = await fetchUserAndAdmin(supabase);
+  const { isAdmin } = await getUserAndAdmin(supabase);
 
-  console.log(userIsAdmin);
+  console.log(isAdmin);
   const query = supabase
     .from("lessons")
     .select("*")
@@ -42,14 +43,16 @@ export default async function Page({
   const lessonsWithProfiles = lessons?.map((lesson: Lesson) => ({
     ...lesson,
     profile: profiles?.find((p: User) => p.user_id === lesson.student_id),
-    teacher_profile: profiles?.find((p: User) => p.user_id === lesson.teacher_id),
+    teacher_profile: profiles?.find(
+      (p: User) => p.user_id === lesson.teacher_id,
+    ),
   }));
 
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Lessons</h1>
-        {userIsAdmin && (
+        {isAdmin && (
           <>
             <SearchBar profiles={profiles} />
             <Button
@@ -72,7 +75,14 @@ export default async function Page({
       {!lessons?.length ? (
         <NoLesson />
       ) : (
-        <LessonsTable lessons={lessonsWithProfiles} />
+        <>
+          <div className="block sm:hidden">
+            <LessonsTableMobile lessons={lessonsWithProfiles} />
+          </div>
+          <div className="hidden sm:block">
+            <LessonsTable lessons={lessonsWithProfiles} />
+          </div>
+        </>
       )}
     </div>
   );

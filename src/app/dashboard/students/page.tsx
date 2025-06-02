@@ -1,7 +1,20 @@
 import { createClient } from "@/utils/supabase/clients/client";
-import { ErrorComponent } from "../songs/@components/ErrorComponent";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { ErrorComponent } from "../../../components/dashboard/ErrorComponent";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
 import { LoadingState } from "@/components/ui/loading-state";
 import Link from "next/link";
 
@@ -31,12 +44,17 @@ function getNextSort(currentField: string, currentDir: string, field: string) {
   return currentDir === "asc" ? "desc" : "asc";
 }
 
-export default async function Page({ searchParams }: { searchParams: { sort?: string; dir?: string } }) {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ sort?: string; dir?: string }>;
+}) {
+  const { sort, dir } = await searchParams;
   const supabase = createClient();
 
   // Determine sort field and direction
-  const sortField = searchParams?.sort || "email";
-  const sortDir = searchParams?.dir === "desc" ? "desc" : "asc";
+  const sortField = sort || "email";
+  const sortDir = dir === "desc" ? "desc" : "asc";
 
   // Get user profiles
   let data: Profile[] | null = null;
@@ -54,7 +72,7 @@ export default async function Page({ searchParams }: { searchParams: { sort?: st
     data = res.data;
     error = res.error;
   } catch (e) {
-    error = e instanceof Error ? e : new Error('An unknown error occurred');
+    error = e instanceof Error ? e : new Error("An unknown error occurred");
   }
 
   if (error) {
@@ -72,7 +90,11 @@ export default async function Page({ searchParams }: { searchParams: { sort?: st
   }
 
   if (data.length === 0) {
-    return <div className="p-8 text-center text-muted-foreground">No students found.</div>;
+    return (
+      <div className="p-8 text-center text-muted-foreground">
+        No students found.
+      </div>
+    );
   }
 
   function sortIndicator(field: string) {
@@ -115,7 +137,10 @@ export default async function Page({ searchParams }: { searchParams: { sort?: st
               {data.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>
-                    <Link href={`/dashboard/students/${user.id}`} className="text-blue-600 hover:underline">
+                    <Link
+                      href={`/dashboard/students/${user.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
                       {user.email || "-"}
                     </Link>
                   </TableCell>
@@ -123,7 +148,11 @@ export default async function Page({ searchParams }: { searchParams: { sort?: st
                   <TableCell>{user.firstName || "-"}</TableCell>
                   <TableCell>{user.lastName || "-"}</TableCell>
                   <TableCell>{getRole(user)}</TableCell>
-                  <TableCell>{user.created_at ? new Date(user.created_at).toLocaleString() : "-"}</TableCell>
+                  <TableCell>
+                    {user.created_at
+                      ? new Date(user.created_at).toLocaleString()
+                      : "-"}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

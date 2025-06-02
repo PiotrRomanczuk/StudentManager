@@ -27,8 +27,6 @@ import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { FORM_FIELDS, LEVEL_OPTIONS, MUSICAL_KEYS } from "./CONSTANTS";
 
-
-
 const songSchema = z.object({
   title: z.string().min(1, "Title is required"),
   author: z.string().optional(),
@@ -36,7 +34,10 @@ const songSchema = z.object({
   key: z.string().optional(),
   chords: z.string().min(1, "Chords are required"),
   audio_files: z.string().optional(),
-  ultimate_guitar_link: z.string().url("Please enter a valid URL").min(1, "Ultimate Guitar link is required"),
+  ultimate_guitar_link: z
+    .string()
+    .url("Please enter a valid URL")
+    .min(1, "Ultimate Guitar link is required"),
   short_title: z.string().optional(),
 });
 
@@ -115,12 +116,9 @@ export function SongEditForm({
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {FORM_FIELDS.map((field) => (
-              <div 
-                key={field.id} 
-                className={cn(
-                  "space-y-2",
-                  field.fullWidth && "md:col-span-2"
-                )}
+              <div
+                key={field.id}
+                className={cn("space-y-2", field.fullWidth && "md:col-span-2")}
               >
                 <Label htmlFor={field.id} className="flex items-center gap-1">
                   {field.label}
@@ -135,10 +133,13 @@ export function SongEditForm({
                       }
                       autoComplete="off"
                     >
-                      <SelectTrigger className={cn(
-                        "w-full",
-                        errors[field.id as keyof SongFormData] && "border-red-500"
-                      )}>
+                      <SelectTrigger
+                        className={cn(
+                          "w-full",
+                          errors[field.id as keyof SongFormData] &&
+                            "border-red-500",
+                        )}
+                      >
                         <SelectValue placeholder={field.placeholder} />
                       </SelectTrigger>
                       <SelectContent>
@@ -164,7 +165,8 @@ export function SongEditForm({
                       required={field.required}
                       className={cn(
                         "min-h-[300px] resize-y",
-                        errors[field.id as keyof SongFormData] && "border-red-500"
+                        errors[field.id as keyof SongFormData] &&
+                          "border-red-500",
                       )}
                       autoComplete="off"
                     />
@@ -187,7 +189,9 @@ export function SongEditForm({
                       <Button
                         type="button"
                         variant="outline"
-                        onClick={() => document.getElementById(field.id)?.click()}
+                        onClick={() =>
+                          document.getElementById(field.id)?.click()
+                        }
                         className="w-full transition-all duration-200 hover:bg-primary/10 hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <Upload className="mr-2 h-4 w-4" />
@@ -209,7 +213,8 @@ export function SongEditForm({
                       required={field.required}
                       className={cn(
                         "focus:ring-2 focus:ring-primary/20",
-                        errors[field.id as keyof SongFormData] && "border-red-500"
+                        errors[field.id as keyof SongFormData] &&
+                          "border-red-500",
                       )}
                       autoComplete="off"
                     />
@@ -240,9 +245,9 @@ export function SongEditForm({
           >
             {mode === "create" ? "Back to Songs" : "Back to Song"}
           </Button>
-          <Button 
-            type="submit" 
-            disabled={loading} 
+          <Button
+            type="submit"
+            disabled={loading}
             className="min-w-[120px] bg-primary hover:bg-primary/90 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

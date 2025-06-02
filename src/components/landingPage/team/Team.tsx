@@ -15,7 +15,10 @@ const people = [
 
 export default function Team() {
   return (
-    <div className="bg-gradient-to-b from-indigo-50 to-white py-24 md:py-32" id="team">
+    <div
+      className="bg-gradient-to-b from-indigo-50 to-white py-24 md:py-32"
+      id="team"
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -28,7 +31,8 @@ export default function Team() {
             Meet the Team
           </h2>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            We&apos;re a passionate team dedicated to revolutionizing student management through technology.
+            We&apos;re a passionate team dedicated to revolutionizing student
+            management through technology.
           </p>
         </motion.div>
 
@@ -54,8 +58,12 @@ export default function Team() {
                 <h3 className="text-2xl font-semibold leading-8 tracking-tight text-gray-900">
                   {person.name}
                 </h3>
-                <p className="text-base leading-7 text-indigo-600">{person.role}</p>
-                <p className="mt-6 text-base leading-7 text-gray-600">{person.bio}</p>
+                <p className="text-base leading-7 text-indigo-600">
+                  {person.role}
+                </p>
+                <p className="mt-6 text-base leading-7 text-gray-600">
+                  {person.bio}
+                </p>
                 {/* <ul role="list" className="mt-6 flex gap-x-6">
                   <li>
                     <a

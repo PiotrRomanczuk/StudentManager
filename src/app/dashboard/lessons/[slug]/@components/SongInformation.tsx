@@ -37,8 +37,13 @@ export default async function SongInformation({
       <Card className="flex-1 border-lesson-blue-border">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-bold text-lesson-blue-text">Songs</CardTitle>
-            <Badge variant="outline" className="ml-2 border-lesson-blue-border text-lesson-blue-text">
+            <CardTitle className="text-xl font-bold text-lesson-blue-text">
+              Songs
+            </CardTitle>
+            <Badge
+              variant="outline"
+              className="ml-2 border-lesson-blue-border text-lesson-blue-text"
+            >
               0
             </Badge>
           </div>
@@ -58,12 +63,25 @@ export default async function SongInformation({
     songs.map((song: Song) => [song.id, song]),
   );
 
+  const statusColorMap: Record<string, string> = {
+    to_learn: "bg-yellow-100 text-yellow-800",
+    started: "bg-blue-100 text-blue-800",
+    remembered: "bg-green-100 text-green-800",
+    with_author: "bg-purple-100 text-purple-800",
+    mastered: "bg-gray-200 text-gray-800",
+  };
+
   return (
     <Card className="flex-1 border-lesson-blue-border">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-bold text-lesson-blue-text">Songs</CardTitle>
-          <Badge variant="outline" className="ml-2 border-lesson-blue-border text-lesson-blue-text">
+          <CardTitle className="text-xl font-bold text-lesson-blue-text">
+            Songs
+          </CardTitle>
+          <Badge
+            variant="outline"
+            className="ml-2 border-lesson-blue-border text-lesson-blue-text"
+          >
             {lessonSongs.length}
           </Badge>
         </div>
@@ -79,7 +97,10 @@ export default async function SongInformation({
         ) : (
           <ul className="space-y-2">
             {lessonSongs.map(
-              (lessonSong: { song_id: string }, index: number) => {
+              (
+                lessonSong: { song_id: string; song_status: string },
+                index: number,
+              ) => {
                 const song = songMap.get(lessonSong.song_id);
                 return (
                   <li
@@ -91,11 +112,19 @@ export default async function SongInformation({
                       <span className="font-medium">
                         {song?.title || "No Title"}
                       </span>
+                      <span
+                        className={`ml-2 px-2 py-1 rounded text-xs font-semibold ${statusColorMap[lessonSong.song_status] || "bg-gray-100 text-gray-800"}`}
+                      >
+                        {lessonSong.song_status.replace(/_/g, " ")}
+                      </span>
                       <Link
                         href={`/dashboard/songs/${lessonSong.song_id}`}
                         className="ml-auto"
                       >
-                        <Button variant="link" className="text-lesson-blue-text hover:text-lesson-blue-text/80">
+                        <Button
+                          variant="link"
+                          className="text-lesson-blue-text hover:text-lesson-blue-text/80"
+                        >
                           View Song
                         </Button>
                       </Link>
@@ -108,7 +137,11 @@ export default async function SongInformation({
         )}
       </CardContent>
       <CardFooter>
-        <Button asChild variant="outline" className="w-full border-lesson-blue-border hover:bg-lesson-blue-bg hover:text-lesson-blue-text">
+        <Button
+          asChild
+          variant="outline"
+          className="w-full border-lesson-blue-border hover:bg-lesson-blue-bg hover:text-lesson-blue-text"
+        >
           <Link href={`/dashboard/lessons/${lesson.id}/manage-songs`}>
             Manage Songs
           </Link>

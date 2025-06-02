@@ -47,10 +47,16 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       <div className="bg-white shadow-sm border-b border-lesson-blue-border">
         <div className="container mx-auto py-4 px-6">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-lesson-blue-text">Lesson Details</h1>
+            <h1 className="text-2xl font-bold text-lesson-blue-text">
+              Lesson Details
+            </h1>
             <div className="flex gap-3">
               {/* <DeleteButton lessonId={lesson.id} /> */}
-              <Button asChild variant="outline" className="hover:bg-lesson-blue-bg">
+              <Button
+                asChild
+                variant="outline"
+                className="hover:bg-lesson-blue-bg"
+              >
                 <Link href="/dashboard/lessons">Back to Lessons</Link>
               </Button>
             </div>

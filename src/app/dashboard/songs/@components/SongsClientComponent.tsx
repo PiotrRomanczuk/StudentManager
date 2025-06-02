@@ -1,63 +1,80 @@
 "use client";
 
 import { useState } from "react";
-import { SongTable } from "./SongTable";
-import { SongTableMobile } from "./SongTableMobile";
 import { PaginationComponent } from "./PaginationComponent";
-import { SongSearchBar } from "./SongSearchBar";
+import { SongSearchBar } from "@/components/dashboard/SongSearchBar";
 import { Song } from "@/types/Song";
+import { TeacherSongTable } from "./SongTable/admin_table/TeacherSongTable";
+import { TeacherSongTableMobile } from "./SongTable/admin_table/TeacherSongTableMobile";
+import { StudentSongTable } from "./SongTable/student_table/StudentSongTable";
+import { StudentSongTableMobile } from "./SongTable/student_table/StudentSongTableMobile";
 
 interface SongsClientComponentProps {
   songs: Song[];
   isAdmin?: boolean;
 }
 
-export default function SongsClientComponent({ songs, isAdmin }: SongsClientComponentProps) {
+export default function SongsClientComponent({
+  songs,
+  isAdmin,
+}: SongsClientComponentProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const itemsPerPage = 24;
+  const itemsPerPage = songs.length < 15 ? songs.length || 1 : 15;
 
-  // Sort songs by updated_at for the table
-  const timeSortedSongs = [...songs].sort(
-    (a, b) =>
-      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
-  );
-
-  const filteredSongs = timeSortedSongs.filter((song) =>
-    song.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const filteredSongs = songs
+    .filter((song) =>
+      song.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
+    .sort(
+      (a, b) =>
+        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+    );
 
   const totalPages = Math.ceil(filteredSongs.length / itemsPerPage);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 space-y-4">
       <div className="w-full max-w-full sm:max-w-md">
         <SongSearchBar songs={songs} onSearch={setSearchQuery} />
       </div>
-      <div className="w-full overflow-hidden">
+      <div className="w-full overflow-hidden h-full">
         {/* Mobile view */}
-        <div className="block sm:hidden">
-          <SongTableMobile
+        <div className="block sm:hidden h-full">
+        {isAdmin ? (
+          <TeacherSongTableMobile
             songs={filteredSongs}
             currentPage={currentPage}
             itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
-            isAdmin={isAdmin}
+            onPageChange={setCurrentPage}
           />
+          ) : (
+            <StudentSongTableMobile
+              songs={filteredSongs}
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </div>
         {/* Desktop view */}
-        <div className="hidden sm:block">
-          <SongTable
-            songs={filteredSongs}
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
-            isAdmin={isAdmin}
-          />
+        <div className="hidden sm:block h-full">
+          {isAdmin ? (
+            <TeacherSongTable
+              songs={filteredSongs}
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+              isAdmin={isAdmin}
+            />
+          ) : (
+            <StudentSongTable
+              songs={filteredSongs}
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </div>
       </div>
       {totalPages > 1 && (
@@ -65,7 +82,7 @@ export default function SongsClientComponent({ songs, isAdmin }: SongsClientComp
           <PaginationComponent
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={handlePageChange}
+            onPageChange={setCurrentPage}
           />
         </div>
       )}

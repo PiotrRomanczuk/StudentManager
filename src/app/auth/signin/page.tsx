@@ -24,7 +24,10 @@ export default function LoginPage() {
       await login(formData);
       // If successful, redirect will happen server-side
     } catch (err: unknown) {
-      setError((err as Error)?.message?.replace("Error signing in:", "") || "Login failed");
+      setError(
+        (err as Error)?.message?.replace("Error signing in:", "") ||
+          "Login failed",
+      );
     } finally {
       setLoading(false);
     }
@@ -36,7 +39,10 @@ export default function LoginPage() {
     try {
       await signInWithGoogle();
     } catch (err: unknown) {
-      setError((err as Error)?.message?.replace("Error signing in with Google:", "") || "Google sign-in failed");
+      setError(
+        (err as Error)?.message?.replace("Error signing in with Google:", "") ||
+          "Google sign-in failed",
+      );
       setGoogleLoading(false);
     }
   }
@@ -46,7 +52,13 @@ export default function LoginPage() {
       <div className="w-full max-w-[420px] space-y-8 bg-card rounded-xl shadow-lg p-8 border border-border/40 animate-in fade-in duration-500">
         <div className="space-y-2 text-center">
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-            <Image src="/LOGO_V1.png" alt="logo" width={48} height={48} className="rounded-full" />
+            <Image
+              src="/LOGO_V1.png"
+              alt="logo"
+              width={48}
+              height={48}
+              className="rounded-full"
+            />
           </div>
           <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
           <p className="text-sm text-muted-foreground">
@@ -83,7 +95,9 @@ export default function LoginPage() {
               aria-label="Email address"
               className="h-11 transition-all focus-visible:ring-primary/70"
             />
-            <div className="text-xs text-muted-foreground mt-1">Enter your registered email address.</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              Enter your registered email address.
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -119,7 +133,9 @@ export default function LoginPage() {
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            <div className="text-xs text-muted-foreground mt-1">Password must be at least 6 characters.</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              Password must be at least 6 characters.
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -131,7 +147,10 @@ export default function LoginPage() {
               onChange={() => setRememberMe((v) => !v)}
               className="accent-primary h-4 w-4 rounded border border-input focus:ring-primary/70"
             />
-            <Label htmlFor="rememberMe" className="text-xs text-muted-foreground cursor-pointer">
+            <Label
+              htmlFor="rememberMe"
+              className="text-xs text-muted-foreground cursor-pointer"
+            >
               Remember me
             </Label>
           </div>
@@ -142,9 +161,24 @@ export default function LoginPage() {
             className="w-full h-11 font-medium transition-all hover:shadow-md flex items-center justify-center"
           >
             {loading ? (
-              <svg className="animate-spin mr-2 h-4 w-4 text-primary" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+              <svg
+                className="animate-spin mr-2 h-4 w-4 text-primary"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8z"
+                />
               </svg>
             ) : null}
             Sign In
@@ -156,7 +190,9 @@ export default function LoginPage() {
             <span className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-3 text-muted-foreground">Or continue with</span>
+            <span className="bg-card px-3 text-muted-foreground">
+              Or continue with
+            </span>
           </div>
         </div>
 
@@ -169,9 +205,24 @@ export default function LoginPage() {
             className="w-full h-11 font-medium transition-all hover:bg-secondary/50 hover:border-border flex items-center justify-center"
           >
             {googleLoading ? (
-              <svg className="animate-spin mr-2 h-4 w-4 text-primary" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+              <svg
+                className="animate-spin mr-2 h-4 w-4 text-primary"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8z"
+                />
               </svg>
             ) : (
               <svg

@@ -53,7 +53,10 @@ const tiers = [
 
 export default function Pricing() {
   return (
-    <div className="bg-gradient-to-b from-white to-indigo-50 py-24 sm:py-32" id="pricing">
+    <div
+      className="bg-gradient-to-b from-white to-indigo-50 py-24 sm:py-32"
+      id="pricing"
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -62,7 +65,9 @@ export default function Pricing() {
           transition={{ duration: 0.6 }}
           className="mx-auto max-w-2xl text-center"
         >
-          <h2 className="text-base font-semibold leading-7 text-indigo-600">Pricing</h2>
+          <h2 className="text-base font-semibold leading-7 text-indigo-600">
+            Pricing
+          </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Choose the right plan for your needs
           </p>
@@ -89,15 +94,24 @@ export default function Pricing() {
                 </div>
               )}
               <div>
-                <h3 className="text-lg font-semibold leading-8 text-gray-900">{tier.name}</h3>
-                <p className="mt-4 text-sm leading-6 text-gray-600">{tier.description}</p>
+                <h3 className="text-lg font-semibold leading-8 text-gray-900">
+                  {tier.name}
+                </h3>
+                <p className="mt-4 text-sm leading-6 text-gray-600">
+                  {tier.description}
+                </p>
                 <p className="mt-6 flex items-baseline gap-x-1">
                   <span className="text-4xl font-bold tracking-tight text-gray-900">
                     {tier.price.monthly}
                   </span>
-                  <span className="text-sm font-semibold leading-6 text-gray-600">/month</span>
+                  <span className="text-sm font-semibold leading-6 text-gray-600">
+                    /month
+                  </span>
                 </p>
-                <ul role="list" className="mt-8 space-y-3 text-sm leading-6 text-gray-600">
+                <ul
+                  role="list"
+                  className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
+                >
                   {tier.features.map((feature) => (
                     <li key={feature} className="flex gap-x-3">
                       <CheckIcon
@@ -127,4 +141,4 @@ export default function Pricing() {
       </div>
     </div>
   );
-} 
+}

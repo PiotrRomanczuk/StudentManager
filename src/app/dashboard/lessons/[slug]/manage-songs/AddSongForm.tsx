@@ -1,6 +1,6 @@
 "use client";
 
-import { SongSearchBar } from "@/app/dashboard/songs/@components/SongSearchBar";
+import { SongSearchBar } from "@/components/dashboard/SongSearchBar";
 import { Button } from "@/components/ui/button";
 import { addSongToLesson } from "./actions";
 import type { Song } from "@/types/Song";
@@ -18,12 +18,14 @@ export default function AddSongForm({
   slug,
 }: AddSongFormProps) {
   const [selectedSongId, setSelectedSongId] = useState<string>("");
-  
-  const availableSongs = songs.filter((song) => !assignedSongIds.includes(song.id));
+
+  const availableSongs = songs.filter(
+    (song) => !assignedSongIds.includes(song.id),
+  );
 
   const handleSearch = (query: string) => {
     const matchingSong = availableSongs.find(
-      (song) => song.title.toLowerCase() === query.toLowerCase()
+      (song) => song.title.toLowerCase() === query.toLowerCase(),
     );
     if (matchingSong) {
       setSelectedSongId(matchingSong.id);
@@ -32,7 +34,9 @@ export default function AddSongForm({
 
   return (
     <div className="bg-admin-gray-lightest p-6 rounded-lg border border-admin-gray-light shadow-sm">
-      <h2 className="text-xl font-semibold mb-4 text-admin-gray-darker">Add Song to Lesson</h2>
+      <h2 className="text-xl font-semibold mb-4 text-admin-gray-darker">
+        Add Song to Lesson
+      </h2>
       <form
         action={async (formData) => {
           if (selectedSongId) {
@@ -45,8 +49,8 @@ export default function AddSongForm({
         <div className="flex-1">
           <SongSearchBar songs={availableSongs} onSearch={handleSearch} />
         </div>
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           disabled={!selectedSongId}
           className="bg-admin-blue hover:bg-admin-blue-dark text-white transition-colors"
         >

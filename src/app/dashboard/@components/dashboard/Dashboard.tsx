@@ -10,14 +10,20 @@ import { Menu, X } from "lucide-react";
  * Dashboard component that handles the layout and navigation for the dashboard
  * @param children - The content to be rendered in the main area
  * @param isAdmin - Boolean flag indicating if the current user has admin privileges
- * 
+ *
  * Admin Profile Check:
  * - The isAdmin prop should be set based on the user's role in your authentication system
  * - Example: isAdmin={user?.role === 'admin'} or isAdmin={user?.isAdmin}
  * - Only admin users will see restricted sections like Students, Assignments, etc.
  * - Regular users will only see basic sections like Dashboard, Songs, and Lessons
  */
-const Dashboard = ({ children, isAdmin = false }: { children: React.ReactNode; isAdmin?: boolean }) => {
+const Dashboard = ({
+  children,
+  isAdmin = false,
+}: {
+  children: React.ReactNode;
+  isAdmin?: boolean;
+}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
@@ -34,13 +40,15 @@ const Dashboard = ({ children, isAdmin = false }: { children: React.ReactNode; i
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Filter menu items based on admin status
   // This ensures that admin-only sections are only visible to users with admin privileges
-  const filteredMenuItems = DASHBOARD_LIST.filter(item => !item.isAdmin || isAdmin);
+  const filteredMenuItems = DASHBOARD_LIST.filter(
+    (item) => !item.isAdmin || isAdmin,
+  );
 
   return (
     <div className="flex h-[calc(100vh-4rem)] bg-gray-100">
@@ -70,7 +78,11 @@ const Dashboard = ({ children, isAdmin = false }: { children: React.ReactNode; i
 
         <nav className="mt-4 overflow-y-auto h-[calc(100%-4rem)]">
           {filteredMenuItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive =
+              item.href === "/dashboard"
+                ? pathname === "/dashboard"
+                : pathname === item.href ||
+                  pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.name}
@@ -99,7 +111,7 @@ const Dashboard = ({ children, isAdmin = false }: { children: React.ReactNode; i
 
       {/* Main Content */}
       <main
-        className={`flex-1 transition-all duration-300 p-4 md:p-8 h-full ${
+        className={`flex-1 transition-all duration-300 p-4 md:p-8 h-full min-h-full w-full bg-gray-100 ${
           isSidebarOpen ? "md:ml-4" : "md:ml-0"
         }`}
       >

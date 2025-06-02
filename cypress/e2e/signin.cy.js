@@ -14,7 +14,7 @@ describe("Login Page", () => {
 
   it("should handle login with valid credentials", () => {
     // Type in the test credentials
-    cy.get("#email").type("test");
+    cy.get("#email").type("test@test.com");
     cy.get("#password").type("test123");
 
     // Submit the form

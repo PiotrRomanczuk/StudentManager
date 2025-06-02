@@ -1,0 +1,55 @@
+{
+  "table": "tasks",
+  "columns": [
+    {
+      "name": "id",
+      "type": "bigint",
+      "constraints": "GENERATED ALWAYS AS IDENTITY NOT NULL, PRIMARY KEY"
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "constraints": "NOT NULL"
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "due_date",
+      "type": "timestamp with time zone",
+      "constraints": "NULL"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "constraints": "NOT NULL DEFAULT now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "constraints": "NOT NULL DEFAULT now()"
+    },
+    {
+      "name": "teacher_id",
+      "type": "bigint",
+      "constraints": "NOT NULL, FOREIGN KEY REFERENCES profiles(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "student_id",
+      "type": "bigint",
+      "constraints": "NOT NULL, FOREIGN KEY REFERENCES profiles(id) ON DELETE CASCADE"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_tasks_teacher_id",
+      "columns": ["teacher_id"]
+    },
+    {
+      "name": "idx_tasks_student_id",
+      "columns": ["student_id"]
+    }
+  ]
+}

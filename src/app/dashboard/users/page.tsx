@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/clients/client";
-import { ErrorComponent } from "../songs/@components/ErrorComponent";
+import { ErrorComponent } from "../../../components/dashboard/ErrorComponent";
 
 export default async function Page() {
   const supabase = createClient();

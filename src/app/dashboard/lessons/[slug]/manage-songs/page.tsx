@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const { data: songs, error } = await supabase.from("songs").select("*");
   const { data: lessonSongs, error: lessonSongsError } = await supabase
     .from("lesson_songs")
-    .select("song_id")
+    .select("song_id, song_status")
     .eq("lesson_id", slug);
 
   const assignedSongIds =
@@ -45,6 +45,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
         <AssignedSongsList
           songs={songs}
           assignedSongIds={assignedSongIds}
+          lessonSongs={lessonSongs}
           slug={slug}
         />
       </div>

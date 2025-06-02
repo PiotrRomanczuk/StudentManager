@@ -11,10 +11,10 @@ export default function RootLayout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* <UserProvider> */}
-        <NavBar />
-        <div className="w-full">
-          <Dashboard>{children}</Dashboard>
-        </div>
+      <NavBar />
+      <div className="w-full">
+        <Dashboard>{children}</Dashboard>
+      </div>
       {/* </UserProvider> */}
     </div>
   );

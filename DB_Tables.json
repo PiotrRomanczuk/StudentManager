@@ -1,28 +1,28 @@
 {
-    "tables": [
-      {
-        "name": "lesson_songs",
-        "sql": "CREATE  TABLE public.lesson_songs (\n  lesson_id uuid NOT NULL,\n  song_id uuid NOT NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  updated_at timestamp with time zone NOT NULL DEFAULT now(),\n  song_status public.LearningSongStatus NULL DEFAULT 'STARTED'::\"LearningSongStatus\",\n  CONSTRAINT fk_lesson FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON DELETE CASCADE,\n  CONSTRAINT fk_song FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lesson_songs_lesson_id ON public.lesson_songs USING btree (lesson_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lesson_songs_song_id ON public.lesson_songs USING btree (song_id) TABLESPACE pg_default;"
-      },
-      {
-        "name": "lessons",
-        "sql": "CREATE  TABLE public.lessons (\n  student_id uuid NOT NULL,\n  teacher_id uuid NOT NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  updated_at timestamp with time zone NOT NULL DEFAULT now(),\n  date date NULL,\n  time time without time zone NULL,\n  creator_user_id uuid NULL,\n  status public.LessonStatus NULL DEFAULT 'SCHEDULED'::\"LessonStatus\",\n  id uuid NOT NULL DEFAULT gen_random_uuid(),\n  lesson_number bigint NULL,\n  notes text NULL,\n  title text NULL,\n  CONSTRAINT lessons_pkey PRIMARY KEY (id),\n  CONSTRAINT lessons_creator_user_id_fkey FOREIGN KEY (creator_user_id) REFERENCES profiles(user_id) ON DELETE SET NULL\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lessons_student_id ON public.lessons USING btree (student_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lessons_teacher_id ON public.lessons USING btree (teacher_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lessons_user_id ON public.lessons USING btree (creator_user_id) TABLESPACE pg_default;"
-      },
-      {
-        "name": "profiles",
-        "sql": "CREATE  TABLE public.profiles (\n  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,\n  user_id uuid NULL,\n  username text NULL,\n  bio text NULL,\n  created_at timestamp with time zone NULL DEFAULT now(),\n  updated_at timestamp with time zone NULL DEFAULT now(),\n  email text NULL,\n  \"isStudent\" boolean NULL DEFAULT true,\n  \"isTeacher\" boolean NULL DEFAULT false,\n  \"isAdmin\" boolean NOT NULL DEFAULT false,\n  \"firstName\" text NULL,\n  \"lastName\" text NULL,\n  \"canEdit\" boolean NOT NULL DEFAULT false,\n  \"isTest\" boolean NULL DEFAULT false,\n  CONSTRAINT profiles_pkey PRIMARY KEY (id),\n  CONSTRAINT unique_user_id UNIQUE (user_id),\n  CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_profiles_user_id ON public.profiles USING btree (user_id) TABLESPACE pg_default;"
-      },
-      {
-        "name": "songs",
-        "sql": "CREATE  TABLE public.songs (\n  id uuid NOT NULL DEFAULT gen_random_uuid(),\n  title text NULL,\n  level character varying NULL,\n  key character varying NULL,\n  chords text[] NULL,\n  audio_files jsonb NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  author character varying NULL,\n  ultimate_guitar_link text NULL,\n  short_title text NULL,\n  updated_at timestamp with time zone NULL,\n  CONSTRAINT Songs_pkey PRIMARY KEY (id),\n  CONSTRAINT Songs_title_key UNIQUE (title),\n  CONSTRAINT songs_shortTitle_key UNIQUE (short_title)\n) TABLESPACE pg_default;"
-      },
-      {
-        "name": "tasks",
-        "sql": "CREATE  TABLE public.tasks (\n  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,\n  title text NOT NULL,\n  description text NULL,\n  due_date timestamp with time zone NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  updated_at timestamp with time zone NOT NULL DEFAULT now(),\n  teacher_id bigint NOT NULL,\n  student_id bigint NOT NULL,\n  CONSTRAINT tasks_pkey PRIMARY KEY (id),\n  CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES profiles(id) ON DELETE CASCADE,\n  CONSTRAINT fk_teacher FOREIGN KEY (teacher_id) REFERENCES profiles(id) ON DELETE CASCADE\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_tasks_teacher_id ON public.tasks USING btree (teacher_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_tasks_student_id ON public.tasks USING btree (student_id) TABLESPACE pg_default;"
-      },
-      {
-        "name": "user_favorites",
-        "sql": "CREATE  TABLE public.user_favorites (\n  user_id uuid NOT NULL,\n  song_id uuid NOT NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  id uuid NOT NULL DEFAULT gen_random_uuid(),\n  CONSTRAINT user_favorites_pkey PRIMARY KEY (id),\n  CONSTRAINT fk_song FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE,\n  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_user_favorites_user_id ON public.user_favorites USING btree (user_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_user_favorites_song_id ON public.user_favorites USING btree (song_id) TABLESPACE pg_default;"
-      }
-    ]
-  }
+  "tables": [
+    {
+      "name": "lesson_songs",
+      "sql": "CREATE  TABLE public.lesson_songs (\n  lesson_id uuid NOT NULL,\n  song_id uuid NOT NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  updated_at timestamp with time zone NOT NULL DEFAULT now(),\n  song_status public.LearningSongStatus NULL DEFAULT 'STARTED'::\"LearningSongStatus\",\n  CONSTRAINT fk_lesson FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON DELETE CASCADE,\n  CONSTRAINT fk_song FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lesson_songs_lesson_id ON public.lesson_songs USING btree (lesson_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lesson_songs_song_id ON public.lesson_songs USING btree (song_id) TABLESPACE pg_default;"
+    },
+    {
+      "name": "lessons",
+      "sql": "CREATE  TABLE public.lessons (\n  student_id uuid NOT NULL,\n  teacher_id uuid NOT NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  updated_at timestamp with time zone NOT NULL DEFAULT now(),\n  date date NULL,\n  time time without time zone NULL,\n  creator_user_id uuid NULL,\n  status public.LessonStatus NULL DEFAULT 'SCHEDULED'::\"LessonStatus\",\n  id uuid NOT NULL DEFAULT gen_random_uuid(),\n  lesson_number bigint NULL,\n  notes text NULL,\n  title text NULL,\n  CONSTRAINT lessons_pkey PRIMARY KEY (id),\n  CONSTRAINT lessons_creator_user_id_fkey FOREIGN KEY (creator_user_id) REFERENCES profiles(user_id) ON DELETE SET NULL\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lessons_student_id ON public.lessons USING btree (student_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lessons_teacher_id ON public.lessons USING btree (teacher_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_lessons_user_id ON public.lessons USING btree (creator_user_id) TABLESPACE pg_default;"
+    },
+    {
+      "name": "profiles",
+      "sql": "CREATE  TABLE public.profiles (\n  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,\n  user_id uuid NULL,\n  username text NULL,\n  bio text NULL,\n  created_at timestamp with time zone NULL DEFAULT now(),\n  updated_at timestamp with time zone NULL DEFAULT now(),\n  email text NULL,\n  \"isStudent\" boolean NULL DEFAULT true,\n  \"isTeacher\" boolean NULL DEFAULT false,\n  \"isAdmin\" boolean NOT NULL DEFAULT false,\n  \"firstName\" text NULL,\n  \"lastName\" text NULL,\n  \"canEdit\" boolean NOT NULL DEFAULT false,\n  \"isTest\" boolean NULL DEFAULT false,\n  CONSTRAINT profiles_pkey PRIMARY KEY (id),\n  CONSTRAINT unique_user_id UNIQUE (user_id),\n  CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_profiles_user_id ON public.profiles USING btree (user_id) TABLESPACE pg_default;"
+    },
+    {
+      "name": "songs",
+      "sql": "CREATE  TABLE public.songs (\n  id uuid NOT NULL DEFAULT gen_random_uuid(),\n  title text NULL,\n  level character varying NULL,\n  key character varying NULL,\n  chords text[] NULL,\n  audio_files jsonb NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  author character varying NULL,\n  ultimate_guitar_link text NULL,\n  short_title text NULL,\n  updated_at timestamp with time zone NULL,\n  CONSTRAINT Songs_pkey PRIMARY KEY (id),\n  CONSTRAINT Songs_title_key UNIQUE (title),\n  CONSTRAINT songs_shortTitle_key UNIQUE (short_title)\n) TABLESPACE pg_default;"
+    },
+    {
+      "name": "tasks",
+      "sql": "CREATE  TABLE public.tasks (\n  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,\n  title text NOT NULL,\n  description text NULL,\n  due_date timestamp with time zone NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  updated_at timestamp with time zone NOT NULL DEFAULT now(),\n  teacher_id bigint NOT NULL,\n  student_id bigint NOT NULL,\n  CONSTRAINT tasks_pkey PRIMARY KEY (id),\n  CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES profiles(id) ON DELETE CASCADE,\n  CONSTRAINT fk_teacher FOREIGN KEY (teacher_id) REFERENCES profiles(id) ON DELETE CASCADE\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_tasks_teacher_id ON public.tasks USING btree (teacher_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_tasks_student_id ON public.tasks USING btree (student_id) TABLESPACE pg_default;"
+    },
+    {
+      "name": "user_favorites",
+      "sql": "CREATE  TABLE public.user_favorites (\n  user_id uuid NOT NULL,\n  song_id uuid NOT NULL,\n  created_at timestamp with time zone NOT NULL DEFAULT now(),\n  id uuid NOT NULL DEFAULT gen_random_uuid(),\n  CONSTRAINT user_favorites_pkey PRIMARY KEY (id),\n  CONSTRAINT fk_song FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE,\n  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE\n) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_user_favorites_user_id ON public.user_favorites USING btree (user_id) TABLESPACE pg_default;\nCREATE INDEX IF NOT EXISTS idx_user_favorites_song_id ON public.user_favorites USING btree (song_id) TABLESPACE pg_default;"
+    }
+  ]
+}

@@ -24,12 +24,12 @@ interface LessonsTableProps {
 
 export function LessonsTable({ lessons }: LessonsTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 18;
   const totalPages = Math.ceil(lessons.length / itemsPerPage);
 
   const paginatedLessons = lessons.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   function formatDate(dateString: string) {
@@ -47,11 +47,11 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-        <div className="overflow-x-auto -mx-4 sm:mx-0">
+    <div className="space-y-4 w-full max-w-4xl mx-auto">
+      <div className="bg-white rounded-lg shadow-md p-2 sm:p-4 md:p-6 w-full max-w-4xl mx-auto">
+        <div className="overflow-x-auto w-full max-w-full">
           <div className="inline-block min-w-full align-middle">
-            <Table>
+            <Table className="w-full min-w-[700px]">
               <TableHeader>
                 <TableRow className="bg-gray-50 hover:bg-gray-50">
                   <TableHead className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

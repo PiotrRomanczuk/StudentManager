@@ -1,0 +1,88 @@
+{
+  "table": "lessons",
+  "columns": [
+    {
+      "name": "student_id",
+      "type": "uuid",
+      "constraints": "NOT NULL"
+    },
+    {
+      "name": "teacher_id",
+      "type": "uuid",
+      "constraints": "NOT NULL"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "constraints": "NOT NULL DEFAULT now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "constraints": "NOT NULL DEFAULT now()"
+    },
+    {
+      "name": "date",
+      "type": "date",
+      "constraints": "NULL"
+    },
+    {
+      "name": "time",
+      "type": "time without time zone",
+      "constraints": "NULL"
+    },
+    {
+      "name": "creator_user_id",
+      "type": "uuid",
+      "constraints": "NULL, FOREIGN KEY REFERENCES profiles(user_id) ON DELETE SET NULL"
+    },
+    {
+      "name": "status",
+      "type": "public.LessonStatus",
+      "constraints": "NULL DEFAULT 'SCHEDULED'::\"LessonStatus\""
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "constraints": "NOT NULL DEFAULT gen_random_uuid(), PRIMARY KEY"
+    },
+    {
+      "name": "lesson_number",
+      "type": "bigint",
+      "constraints": "NULL"
+    },
+    {
+      "name": "notes",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "lesson_teacher_number",
+      "type": "bigint",
+      "constraints": "NULL"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_lessons_student_id",
+      "columns": ["student_id"]
+    },
+    {
+      "name": "idx_lessons_teacher_id",
+      "columns": ["teacher_id"]
+    },
+    {
+      "name": "idx_lessons_user_id",
+      "columns": ["creator_user_id"]
+    },
+    {
+      "name": "idx_lessons_creator_user_id",
+      "columns": ["creator_user_id"]
+    }
+  ]
+}

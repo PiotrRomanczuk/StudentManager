@@ -2,23 +2,26 @@ import { motion } from "framer-motion";
 
 const testimonials = [
   {
-    content: "This platform has revolutionized how I manage my guitar students. The progress tracking and repertoire management features have made it so much easier to keep track of each student's journey.",
+    content:
+      "This platform has revolutionized how I manage my guitar students. The progress tracking and repertoire management features have made it so much easier to keep track of each student's journey.",
     author: "Sarah Johnson",
     role: "Guitar School Director",
-    imageUrl: "/testimonial-1.jpg"
+    imageUrl: "/testimonial-1.jpg",
   },
   {
-    content: "As a private guitar instructor, I've been able to streamline my lesson planning and student tracking. The platform helps me focus more on teaching and less on administration.",
+    content:
+      "As a private guitar instructor, I've been able to streamline my lesson planning and student tracking. The platform helps me focus more on teaching and less on administration.",
     author: "Michael Chen",
     role: "Professional Guitar Instructor",
-    imageUrl: "/testimonial-2.jpg"
+    imageUrl: "/testimonial-2.jpg",
   },
   {
-    content: "The communication tools have made it so much easier to keep parents informed about their children's guitar progress. It's been a game-changer for my teaching studio.",
+    content:
+      "The communication tools have made it so much easier to keep parents informed about their children's guitar progress. It's been a game-changer for my teaching studio.",
     author: "Emma Rodriguez",
     role: "Guitar Teacher",
-    imageUrl: "/testimonial-3.jpg"
-  }
+    imageUrl: "/testimonial-3.jpg",
+  },
 ];
 
 export default function Testimonials() {
@@ -32,12 +35,15 @@ export default function Testimonials() {
           transition={{ duration: 0.6 }}
           className="mx-auto max-w-2xl text-center"
         >
-          <h2 className="text-base font-semibold leading-7 text-indigo-600">Testimonials</h2>
+          <h2 className="text-base font-semibold leading-7 text-indigo-600">
+            Testimonials
+          </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             What Our Users Say
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Don&apos;t just take our word for it. Here&apos;s what educators are saying about our platform.
+            Don&apos;t just take our word for it. Here&apos;s what educators are
+            saying about our platform.
           </p>
         </motion.div>
 
@@ -64,7 +70,9 @@ export default function Testimonials() {
                     <h3 className="text-base font-semibold leading-7 tracking-tight text-gray-900">
                       {testimonial.author}
                     </h3>
-                    <p className="text-sm leading-6 text-indigo-600">{testimonial.role}</p>
+                    <p className="text-sm leading-6 text-indigo-600">
+                      {testimonial.role}
+                    </p>
                   </div>
                 </div>
                 <p className="mt-6 text-base leading-7 text-gray-600">
@@ -77,4 +85,4 @@ export default function Testimonials() {
       </div>
     </div>
   );
-} 
+}

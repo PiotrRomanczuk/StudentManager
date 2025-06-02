@@ -17,6 +17,7 @@ import { redirect } from "next/navigation";
 type LessonInformationProps = {
   lesson: {
     id: string;
+    lesson_number?: number;
     student_id: string;
     teacher_id: string;
     notes?: string;
@@ -55,14 +56,33 @@ export default function LessonInformation({
   return (
     <Card className="flex-1 border-lesson-blue-border">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-xl font-bold text-lesson-blue-text">Lesson Information</CardTitle>
-        <Button asChild size="sm" variant="outline" className="hover:bg-lesson-blue-bg hover:text-lesson-blue-text">
+        <div className="flex items-center gap-3">
+          <CardTitle className="text-xl font-bold text-lesson-blue-text">
+            Lesson Information
+          </CardTitle>
+          {lesson.lesson_number && (
+            <span className="ml-2 px-2 py-1 rounded bg-lesson-blue-bg text-lesson-blue-text text-sm font-semibold border border-lesson-blue-border">
+              Lesson #{lesson.lesson_number}
+            </span>
+          )}
+        </div>
+        <Button
+          asChild
+          size="sm"
+          variant="outline"
+          className="hover:bg-lesson-blue-bg hover:text-lesson-blue-text"
+        >
           <Link href={`/dashboard/lessons/${lesson.id}/edit`}>
             <Edit className="mr-2 h-4 w-4" />
             Edit Lesson
           </Link>
         </Button>
-        <Button size="sm" variant="outline" onClick={handleDelete} className="hover:bg-lesson-blue-bg hover:text-lesson-blue-text">
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={handleDelete}
+          className="hover:bg-lesson-blue-bg hover:text-lesson-blue-text"
+        >
           <Edit className="mr-2 h-4 w-4" />
           Delete Lesson
         </Button>
@@ -118,8 +138,14 @@ export default function LessonInformation({
         </div>
       </CardContent>
       <CardFooter className="flex justify-between text-xs text-lesson-blue-text">
-        <div>Created: {new Date(lesson.created_at).toLocaleString()}</div>
-        <div>Updated: {new Date(lesson.updated_at).toLocaleString()}</div>
+        <div>
+          Created:{" "}
+          {new Date(lesson.created_at.replace(" ", "T")).toLocaleString()}
+        </div>
+        <div>
+          Updated:{" "}
+          {new Date(lesson.updated_at.replace(" ", "T")).toLocaleString()}
+        </div>
       </CardFooter>
     </Card>
   );

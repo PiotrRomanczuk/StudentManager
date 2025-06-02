@@ -46,13 +46,11 @@ export async function removeSongFromLesson(formData: FormData, slug: string) {
       "Error fetching current lesson songs:",
       fetchError.message || fetchError,
     );
-  } else {
-    // console.log("Current lesson songs data:", currentData);
   }
 
-  // console.log(
-  //   `Attempting to delete song with ID ${songId} from lesson ${trimmedSlug}`,
-  // );
+  console.log(
+    `Attempting to delete song with ID ${songId} from lesson ${trimmedSlug}`,
+  );
 
   const { error: lessonError } = await supabase
     .from("lesson_songs")
@@ -69,10 +67,9 @@ export async function removeSongFromLesson(formData: FormData, slug: string) {
       "Error removing lesson song:" + lessonError.message || lessonError,
     );
   } else {
-    // console.log(
-    //   `Successfully removed song with ID ${songId} from lesson ${trimmedSlug}`,
-    // );
-    // console.log("Deleted data:", data);
+    console.log(
+      `Successfully removed song with ID ${songId} from lesson ${trimmedSlug}`,
+    );
   }
 
   revalidatePath(`/lessons/${trimmedSlug}/manage-songs`);

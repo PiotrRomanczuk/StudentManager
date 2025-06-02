@@ -15,10 +15,13 @@ export default function HeroHome() {
               className="text-left"
             >
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Master the Art of <span className="text-indigo-600">Guitar Teaching</span>
+                Master the Art of{" "}
+                <span className="text-indigo-600">Guitar Teaching</span>
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                Transform your guitar teaching studio with our comprehensive platform. Track student progress, manage lessons, and focus on what matters most - inspiring the next generation of guitarists.
+                Transform your guitar teaching studio with our comprehensive
+                platform. Track student progress, manage lessons, and focus on
+                what matters most - inspiring the next generation of guitarists.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
                 <motion.a
@@ -31,10 +34,10 @@ export default function HeroHome() {
                 </motion.a>
                 <motion.a
                   whileHover={{ x: 5 }}
-                  href="#features"
+                  href="/documentation"
                   className="text-lg font-semibold leading-6 text-gray-900"
                 >
-                  Learn More <span aria-hidden="true">→</span>
+                  Documentation <span aria-hidden="true">→</span>
                 </motion.a>
               </div>
             </motion.div>

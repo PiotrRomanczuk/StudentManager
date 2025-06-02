@@ -1,0 +1,40 @@
+{
+  "table": "lesson_songs",
+  "columns": [
+    {
+      "name": "lesson_id",
+      "type": "uuid",
+      "constraints": "NOT NULL, FOREIGN KEY REFERENCES lessons(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "song_id",
+      "type": "uuid",
+      "constraints": "NOT NULL, FOREIGN KEY REFERENCES songs(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "constraints": "NOT NULL DEFAULT now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "constraints": "NOT NULL DEFAULT now()"
+    },
+    {
+      "name": "song_status",
+      "type": "public.LearningSongStatus",
+      "constraints": "NULL DEFAULT 'STARTED'::\"LearningSongStatus\""
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_lesson_songs_lesson_id",
+      "columns": ["lesson_id"]
+    },
+    {
+      "name": "idx_lesson_songs_song_id",
+      "columns": ["song_id"]
+    }
+  ]
+}

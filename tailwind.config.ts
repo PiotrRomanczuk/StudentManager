@@ -87,6 +87,28 @@ export default {
             dark: "#065F46", // green-800
           },
         },
+        songStatus: {
+          to_learn: {
+            bg: "#FFF7ED", // lesson-orange-bg
+            text: "#EA580C", // lesson-orange-text
+          },
+          started: {
+            bg: "#EFF6FF", // lesson-blue-bg
+            text: "#2563EB", // lesson-blue-text
+          },
+          remembered: {
+            bg: "#DCFCE7", // lesson-green-bg
+            text: "#16A34A", // lesson-green-text
+          },
+          with_author: {
+            bg: "#F3E8FF", // lesson-purple-bg
+            text: "#9333EA", // lesson-purple-text
+          },
+          mastered: {
+            bg: "#F9FAFB", // admin-gray-lightest
+            text: "#1F2937", // admin-gray-dark
+          },
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

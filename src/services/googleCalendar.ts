@@ -19,7 +19,7 @@
 //       // Load client secrets from a local file.
 //       const content = fs.readFileSync(CREDENTIALS_PATH);
 //       const credentials = JSON.parse(content.toString());
-      
+
 //       const { client_secret, client_id, redirect_uris } = credentials.installed || credentials.web;
 //       this.auth = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 

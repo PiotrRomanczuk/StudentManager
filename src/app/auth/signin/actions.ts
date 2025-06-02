@@ -25,6 +25,11 @@ export async function login(formData: FormData) {
 }
 
 export async function signInWithGoogle() {
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : process.env.NEXT_PUBLIC_API_BASE_URL;
+
   console.log("signInWithGoogle function started");
   const supabase = await createClient();
   console.log("Supabase client created");
@@ -32,7 +37,7 @@ export async function signInWithGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "http://localhost:3000/api/auth/callback",
+      redirectTo: `${BASE_URL}/api/auth/callback`,
     },
   });
 
@@ -44,8 +49,8 @@ export async function signInWithGoogle() {
   console.log("Google sign-in data:", data);
 
   if (data.url) {
-    console.log("Redirecting to:", data.url);
-    redirect(data.url);
+    console.log("Redirecting to dashboard");
+    redirect("/dashboard");
   }
 }
 

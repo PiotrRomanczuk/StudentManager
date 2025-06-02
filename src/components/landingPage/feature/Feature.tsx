@@ -3,7 +3,10 @@ import { motion } from "framer-motion";
 
 export default function Feature() {
   return (
-    <div className="bg-gradient-to-b from-white to-indigo-50 py-24 sm:py-32" id="feature">
+    <div
+      className="bg-gradient-to-b from-white to-indigo-50 py-24 sm:py-32"
+      id="feature"
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
           className="mx-auto max-w-2xl text-center"
@@ -18,8 +21,9 @@ export default function Feature() {
             Everything You Need to Manage Students
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Streamline your educational administration with our powerful suite of tools. 
-            From attendance tracking to grade management, we&apos;ve got you covered.
+            Streamline your educational administration with our powerful suite
+            of tools. From attendance tracking to grade management, we&apos;ve
+            got you covered.
           </p>
         </motion.div>
 
