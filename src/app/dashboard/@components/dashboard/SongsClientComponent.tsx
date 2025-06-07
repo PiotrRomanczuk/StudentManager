@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { PaginationComponent } from "./PaginationComponent";
+import { PaginationComponent } from "../pagination/PaginationComponent";
 import { SongSearchBar } from "@/components/dashboard/SongSearchBar";
 import { Song } from "@/types/Song";
-import { TeacherSongTable } from "./SongTable/admin_table/TeacherSongTable";
-import { TeacherSongTableMobile } from "./SongTable/admin_table/TeacherSongTableMobile";
-import { StudentSongTable } from "./SongTable/student_table/StudentSongTable";
-import { StudentSongTableMobile } from "./SongTable/student_table/StudentSongTableMobile";
+import { TeacherSongTable } from "../../songs/v1/@components/SongTable/admin_table/TeacherSongTable";
+import { TeacherSongTableMobile } from "../../songs/v1/@components/SongTable/admin_table/TeacherSongTableMobile";
+import { StudentSongTable } from "../../songs/v1/@components/SongTable/student_table/StudentSongTable";
+import { StudentSongTableMobile } from "../../songs/v1/@components/SongTable/student_table/StudentSongTableMobile";
 
 interface SongsClientComponentProps {
   songs: Song[];
@@ -41,13 +41,13 @@ export default function SongsClientComponent({
       <div className="w-full overflow-hidden h-full">
         {/* Mobile view */}
         <div className="block sm:hidden h-full">
-        {isAdmin ? (
-          <TeacherSongTableMobile
-            songs={filteredSongs}
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            onPageChange={setCurrentPage}
-          />
+          {isAdmin ? (
+            <TeacherSongTableMobile
+              songs={filteredSongs}
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+            />
           ) : (
             <StudentSongTableMobile
               songs={filteredSongs}

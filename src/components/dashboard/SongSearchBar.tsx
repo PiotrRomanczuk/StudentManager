@@ -18,6 +18,12 @@ export function SongSearchBar({ songs, onSearch }: SongSearchBarProps) {
     a.title.localeCompare(b.title),
   );
 
+  const filteredSongs = searchQuery.trim()
+    ? alphabeticallySortedSongs.filter(song =>
+        song.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : alphabeticallySortedSongs;
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -70,7 +76,7 @@ export function SongSearchBar({ songs, onSearch }: SongSearchBarProps) {
       />
       {(isDropdownOpen || isAnimating) && (
         <div
-          className={`absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden transition-all duration-200 ease-in-out
+          className={`absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg overflow-y-auto transition-all duration-200 ease-in-out
             ${isDropdownOpen ? "max-h-[300px] opacity-100 scale-y-100" : "max-h-0 opacity-0 scale-y-95"}
             origin-top
           `}
@@ -88,7 +94,7 @@ export function SongSearchBar({ songs, onSearch }: SongSearchBarProps) {
               </span>
             </div>
           </div>
-          {alphabeticallySortedSongs.map((song) => (
+          {filteredSongs.map((song) => (
             <div
               key={song.id}
               className="px-3 sm:px-4 py-2 hover:bg-gray-100 cursor-pointer"

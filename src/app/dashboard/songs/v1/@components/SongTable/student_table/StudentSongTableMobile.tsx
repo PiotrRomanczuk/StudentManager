@@ -48,7 +48,9 @@ export function StudentSongTableMobile({
               {/* Status */}
               {song.status && (
                 <div className="mb-2">
-                  <span className={`px-2 py-1 rounded text-xs font-semibold bg-songStatus-${song.status}-bg text-songStatus-${song.status}-text`}>
+                  <span
+                    className={`px-2 py-1 rounded text-xs font-semibold bg-songStatus-${song.status}-bg text-songStatus-${song.status}-text`}
+                  >
                     {song.status.replace(/_/g, " ")}
                   </span>
                 </div>
@@ -74,4 +76,4 @@ export function StudentSongTableMobile({
       </div>
     </div>
   );
-} 
+}

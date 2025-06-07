@@ -1,64 +1,39 @@
-import { Container } from "@/components/ui/container";
-import { ErrorComponent } from "../../../components/dashboard/ErrorComponent";
-import SongsClientComponent from "./@components/SongsClientComponent";
-import { AdminControls } from "./@components/AdminControls";
-import { cookies } from "next/headers";
-import { getUserAndAdmin } from "../@utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
-import { BASE_URL } from "@/constants/BASE_URL";
+import { getUserAndAdmin } from "../@utils/getUserAndAdmin";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default async function Page() {
-  try {
+export default async function SongsPage() {
     const supabase = await createClient();
-    const { user, isAdmin } = await getUserAndAdmin(supabase);
-    const cookieHeader = (await cookies()).toString();
+    const { isAdmin } = await getUserAndAdmin(supabase);
 
-    const songs_res = await fetch(
-      `${BASE_URL}/api/song/user-songs${user?.id ? `?userId=${user.id}` : ""}`,
-      {
-        cache: "no-store",
-        // credentials: "include",
-        headers: { Cookie: cookieHeader },
-      },
-    );
-    if (!songs_res.ok) {
-      return (
-        <ErrorComponent error={(await songs_res.json()).error || "Failed to fetch songs"} />
-      );
+    if (isAdmin) {
+        return (
+            <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-3xl mx-auto">
+                    <div className="text-center">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+                            Which version would you like to use?
+                        </h1>
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <Link 
+                                href="/dashboard/songs/v1"
+                                className="flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
+                            >
+                                Version 1
+                            </Link>
+                            <Link 
+                                href="/dashboard/songs/v2"
+                                className="flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
+                            >
+                                Version 2
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
-    const { songs } = await songs_res.json();
 
-    const profiles_res = await fetch(
-      `${BASE_URL}/api/profiles`,
-      {
-        cache: "no-store",
-        // credentials: "include",
-        headers: { Cookie: cookieHeader },
-      },
-    );
-    if (!profiles_res.ok) {
-      return (
-        <ErrorComponent error={(await profiles_res.json()).error || "Failed to fetch profiles"} />
-      );
-    }
-    const { profiles } = await profiles_res.json();
-
-    return (
-      <Container className="max-w-3xl border">
-        <div className="my-8">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mx-8 mb-4">
-            <h1 className="text-2xl x-4 font-bold">Songs</h1>
-            {isAdmin && <AdminControls profiles={profiles} />}
-          </div>
-          <SongsClientComponent songs={songs} isAdmin={isAdmin} />
-        </div>
-      </Container>
-    );
-  } catch (error: unknown) {
-    return (
-      <ErrorComponent
-        error={error instanceof Error ? error.message : "An error occurred"}
-      />
-    );
-  }
+    redirect("/dashboard/songs/v1");
 }

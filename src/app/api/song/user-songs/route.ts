@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
       );
     }
     if (!lessons || lessons.length === 0) {
-      return NextResponse.json({ songs: [] });
+      return NextResponse.json({ songs: [], total: 0 });
     }
     const lessonIds = lessons.map((lesson: { id: string }) => lesson.id);
 
@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
       );
     }
     if (!lessonSongs || lessonSongs.length === 0) {
-      return NextResponse.json({ songs: [] });
+      return NextResponse.json({ songs: [], total: 0 });
     }
     const songIdToStatus = lessonSongs.reduce(
       (
@@ -50,10 +50,10 @@ export async function GET(req: NextRequest) {
     );
     const songIds = lessonSongs.map((ls: { song_id: string }) => ls.song_id);
 
-    // 3. Get song details
-    const { data: songs, error: songsError } = await supabase
+    // 3. Get all songs without pagination
+    const { data: songs, error: songsError, count } = await supabase
       .from("songs")
-      .select("*")
+      .select("*", { count: "exact" })
       .in("id", songIds);
     if (songsError) {
       return NextResponse.json(
@@ -66,15 +66,17 @@ export async function GET(req: NextRequest) {
       ...song,
       status: songIdToStatus[(song as { id: string }).id] || null,
     }));
-    return NextResponse.json({ songs: songsWithStatus });
+    return NextResponse.json({ songs: songsWithStatus, total: count });
   } else {
-    const { data: allSongs, error } = await supabase.from("songs").select("*");
+    const { data: allSongs, error, count } = await supabase
+      .from("songs")
+      .select("*", { count: "exact" });
     if (error) {
       return NextResponse.json(
         { error: "Error fetching songs" },
         { status: 500 },
       );
     }
-    return NextResponse.json({ songs: allSongs });
+    return NextResponse.json({ songs: allSongs, total: count });
   }
 }

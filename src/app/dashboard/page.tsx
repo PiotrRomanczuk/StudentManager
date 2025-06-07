@@ -9,6 +9,8 @@ export default async function Page() {
   const supabase = await createClient();
   const { user, isAdmin } = await getUserAndAdmin(supabase);
 
+  console.log(isAdmin);
+
   if (!user?.id) {
     return <ErrorComponent error="Please sign in to view your dashboard" />;
   }

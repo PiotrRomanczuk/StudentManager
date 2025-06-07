@@ -37,7 +37,9 @@ export function StudentSongTable({
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50 hover:bg-gray-50">
-                {STUDENT_TABLE_HEADERS.filter((h: { key: string }) => h.key !== "actions").map((head: { key: string; label: string }) => (
+                {STUDENT_TABLE_HEADERS.filter(
+                  (h: { key: string }) => h.key !== "actions",
+                ).map((head: { key: string; label: string }) => (
                   <TableHead
                     key={`header-${head.key}`}
                     className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors${head.key === "status" ? " w-12" : ""}`}
@@ -75,4 +77,4 @@ export function StudentSongTable({
       </div>
     </div>
   );
-} 
+}

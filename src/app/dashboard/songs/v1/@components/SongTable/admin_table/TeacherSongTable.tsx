@@ -51,51 +51,53 @@ export function TeacherSongTable({
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50 hover:bg-gray-50">
-                {TEACHER_TABLE_HEADERS.filter((h) => h.key !== "actions").map((head, idx, arr) => {
-                  // First column
-                  if (idx === 0) {
+                {TEACHER_TABLE_HEADERS.filter((h) => h.key !== "actions").map(
+                  (head, idx, arr) => {
+                    // First column
+                    if (idx === 0) {
+                      return (
+                        <TableHead
+                          key={`header-${head.key}`}
+                          className="px-3 py-2 text-left text-[11px] font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort(head.key as keyof Song)}
+                        >
+                          <div className="flex items-center gap-1">
+                            {head.label}
+                            {getSortIndicator(head.key as keyof Song)}
+                          </div>
+                        </TableHead>
+                      );
+                    }
+                    // Last column (before actions)
+                    if (idx === arr.length - 1) {
+                      return (
+                        <TableHead
+                          key={`header-${head.key}`}
+                          className="px-3 py-2 text-left text-[11px] font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort(head.key as keyof Song)}
+                        >
+                          <div className="flex items-center gap-1">
+                            {head.label}
+                            {getSortIndicator(head.key as keyof Song)}
+                          </div>
+                        </TableHead>
+                      );
+                    }
+                    // Centered columns
                     return (
                       <TableHead
                         key={`header-${head.key}`}
-                        className="px-3 py-2 text-left text-[11px] font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
+                        className="px-3 py-2 text-center text-[11px] font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
                         onClick={() => handleSort(head.key as keyof Song)}
                       >
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center justify-center gap-1">
                           {head.label}
                           {getSortIndicator(head.key as keyof Song)}
                         </div>
                       </TableHead>
                     );
-                  }
-                  // Last column (before actions)
-                  if (idx === arr.length - 1) {
-                    return (
-                      <TableHead
-                        key={`header-${head.key}`}
-                        className="px-3 py-2 text-left text-[11px] font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
-                        onClick={() => handleSort(head.key as keyof Song)}
-                      >
-                        <div className="flex items-center gap-1">
-                          {head.label}
-                          {getSortIndicator(head.key as keyof Song)}
-                        </div>
-                      </TableHead>
-                    );
-                  }
-                  // Centered columns
-                  return (
-                    <TableHead
-                      key={`header-${head.key}`}
-                      className="px-3 py-2 text-center text-[11px] font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
-                      onClick={() => handleSort(head.key as keyof Song)}
-                    >
-                      <div className="flex items-center justify-center gap-1">
-                        {head.label}
-                        {getSortIndicator(head.key as keyof Song)}
-                      </div>
-                    </TableHead>
-                  );
-                })}
+                  },
+                )}
                 <TableHead
                   key="header-actions"
                   className="px-3 py-2 text-left text-[11px] font-medium text-gray-500 uppercase tracking-wider"
@@ -122,4 +124,4 @@ export function TeacherSongTable({
       </div>
     </div>
   );
-} 
+}

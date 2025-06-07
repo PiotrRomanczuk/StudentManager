@@ -6,7 +6,11 @@ import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
 import { cookies } from "next/headers";
 import { BASE_URL } from "@/constants/BASE_URL";
 
-export default async function Page({ params }: { params: Promise<{ song: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ song: string }>;
+}) {
   const { song: songId } = await params;
   const cookieHeader = (await cookies()).toString();
 

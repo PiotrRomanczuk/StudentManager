@@ -66,7 +66,9 @@ const SongTableActions: React.FC<SongTableActionsProps> = ({
                   asChild
                   className="border-2 hover:bg-gray-300 transition-colors duration-200"
                 >
-                  <Button variant="secondary" size="sm">Cancel</Button>
+                  <Button variant="secondary" size="sm">
+                    Cancel
+                  </Button>
                 </DialogClose>
                 <Button
                   variant="destructive"

@@ -9,10 +9,10 @@ interface LayoutProps {
 
 export default function RootLayout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="w-full h-full">
       {/* <UserProvider> */}
       <NavBar />
-      <div className="w-full">
+      <div className="w-full h-full">
         <Dashboard>{children}</Dashboard>
       </div>
       {/* </UserProvider> */}

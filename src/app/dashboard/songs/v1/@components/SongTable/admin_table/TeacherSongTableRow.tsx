@@ -38,18 +38,20 @@ const TeacherSongTableRow: React.FC<SongTableRowProps> = ({
         </TableCell>
       )}
       {/* Title & Author */}
-      <TableCell className="px-6 py-2 flex-1 min-w-[180px]" aria-label="Title and Author">
+      <TableCell
+        className="px-6 py-2 flex-1 min-w-[180px]"
+        aria-label="Title and Author"
+      >
         <div className="flex flex-col items-start">
-          
-            <div className="text-sm font-medium text-gray-900">
-              {song.title}
-            </div>
-            <div className="text-sm text-gray-500">{song.author}</div>
-          
+          <div className="text-sm font-medium text-gray-900">{song.title}</div>
+          <div className="text-sm text-gray-500">{song.author}</div>
         </div>
       </TableCell>
       {/* Key */}
-      <TableCell className="px-6 py-2 w-20 max-w-[60px] text-center items-center justify-center" aria-label="Key">
+      <TableCell
+        className="px-6 py-2 w-20 max-w-[60px] text-center items-center justify-center"
+        aria-label="Key"
+      >
         <span
           className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800"
           title={song.key}
@@ -58,7 +60,10 @@ const TeacherSongTableRow: React.FC<SongTableRowProps> = ({
         </span>
       </TableCell>
       {/* Level */}
-      <TableCell className="px-6 py-2 w-20 max-w-[60px] text-center items-center justify-center" aria-label="Level">
+      <TableCell
+        className="px-6 py-2 w-20 max-w-[60px] text-center items-center justify-center"
+        aria-label="Level"
+      >
         <span
           className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800"
           title={song.level}

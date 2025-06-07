@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PaginationComponent } from "../songs/@components/PaginationComponent";
+import { PaginationComponent } from "@/app/dashboard/@components/pagination/PaginationComponent";
 
 interface LessonsTableProps {
   lessons: Lesson[];

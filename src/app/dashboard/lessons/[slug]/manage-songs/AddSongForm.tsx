@@ -24,11 +24,18 @@ export default function AddSongForm({
   );
 
   const handleSearch = (query: string) => {
+    if (!query.trim()) {
+      setSelectedSongId("");
+      return;
+    }
+
     const matchingSong = availableSongs.find(
-      (song) => song.title.toLowerCase() === query.toLowerCase(),
+      (song) => song.title.toLowerCase().includes(query.toLowerCase())
     );
     if (matchingSong) {
       setSelectedSongId(matchingSong.id);
+    } else {
+      setSelectedSongId("");
     }
   };
 

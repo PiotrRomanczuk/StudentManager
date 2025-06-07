@@ -22,7 +22,7 @@ export function TeacherSongTableMobile({
   songs,
   currentPage,
   itemsPerPage,
-}: Omit<SongsTableProps, 'isAdmin'>) {
+}: Omit<SongsTableProps, "isAdmin">) {
   const router = useRouter();
   const { currentSongs } = useSongTable(songs, currentPage, itemsPerPage);
 
@@ -67,7 +67,9 @@ export function TeacherSongTableMobile({
                     variant="outline"
                     size="icon"
                     className="bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"
-                    onClick={() => router.push(`/dashboard/songs/${song.id}/edit`)}
+                    onClick={() =>
+                      router.push(`/dashboard/songs/${song.id}/edit`)
+                    }
                     aria-label={`Edit ${song.title}`}
                     title="Edit"
                   >
@@ -140,4 +142,4 @@ export function TeacherSongTableMobile({
       </div>
     </div>
   );
-} 
+}

@@ -7,7 +7,9 @@ export async function GET() {
   try {
     const { user, isAdmin } = await getUserAndAdmin(supabase);
     if (isAdmin) {
-      const { data: profiles, error } = await supabase.from("profiles").select("*");
+      const { data: profiles, error } = await supabase
+        .from("profiles")
+        .select("*");
       if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
@@ -20,7 +22,10 @@ export async function GET() {
         .eq("user_id", user.id)
         .single();
       if (profileError) {
-        return NextResponse.json({ error: profileError.message }, { status: 500 });
+        return NextResponse.json(
+          { error: profileError.message },
+          { status: 500 },
+        );
       }
       // Get the user's songs (reuse logic from user-songs route)
       // 1. Find lessons where user is student or teacher
@@ -29,7 +34,10 @@ export async function GET() {
         .select("id")
         .or(`student_id.eq.${user.id},teacher_id.eq.${user.id}`);
       if (lessonsError) {
-        return NextResponse.json({ error: "Error fetching lessons" }, { status: 500 });
+        return NextResponse.json(
+          { error: "Error fetching lessons" },
+          { status: 500 },
+        );
       }
       if (!lessons || lessons.length === 0) {
         return NextResponse.json({ profile, songs: [] });
@@ -41,7 +49,10 @@ export async function GET() {
         .select("song_id, song_status")
         .in("lesson_id", lessonIds);
       if (lessonSongsError) {
-        return NextResponse.json({ error: "Error fetching lesson songs" }, { status: 500 });
+        return NextResponse.json(
+          { error: "Error fetching lesson songs" },
+          { status: 500 },
+        );
       }
       if (!lessonSongs || lessonSongs.length === 0) {
         return NextResponse.json({ profile, songs: [] });
@@ -63,7 +74,10 @@ export async function GET() {
         .select("*")
         .in("id", songIds);
       if (songsError) {
-        return NextResponse.json({ error: "Error fetching user songs" }, { status: 500 });
+        return NextResponse.json(
+          { error: "Error fetching user songs" },
+          { status: 500 },
+        );
       }
       // Combine song details with their status as a property on each song
       const songsWithStatus = songs.map((song: Record<string, unknown>) => ({

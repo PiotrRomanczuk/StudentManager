@@ -8,7 +8,11 @@ import {
 } from "@/components/ui/card";
 import { ErrorComponent } from "../../../../components/dashboard/ErrorComponent";
 
-export default async function StudentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function StudentDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const supabase = createClient();
   const { data: user, error } = await supabase

@@ -24,7 +24,7 @@ export function PaginationComponent({
         <PaginationItem>
           <PaginationPrevious
             onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-            className={`text-sm sm:text-base ${
+            className={`text-sm sm:text-base cursor-pointer ${
               currentPage === 1 ? "pointer-events-none opacity-50" : ""
             }`}
           />
@@ -34,7 +34,7 @@ export function PaginationComponent({
             <PaginationLink
               onClick={() => onPageChange(page)}
               isActive={currentPage === page}
-              className="text-sm sm:text-base"
+              className="text-sm sm:text-base cursor-pointer"
             >
               {page}
             </PaginationLink>
@@ -43,7 +43,7 @@ export function PaginationComponent({
         <PaginationItem>
           <PaginationNext
             onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-            className={`text-sm sm:text-base ${
+            className={`text-sm sm:text-base cursor-pointer ${
               currentPage === totalPages ? "pointer-events-none opacity-50" : ""
             }`}
           />

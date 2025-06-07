@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       console.error("Validation error:", parseResult.error);
       return NextResponse.json(
         { error: "Invalid input", details: parseResult.error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const validated = parseResult.data;
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     if (existingSong) {
       return NextResponse.json(
         { error: "A song with this title already exists." },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -58,12 +58,12 @@ export async function POST(request: NextRequest) {
         // Unique constraint violation (duplicate title)
         return NextResponse.json(
           { error: "A song with this title already exists." },
-          { status: 409 }
+          { status: 409 },
         );
       }
       return NextResponse.json(
         { error: "Database error", details: error.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -76,14 +76,12 @@ export async function POST(request: NextRequest) {
     if (errorData.details) {
       if (Array.isArray(errorData.details)) {
         // Zod validation errors
-        errorMsg += ": " + errorData.details.map((d: any) => d.message).join("; ");
+        errorMsg +=
+          ": " + errorData.details.map((d: any) => d.message).join("; ");
       } else if (typeof errorData.details === "string") {
         errorMsg += ": " + errorData.details;
       }
     }
-    return NextResponse.json(
-      { error: errorMsg },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: errorMsg }, { status: 500 });
   }
 }

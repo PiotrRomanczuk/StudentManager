@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { PaginationComponent } from "../songs/@components/PaginationComponent";
+import { PaginationComponent } from "@/app/dashboard/@components/pagination/PaginationComponent";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface LessonWithProfiles extends Lesson {

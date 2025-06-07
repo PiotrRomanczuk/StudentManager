@@ -1,7 +1,22 @@
+// import DropboxPage from "./Dropbox";
 import GoogleDrive from "./google-drive";
 import GoogleLogin from "./google-login";
+import { createClient } from '@/utils/supabase/clients/server'
 
 export default async function TestingPage() {
+  const supabase = await createClient(process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY);
+  
+  // Get current user
+  const { data, error } = await supabase.auth.admin.getUserById('734d25a3-75f8-46c8-bceb-bac84bcf405f')
+  
+  console.log(data)
+
+  if (error) {
+    console.error('Error getting user:', error);
+  }
+
+  // console.log(users)
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-start py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-md w-full space-y-8">
@@ -14,8 +29,7 @@ export default async function TestingPage() {
           </p>
         </div>
         <div className="space-y-6">
-          <GoogleLogin />
-          <GoogleDrive />
+          {/* <DropboxPage /> */}
         </div>
       </div>
     </div>
