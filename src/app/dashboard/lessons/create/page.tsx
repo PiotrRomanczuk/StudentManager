@@ -1,6 +1,20 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { createLesson } from "./actions";
 import { User } from "@/types/User";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function getCurrentDateTime() {
   const now = new Date();
@@ -37,98 +51,131 @@ export default async function Page() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">
-            Create New Lesson
-          </h1>
+        <Link
+          href="/dashboard/lessons"
+          className="flex items-center text-sm text-muted-foreground mb-6 hover:text-primary"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to lessons
+        </Link>
 
-          <form className="space-y-6" action={createLesson}>
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="teacher_id"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Teacher
-                </label>
-                <select
-                  id="teacher_id"
-                  name="teacher_id"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                >
-                  {teachers?.map((teacher: User) => (
-                    <option key={teacher.user_id} value={teacher.user_id}>
-                      {teacher.email}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="student_id"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Student
-                </label>
-                <select
-                  id="student_id"
-                  name="student_id"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                >
-                  {students?.map((student: User) => (
-                    <option key={student.user_id} value={student.user_id}>
-                      {student.email}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">
+              Create New Lesson
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form className="space-y-6" action={createLesson}>
+              <div className="space-y-4">
                 <div>
-                  <label
-                    htmlFor="date"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Date
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    defaultValue={date}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  <Label htmlFor="title">Title</Label>
+                  <Input
+                    id="title"
+                    name="title"
+                    placeholder="Enter lesson title"
+                    className="mt-1"
                   />
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="time"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Time
-                  </label>
-                  <input
-                    type="time"
-                    id="time"
-                    name="time"
-                    defaultValue={time}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  <Label htmlFor="teacher_id">Teacher</Label>
+                  <Select name="teacher_id" required>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select a teacher" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {teachers?.map((teacher: User) => (
+                        <SelectItem
+                          key={teacher.user_id}
+                          value={teacher.user_id}
+                        >
+                          {`${teacher.firstName} ${teacher.lastName}`}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="student_id">Student</Label>
+                  <Select name="student_id" required>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select a student" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {students?.map((student: User) => (
+                        <SelectItem
+                          key={student.user_id}
+                          value={student.user_id}
+                        >
+                          {`${student.firstName} ${student.lastName}`}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="date">Date</Label>
+                    <Input
+                      type="date"
+                      id="date"
+                      name="date"
+                      defaultValue={date}
+                      required
+                      // min={date}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="time">Time</Label>
+                    <Input
+                      type="time"
+                      id="time"
+                      name="time"
+                      defaultValue={time}
+                      required
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="status">Status</Label>
+                  <Select name="status" defaultValue="SCHEDULED">
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="SCHEDULED">Scheduled</SelectItem>
+                      <SelectItem value="COMPLETED">Completed</SelectItem>
+                      <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="notes">Notes</Label>
+                  <Textarea
+                    id="notes"
+                    name="notes"
+                    placeholder="Enter any additional notes for this lesson"
+                    className="mt-1"
                   />
                 </div>
               </div>
-            </div>
 
-            <div className="pt-4">
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
-              >
-                Create Lesson
-              </button>
-            </div>
-          </form>
-        </div>
+              <div className="pt-4">
+                <Button type="submit" className="w-full">
+                  Create Lesson
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

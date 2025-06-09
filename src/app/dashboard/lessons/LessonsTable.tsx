@@ -1,9 +1,10 @@
 "use client";
 
-import { Clock, User } from "lucide-react";
+import { Clock, User, ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 import type { Lesson } from "@/types/Lesson";
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,8 @@ interface LessonsTableProps {
 
 export function LessonsTable({ lessons }: LessonsTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const itemsPerPage = 18;
   const totalPages = Math.ceil(lessons.length / itemsPerPage);
 
@@ -46,6 +49,27 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
     return email.split("@")[0];
   }
 
+  function getStatusColor(status: string) {
+    switch (status?.toLowerCase()) {
+      case "scheduled":
+        return "bg-blue-100 text-blue-800";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  }
+
+  function handleSort(column: string) {
+    const currentSort = searchParams.get("sort") || "created_at";
+    const newSort = currentSort === column ? `${column}_desc` : column;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sort", newSort);
+    router.push(`?${params.toString()}`);
+  }
+
   return (
     <div className="space-y-4 w-full max-w-4xl mx-auto">
       <div className="bg-white rounded-lg shadow-md p-2 sm:p-4 md:p-6 w-full max-w-4xl mx-auto">
@@ -55,10 +79,22 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
               <TableHeader>
                 <TableRow className="bg-gray-50 hover:bg-gray-50">
                   <TableHead className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Lesson
+                    <button
+                      onClick={() => handleSort("lesson_number")}
+                      className="flex items-center gap-1 hover:text-gray-700"
+                    >
+                      Lesson
+                      <ArrowUpDown className="h-4 w-4" />
+                    </button>
                   </TableHead>
                   <TableHead className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date
+                    <button
+                      onClick={() => handleSort("date")}
+                      className="flex items-center gap-1 hover:text-gray-700"
+                    >
+                      Date
+                      <ArrowUpDown className="h-4 w-4" />
+                    </button>
                   </TableHead>
                   <TableHead className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Student
@@ -70,7 +106,7 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                     Time
                   </TableHead>
                   <TableHead className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Last Updated
+                    Status
                   </TableHead>
                   <TableHead className="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -130,7 +166,7 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                           <User className="h-4 w-4 text-lesson-green-text" />
                         </div>
                         <span className="text-sm font-medium text-gray-900">
-                          {getEmail("p.romanczuk@gmail.com")}
+                          {getEmail(lesson.teacher_profile?.email || "")}
                         </span>
                       </div>
                     </TableCell>
@@ -149,9 +185,14 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                       )}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
-                      <span className="text-sm text-gray-500">
-                        {formatDate(lesson.updated_at)}
-                      </span>
+                      <Badge
+                        variant="outline"
+                        className={`${getStatusColor(
+                          lesson.status || "scheduled",
+                        )} border-transparent`}
+                      >
+                        {lesson.status || "Scheduled"}
+                      </Badge>
                     </TableCell>
                     <TableCell className="px-3 sm:px-6 py-4 text-right">
                       <Button

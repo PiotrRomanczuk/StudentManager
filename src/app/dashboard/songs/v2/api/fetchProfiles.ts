@@ -5,10 +5,12 @@ export async function fetchProfilesData(cookieHeader: string) {
     cache: "no-store",
     headers: { Cookie: cookieHeader },
   });
-  
+
   if (!profiles_res.ok) {
-    throw new Error((await profiles_res.json()).error || "Failed to fetch profiles");
+    throw new Error(
+      (await profiles_res.json()).error || "Failed to fetch profiles",
+    );
   }
-  
+
   return profiles_res.json();
-} 
+}

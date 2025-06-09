@@ -1,7 +1,7 @@
 "use client";
 
 import { redirect } from "next/navigation";
-import { SongEditForm } from "@/components/dashboard/forms/SongEditForm";
+import { SongEditForm } from "@/app/dashboard/songs/v2/[song]/@components/SongForm";
 import { CreateSongDTO, Song } from "@/types/Song";
 
 const SongEditClientForm = ({

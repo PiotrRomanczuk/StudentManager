@@ -1,10 +1,11 @@
 "use client";
 
-import { Clock, User } from "lucide-react";
+import { Clock, User, ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 import type { Lesson } from "@/types/Lesson";
 import type { User as UserType } from "@/types/User";
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,8 @@ export function LessonsTableMobile({
   isLoading = false,
 }: LessonsTableMobileProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const itemsPerPage = 6;
   const totalPages = Math.ceil(lessons.length / itemsPerPage);
 
@@ -48,6 +51,27 @@ export function LessonsTableMobile({
   function getEmail(email: string) {
     if (!email) return "N/A";
     return email.split("@")[0];
+  }
+
+  function getStatusColor(status: string) {
+    switch (status?.toLowerCase()) {
+      case "scheduled":
+        return "bg-blue-100 text-blue-800";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  }
+
+  function handleSort(column: string) {
+    const currentSort = searchParams.get("sort") || "created_at";
+    const newSort = currentSort === column ? `${column}_desc` : column;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sort", newSort);
+    router.push(`?${params.toString()}`);
   }
 
   if (isLoading) {
@@ -161,9 +185,14 @@ export function LessonsTableMobile({
                 )}
 
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500">
-                    Updated: {formatDate(lesson.updated_at)}
-                  </span>
+                  <Badge
+                    variant="outline"
+                    className={`${getStatusColor(
+                      lesson.status || "scheduled",
+                    )} border-transparent`}
+                  >
+                    {lesson.status || "Scheduled"}
+                  </Badge>
                 </div>
               </div>
             </CardContent>

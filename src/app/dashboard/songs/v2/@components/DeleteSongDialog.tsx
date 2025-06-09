@@ -26,9 +26,12 @@ export function DeleteSongDialog({
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure you want to delete this song?</AlertDialogTitle>
+          <AlertDialogTitle>
+            Are you sure you want to delete this song?
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete "{songTitle}". This action cannot be undone.
+            This will permanently delete "{songTitle}". This action cannot be
+            undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -43,4 +46,4 @@ export function DeleteSongDialog({
       </AlertDialogContent>
     </AlertDialog>
   );
-} 
+}

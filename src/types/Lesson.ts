@@ -11,6 +11,9 @@ export interface Lesson {
   date: Date;
   time: TimeRanges;
   profile?: User;
+  teacher_profile?: User;
   songs: Song[];
   notes: string;
+  title?: string;
+  status?: string;
 }

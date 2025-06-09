@@ -39,20 +39,20 @@ export default function SongsClientComponentTesting({
       if (aValue === null || aValue === undefined) return 1;
       if (bValue === null || bValue === undefined) return -1;
 
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return sortConfig.direction === 'asc' 
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortConfig.direction === "asc"
           ? aValue.localeCompare(bValue)
           : bValue.localeCompare(aValue);
       }
 
       if (aValue instanceof Date && bValue instanceof Date) {
-        return sortConfig.direction === 'asc'
+        return sortConfig.direction === "asc"
           ? aValue.getTime() - bValue.getTime()
           : bValue.getTime() - aValue.getTime();
       }
 
-      if (typeof aValue === 'number' && typeof bValue === 'number') {
-        return sortConfig.direction === 'asc'
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortConfig.direction === "asc"
           ? aValue - bValue
           : bValue - aValue;
       }
@@ -61,10 +61,16 @@ export default function SongsClientComponentTesting({
     });
   }, [filteredSongs, sortConfig]);
 
-  const { currentSongs } = useSongTable(sortedAndFilteredSongs, currentPage, itemsPerPage);
+  const { currentSongs } = useSongTable(
+    sortedAndFilteredSongs,
+    currentPage,
+    itemsPerPage,
+  );
 
   const headers = isAdmin ? TEACHER_TABLE_HEADERS : STUDENT_TABLE_HEADERS;
-  const actions = isAdmin ? ["view", "edit", "delete"] as const : ["view"] as const;
+  const actions = isAdmin
+    ? (["view", "edit", "delete"] as const)
+    : (["view"] as const);
   const showStatus = !isAdmin;
 
   const totalPages = Math.ceil(sortedAndFilteredSongs.length / itemsPerPage);

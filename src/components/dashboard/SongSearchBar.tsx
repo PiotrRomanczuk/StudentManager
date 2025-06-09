@@ -19,8 +19,8 @@ export function SongSearchBar({ songs, onSearch }: SongSearchBarProps) {
   );
 
   const filteredSongs = searchQuery.trim()
-    ? alphabeticallySortedSongs.filter(song =>
-        song.title.toLowerCase().includes(searchQuery.toLowerCase())
+    ? alphabeticallySortedSongs.filter((song) =>
+        song.title.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : alphabeticallySortedSongs;
 

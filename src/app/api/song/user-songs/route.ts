@@ -51,7 +51,11 @@ export async function GET(req: NextRequest) {
     const songIds = lessonSongs.map((ls: { song_id: string }) => ls.song_id);
 
     // 3. Get all songs without pagination
-    const { data: songs, error: songsError, count } = await supabase
+    const {
+      data: songs,
+      error: songsError,
+      count,
+    } = await supabase
       .from("songs")
       .select("*", { count: "exact" })
       .in("id", songIds);
@@ -68,9 +72,11 @@ export async function GET(req: NextRequest) {
     }));
     return NextResponse.json({ songs: songsWithStatus, total: count });
   } else {
-    const { data: allSongs, error, count } = await supabase
-      .from("songs")
-      .select("*", { count: "exact" });
+    const {
+      data: allSongs,
+      error,
+      count,
+    } = await supabase.from("songs").select("*", { count: "exact" });
     if (error) {
       return NextResponse.json(
         { error: "Error fetching songs" },

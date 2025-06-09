@@ -24,7 +24,8 @@ export async function GET() {
     console.log(user.user.id);
 
     // Get user's role from the user metadata
-    const { data: adminData, error: adminError } = await supabase.auth.admin.getUserById(user.user.id);
+    const { data: adminData, error: adminError } =
+      await supabase.auth.admin.getUserById(user.user.id);
 
     console.log(adminData);
     console.log(adminError);
@@ -33,13 +34,13 @@ export async function GET() {
     if (adminError) {
       return NextResponse.json({
         user: { ...user.user },
-        isAdmin: false
+        isAdmin: false,
       });
     }
 
     return NextResponse.json({
       user: { ...user.user },
-      isAdmin: true
+      isAdmin: true,
     });
   } catch (error) {
     return NextResponse.json(

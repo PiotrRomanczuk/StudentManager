@@ -43,7 +43,6 @@ const FORM_FIELDS = [
     label: "Chords",
     placeholder: "Enter chord progression (e.g., Am G F E)",
     type: "textarea",
-    required: true,
     fullWidth: true,
   },
 ];

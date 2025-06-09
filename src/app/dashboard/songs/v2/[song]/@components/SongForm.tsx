@@ -25,15 +25,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { FORM_FIELDS, LEVEL_OPTIONS, MUSICAL_KEYS } from "./CONSTANTS";
+import {
+  FORM_FIELDS,
+  LEVEL_OPTIONS,
+  MUSICAL_KEYS,
+} from "../../../../../../components/dashboard/forms/CONSTANTS";
 
 const songSchema = z.object({
   title: z.string().min(1, "Title is required"),
   author: z.string().optional(),
   level: z.string().min(1, "Level is required"),
   key: z.string().optional(),
-  chords: z.string().min(1, "Chords are required"),
-  audio_files: z.string().optional(),
+  chords: z.string().optional(),
+  audio_files: z.string().nullable().optional(),
   ultimate_guitar_link: z
     .string()
     .url("Please enter a valid URL")
@@ -53,7 +57,7 @@ export interface SongFormProps {
   onCancel: () => void;
 }
 
-export function SongEditForm({
+export function SongForm({
   mode,
   song,
   loading,

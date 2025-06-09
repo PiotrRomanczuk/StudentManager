@@ -3,13 +3,14 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export async function createClient(customAnonKey?: string): Promise<
-  ReturnType<typeof createServerClient>
-> {
+export async function createClient(
+  customAnonKey?: string,
+): Promise<ReturnType<typeof createServerClient>> {
   const cookieStore = await cookies();
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = customAnonKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseAnonKey =
+    customAnonKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   return createServerClient(supabaseUrl!, supabaseAnonKey!, {
     cookies: {
@@ -30,7 +31,7 @@ export async function createClient(customAnonKey?: string): Promise<
     },
     auth: {
       autoRefreshToken: false,
-      persistSession: false
-    }
+      persistSession: false,
+    },
   });
 }

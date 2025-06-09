@@ -1,18 +1,22 @@
 // import DropboxPage from "./Dropbox";
 import GoogleDrive from "./google-drive";
 import GoogleLogin from "./google-login";
-import { createClient } from '@/utils/supabase/clients/server'
+import { createClient } from "@/utils/supabase/clients/server";
 
 export default async function TestingPage() {
-  const supabase = await createClient(process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY);
-  
+  const supabase = await createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
+  );
+
   // Get current user
-  const { data, error } = await supabase.auth.admin.getUserById('734d25a3-75f8-46c8-bceb-bac84bcf405f')
-  
-  console.log(data)
+  const { data, error } = await supabase.auth.admin.getUserById(
+    "734d25a3-75f8-46c8-bceb-bac84bcf405f",
+  );
+
+  console.log(data);
 
   if (error) {
-    console.error('Error getting user:', error);
+    console.error("Error getting user:", error);
   }
 
   // console.log(users)
@@ -28,9 +32,7 @@ export default async function TestingPage() {
             Test Google Login and Google Drive features below.
           </p>
         </div>
-        <div className="space-y-6">
-          {/* <DropboxPage /> */}
-        </div>
+        <div className="space-y-6">{/* <DropboxPage /> */}</div>
       </div>
     </div>
   );

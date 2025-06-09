@@ -29,8 +29,8 @@ export default function AddSongForm({
       return;
     }
 
-    const matchingSong = availableSongs.find(
-      (song) => song.title.toLowerCase().includes(query.toLowerCase())
+    const matchingSong = availableSongs.find((song) =>
+      song.title.toLowerCase().includes(query.toLowerCase()),
     );
     if (matchingSong) {
       setSelectedSongId(matchingSong.id);

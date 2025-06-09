@@ -60,7 +60,9 @@ export function SongRow({
             )}
             {actions.includes("edit") && (
               <Button
-                onClick={() => router.push(`/dashboard/songs/v2/${song.id}/edit`)}
+                onClick={() =>
+                  router.push(`/dashboard/songs/v2/${song.id}/edit`)
+                }
                 className="hover:scale-110 transition-transform hover:bg-admin-green-light"
               >
                 <Pencil size={16} className="text-admin-green-dark" />
