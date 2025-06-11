@@ -9,6 +9,8 @@ export async function signup(formData: FormData) {
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
+    firstName: formData.get("firstName") as string,
+    lastName: formData.get("lastName") as string,
   };
 
   const {
@@ -29,8 +31,16 @@ export async function signup(formData: FormData) {
 
     // Step 3: Insert profile information
     const { error: profileError } = await supabase
-      .from("user_")
-      .insert([{ user_id: userId, user_type: "student" }]);
+      .from("profiles")
+      .insert([{ 
+        user_id: userId,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        isStudent: true,
+        isTeacher: false,
+        isAdmin: false
+      }]);
 
     if (profileError) {
       throw new Error("Error creating user profile:" + profileError);

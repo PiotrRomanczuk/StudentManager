@@ -13,9 +13,19 @@ export async function handleSongCreate(songToCreate: Partial<Song>) {
     }
   } catch (error) {
     console.error("Failed to create song:", error);
-    toast.error(
-      error instanceof Error ? error.message : "Failed to create song",
-    );
+    let errorMessage = "Failed to create song";
+    
+    if (error instanceof Error) {
+      if (error.message.includes("songs_shortTitle_key")) {
+        errorMessage = "A song with this short title already exists. Please choose a different short title.";
+      } else if (error.message.includes("Songs_title_key")) {
+        errorMessage = "A song with this title already exists. Please choose a different title.";
+      } else {
+        errorMessage = error.message;
+      }
+    }
+    
+    toast.error(errorMessage);
   }
 }
 

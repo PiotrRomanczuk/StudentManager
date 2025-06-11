@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import React from "react";
-import { SongEditForm } from "@/app/dashboard/songs/v2/[song]/@components/SongForm";
+import { SongForm } from "@/app/dashboard/songs/v2/[song]/@components/SongForm";
 import { CreateSongDTO, Song } from "@/types/Song";
 import { createGuid } from "@/utils/createGuid";
 import { toast } from "sonner";
@@ -25,7 +25,7 @@ export default function Page() {
   return (
     <div>
       <h1 className="text-3xl font-bold pl-6 pt-4 mb-6">New Song</h1>
-      <SongEditForm
+      <SongForm
         song={defaultSong}
         mode="create"
         loading={false}

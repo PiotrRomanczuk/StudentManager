@@ -7,6 +7,13 @@ const FORM_FIELDS = [
     type: "text",
   },
   {
+    id: "short_title",
+    label: "Short Title",
+    placeholder: "Enter a unique short title (optional)",
+    type: "text",
+    required: false,
+  },
+  {
     id: "author",
     label: "Author",
     placeholder: "Enter author name",

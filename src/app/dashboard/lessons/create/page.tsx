@@ -37,6 +37,12 @@ export default async function Page() {
     .from("profiles")
     .select("*")
     .eq("isStudent", true);
+
+  // Sort students by email
+  const sortedStudents = students?.sort((a: User, b: User) => 
+    (a.email || '').localeCompare(b.email || '')
+  );
+
   const { data: teachers, error: teachersError } = await supabase
     .from("profiles")
     .select("*")
@@ -69,18 +75,8 @@ export default async function Page() {
             <form className="space-y-6" action={createLesson}>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    id="title"
-                    name="title"
-                    placeholder="Enter lesson title"
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
                   <Label htmlFor="teacher_id">Teacher</Label>
-                  <Select name="teacher_id" required>
+                  <Select name="teacher_id" required defaultValue={teachers?.[0]?.user_id}>
                     <SelectTrigger className="mt-1">
                       <SelectValue placeholder="Select a teacher" />
                     </SelectTrigger>
@@ -104,12 +100,12 @@ export default async function Page() {
                       <SelectValue placeholder="Select a student" />
                     </SelectTrigger>
                     <SelectContent>
-                      {students?.map((student: User) => (
+                      {sortedStudents?.map((student: User) => (
                         <SelectItem
                           key={student.user_id}
                           value={student.user_id}
                         >
-                          {`${student.firstName} ${student.lastName}`}
+                          {student.email}
                         </SelectItem>
                       ))}
                     </SelectContent>

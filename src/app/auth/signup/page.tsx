@@ -51,6 +51,30 @@ export default function SignUpPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
+            <Label htmlFor="firstName">First Name</Label>
+            <Input
+              id="firstName"
+              name="firstName"
+              type="text"
+              placeholder="John"
+              required
+              autoComplete="given-name"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="lastName">Last Name</Label>
+            <Input
+              id="lastName"
+              name="lastName"
+              type="text"
+              placeholder="Doe"
+              required
+              autoComplete="family-name"
+            />
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"

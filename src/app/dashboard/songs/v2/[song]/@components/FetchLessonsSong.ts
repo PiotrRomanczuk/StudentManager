@@ -12,11 +12,14 @@ export type LessonSong = {
   student_email?: string;
 };
 
-type LessonWithStudent = {
+type Lesson = {
   id: string;
-  student?: {
-    email: string;
-  };
+  student_id: string;
+};
+
+type Profile = {
+  user_id: string;
+  email: string;
 };
 
 export async function fetchLessonsSong(songId: string): Promise<{
@@ -53,9 +56,7 @@ export async function fetchLessonsSong(songId: string): Promise<{
       .from("lessons")
       .select(`
         id,
-        student:profiles (
-          email
-        )
+        student_id
       `)
       .in("id", lessonSongs.map((ls: LessonSong) => ls.lesson_id));
 
@@ -63,9 +64,24 @@ export async function fetchLessonsSong(songId: string): Promise<{
       throw new Error(`Failed to fetch lessons: ${lessonsError.message}`);
     }
 
+    // Get the student profiles
+    const { data: profiles, error: profilesError } = await supabase
+      .from("profiles")
+      .select("user_id, email")
+      .in("user_id", lessons?.map((lesson: Lesson) => lesson.student_id) || []);
+
+    if (profilesError) {
+      throw new Error(`Failed to fetch profiles: ${profilesError.message}`);
+    }
+
+    // Create a map of student_id to email
+    const studentToEmail = new Map(
+      (profiles || []).map((profile: Profile) => [profile.user_id, profile.email])
+    );
+
     // Create a map of lesson_id to student email
     const lessonToEmail = new Map(
-      (lessons as LessonWithStudent[] || []).map(lesson => [lesson.id, lesson.student?.email])
+      (lessons || []).map((lesson: Lesson) => [lesson.id, studentToEmail.get(lesson.student_id)])
     );
 
     // Combine the data

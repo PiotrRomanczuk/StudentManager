@@ -1,7 +1,7 @@
 import type { Lesson } from "@/types/Lesson";
 import type { User } from "@/types/User";
 import { createClient } from "@/utils/supabase/clients/server";
-import { Plus, ArrowUpDown } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -12,13 +12,7 @@ import { getUserAndAdmin } from "../@utils/getUserAndAdmin";
 import SearchBar from "@/components/Search-bar";
 import NoLesson from "./[slug]/@components/NoLesson";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { LessonFilters } from "./@components/LessonFilters";
 
 type Params = { user_id: string; sort?: string; filter?: string };
 
@@ -76,29 +70,7 @@ export default async function Page({
         <h1 className="text-3xl font-bold">Lessons</h1>
         {isAdmin && (
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
-            <div className="flex items-center gap-4 w-full sm:w-auto">
-              <Select defaultValue={sort}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="created_at">Date Created</SelectItem>
-                  <SelectItem value="date">Lesson Date</SelectItem>
-                  <SelectItem value="lesson_number">Lesson Number</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select defaultValue={filter || "all"}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="scheduled">Scheduled</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <LessonFilters currentSort={sort} currentFilter={filter || null} />
             <div className="flex items-center gap-4 w-full sm:w-auto">
               <SearchBar profiles={profiles} />
               <Button
