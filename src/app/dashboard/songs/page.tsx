@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/clients/server";
-import { getUserAndAdmin } from "../@utils/getUserAndAdmin";
+import { getUserAndAdmin } from "../utils/getUserAndAdmin";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 

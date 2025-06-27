@@ -1,16 +1,15 @@
 "use client";
 
-import { Clock, User, ArrowUpDown } from "lucide-react";
+import { Clock, User } from "lucide-react";
 import Link from "next/link";
 import type { Lesson } from "@/types/Lesson";
 import type { User as UserType } from "@/types/User";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { PaginationComponent } from "@/app/dashboard/@components/pagination/PaginationComponent";
+import { PaginationComponent } from "@/app/dashboard/components/pagination/PaginationComponent";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface LessonWithProfiles extends Lesson {
@@ -28,8 +27,6 @@ export function LessonsTableMobile({
   isLoading = false,
 }: LessonsTableMobileProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const itemsPerPage = 6;
   const totalPages = Math.ceil(lessons.length / itemsPerPage);
 
@@ -64,14 +61,6 @@ export function LessonsTableMobile({
       default:
         return "bg-gray-100 text-gray-800";
     }
-  }
-
-  function handleSort(column: string) {
-    const currentSort = searchParams.get("sort") || "created_at";
-    const newSort = currentSort === column ? `${column}_desc` : column;
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("sort", newSort);
-    router.push(`?${params.toString()}`);
   }
 
   if (isLoading) {

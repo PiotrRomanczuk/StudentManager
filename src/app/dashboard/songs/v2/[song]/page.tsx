@@ -5,9 +5,9 @@ import SongNotFound from "./@components/SongNotFound";
 import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
 import { cookies } from "next/headers";
 import { BASE_URL } from "@/constants/BASE_URL";
-import { getUserAndAdmin } from "@/app/dashboard/@utils/getUserAndAdmin";
+import { getUserAndAdmin } from "@/app/dashboard/utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
-import { fetchLessonsSong, LessonSong } from "./@components/FetchLessonsSong";
+import { fetchLessonsSong } from "./@components/FetchLessonsSong";
 import { Song } from "@/types/Song";
 import UsersWithSongList from "./@components/UsersWithSongList";
 
@@ -18,9 +18,9 @@ export default async function Page({
 }) {
   const supabase = await createClient();
   const { song: songId } = await params;
-  const cookieHeader = (await cookies()).toString();  
+  const cookieHeader = (await cookies()).toString();
   
-  const { isAdmin } = await getUserAndAdmin(supabase);
+  await getUserAndAdmin(supabase); // Keep the call for potential side effects
 
   let song: Song | null = null;
   let error: string | null = null;
@@ -85,7 +85,7 @@ export default async function Page({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <SongDetails song={song} isAdmin={isAdmin} lessons={lessons || []} />
+            <SongDetails song={song} />
           </div>
         </div>
         <div className="lg:col-span-1">

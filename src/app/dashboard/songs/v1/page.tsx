@@ -1,9 +1,9 @@
 import { Container } from "@/components/ui/container";
 import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
-import SongsClientComponent from "../../@components/dashboard/SongsClientComponent";
+import SongsClientComponent from "../../components/dashboard/SongsClientComponent";
 import * as AdminControls from "./@components/AdminControls";
 import { cookies } from "next/headers";
-import { getUserAndAdmin } from "../../@utils/getUserAndAdmin";
+import { getUserAndAdmin } from "../../utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
 import { BASE_URL } from "@/constants/BASE_URL";
 

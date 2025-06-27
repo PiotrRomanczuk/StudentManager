@@ -1,6 +1,4 @@
 // import DropboxPage from "./Dropbox";
-import GoogleDrive from "./google-drive";
-import GoogleLogin from "./google-login";
 import { createClient } from "@/utils/supabase/clients/server";
 
 export default async function TestingPage() {

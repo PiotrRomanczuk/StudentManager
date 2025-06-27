@@ -3,11 +3,10 @@ import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
 import SongsClientComponentTesting from "./@components/SongsClientComponentTesting";
 import { AdminControls } from "../v1/@components/AdminControls";
 import { cookies } from "next/headers";
-import { getUserAndAdmin } from "../../@utils/getUserAndAdmin";
+import { getUserAndAdmin } from "../../utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
 import { fetchSongsData } from "./api/fetchSongs";
 import { fetchProfilesData } from "./api/fetchProfiles";
-import StudentsSongs from "./StudentsSongs";
 import { getSongsByStudent } from "./FetchStudentSongs";
 
 type Params = { user_id: string };
@@ -42,14 +41,13 @@ export default async function Page({
             <SongsClientComponentTesting
               songs={songs}
               isAdmin={false}
-              totalItems={songs.length}
             />
           </div>
         </Container>
       );
     }
 
-    const { songs, total } = await fetchSongsData(user?.id, cookieHeader);
+    const { songs } = await fetchSongsData(user?.id, cookieHeader);
 
     if (!songs) {
       throw new Error("Failed to fetch songs");
@@ -65,7 +63,6 @@ export default async function Page({
           <SongsClientComponentTesting
             songs={songs}
             isAdmin={isAdmin}
-            totalItems={total}
           />
         </div>
       </Container>

@@ -75,6 +75,7 @@ export default function LoginPage() {
         <form
           className="space-y-5"
           id="signInForm"
+          data-testid="signInForm"
           ref={formRef}
           action={async (formData) => {
             await handleSubmit(formData);

@@ -69,19 +69,26 @@ export async function POST(request: NextRequest) {
 
     console.log(`Song created successfully:`, data);
     return NextResponse.json({ data }, { status: 201 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Unexpected error:", err);
-    const errorData = await err.json();
-    let errorMsg = errorData.error || "Failed to create song";
-    if (errorData.details) {
-      if (Array.isArray(errorData.details)) {
-        // Zod validation errors
-        errorMsg +=
-          ": " + errorData.details.map((d: any) => d.message).join("; ");
-      } else if (typeof errorData.details === "string") {
-        errorMsg += ": " + errorData.details;
+    let errorMsg = "Failed to create song";
+    
+    if (err instanceof Error) {
+      errorMsg = err.message;
+    } else if (typeof err === 'object' && err !== null && 'error' in err) {
+      const errorData = err as { error?: string; details?: unknown };
+      errorMsg = errorData.error || "Failed to create song";
+      
+      if (errorData.details) {
+        if (Array.isArray(errorData.details)) {
+          // Zod validation errors
+          errorMsg += ": " + errorData.details.map((d: { message?: string }) => d.message || "Unknown error").join("; ");
+        } else if (typeof errorData.details === "string") {
+          errorMsg += ": " + errorData.details;
+        }
       }
     }
+    
     return NextResponse.json({ error: errorMsg }, { status: 500 });
   }
 }

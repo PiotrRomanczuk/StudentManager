@@ -8,7 +8,7 @@ import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { LessonsTable } from "./LessonsTable";
 import { LessonsTableMobile } from "./LessonsTableMobile";
-import { getUserAndAdmin } from "../@utils/getUserAndAdmin";
+import { getUserAndAdmin } from "../utils/getUserAndAdmin";
 import SearchBar from "@/components/Search-bar";
 import NoLesson from "./[slug]/@components/NoLesson";
 import { Skeleton } from "@/components/ui/skeleton";

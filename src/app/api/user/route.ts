@@ -42,7 +42,7 @@ export async function GET() {
       user: { ...user.user },
       isAdmin: true,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

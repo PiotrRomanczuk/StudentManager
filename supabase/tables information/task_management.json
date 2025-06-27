@@ -1,0 +1,133 @@
+{
+  "table": "task_management",
+  "columns": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "constraints": "NOT NULL DEFAULT gen_random_uuid(), PRIMARY KEY"
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "constraints": "NOT NULL"
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "category",
+      "type": "text",
+      "constraints": "NOT NULL"
+    },
+    {
+      "name": "priority",
+      "type": "public.TaskPriority",
+      "constraints": "NOT NULL DEFAULT 'Medium'::\"TaskPriority\""
+    },
+    {
+      "name": "status",
+      "type": "public.TaskStatus",
+      "constraints": "NOT NULL DEFAULT 'Not Started'::\"TaskStatus\""
+    },
+    {
+      "name": "estimated_effort",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "assignee_id",
+      "type": "uuid",
+      "constraints": "NULL, FOREIGN KEY REFERENCES profiles(user_id) ON DELETE SET NULL"
+    },
+    {
+      "name": "due_date",
+      "type": "timestamp with time zone",
+      "constraints": "NULL"
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "constraints": "NOT NULL, FOREIGN KEY REFERENCES profiles(user_id) ON DELETE CASCADE"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "constraints": "NOT NULL DEFAULT now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "constraints": "NOT NULL DEFAULT now()"
+    },
+    {
+      "name": "completed_at",
+      "type": "timestamp with time zone",
+      "constraints": "NULL"
+    },
+    {
+      "name": "tags",
+      "type": "text[]",
+      "constraints": "NULL"
+    },
+    {
+      "name": "external_link",
+      "type": "text",
+      "constraints": "NULL"
+    },
+    {
+      "name": "notes",
+      "type": "text",
+      "constraints": "NULL"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_task_management_category",
+      "columns": ["category"]
+    },
+    {
+      "name": "idx_task_management_priority",
+      "columns": ["priority"]
+    },
+    {
+      "name": "idx_task_management_status",
+      "columns": ["status"]
+    },
+    {
+      "name": "idx_task_management_assignee_id",
+      "columns": ["assignee_id"]
+    },
+    {
+      "name": "idx_task_management_created_by",
+      "columns": ["created_by"]
+    },
+    {
+      "name": "idx_task_management_due_date",
+      "columns": ["due_date"]
+    },
+    {
+      "name": "idx_task_management_created_at",
+      "columns": ["created_at"]
+    }
+  ],
+  "enums": [
+    {
+      "name": "TaskPriority",
+      "values": ["Critical", "High", "Medium", "Low"]
+    },
+    {
+      "name": "TaskStatus",
+      "values": ["Not Started", "In Progress", "Completed", "Blocked"]
+    }
+  ],
+  "triggers": [
+    {
+      "name": "update_task_management_updated_at",
+      "function": "update_updated_at_column()",
+      "events": ["UPDATE"],
+      "timing": "BEFORE"
+    }
+  ]
+} 

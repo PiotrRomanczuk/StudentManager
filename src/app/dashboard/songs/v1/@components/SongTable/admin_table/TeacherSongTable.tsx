@@ -13,7 +13,6 @@ import { useSongTable } from "../../hooks/useSongTable";
 import { TEACHER_TABLE_HEADERS } from "./TEACHER_TABLE_HEADERS";
 import { Song } from "@/types/Song";
 import React from "react";
-import SongTableRow from "../student_table/StudentSongTableRow";
 import { createClient } from "@/utils/supabase/clients/client";
 import { toast } from "sonner";
 import TeacherSongTableRow from "./TeacherSongTableRow";

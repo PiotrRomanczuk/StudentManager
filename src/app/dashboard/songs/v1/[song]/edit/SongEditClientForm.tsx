@@ -1,7 +1,7 @@
 "use client";
 
 import { redirect } from "next/navigation";
-import { SongEditForm } from "@/app/dashboard/songs/v2/[song]/@components/SongForm";
+import { SongForm } from "@/app/dashboard/songs/v2/[song]/@components/SongForm";
 import { CreateSongDTO, Song } from "@/types/Song";
 
 const SongEditClientForm = ({
@@ -21,7 +21,7 @@ const SongEditClientForm = ({
           {mode === "edit" ? "Edit song details" : "Create new song"}
         </p>
       </div>
-      <SongEditForm
+      <SongForm
         song={song}
         mode="edit"
         songId={song.id}

@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { google } from "googleapis";
 import oAuth2Client from "@/utils/google/google-auth";
 
 export async function GET() {

@@ -1,4 +1,4 @@
-export default function StudentsSongs({ user_id }: { user_id: string }) {
+export default function StudentsSongs() {
   return (
     <div>
       <h1>Students Songs</h1>

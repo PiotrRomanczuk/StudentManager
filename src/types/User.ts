@@ -7,4 +7,10 @@ export interface User {
   avatar_url?: string;
   isTeacher?: boolean;
   isStudent?: boolean;
+  isAdmin?: boolean;
+  canEdit?: boolean;
+  isTest?: boolean;
+  isActive?: boolean;
+  created_at?: string;
+  updated_at?: string;
 }

@@ -6,7 +6,7 @@ import { SongTableMobile } from "./SongTableMobile";
 import { TEACHER_TABLE_HEADERS, STUDENT_TABLE_HEADERS } from "./TABLE_HEADERS";
 import { Song } from "@/types/Song";
 import { SongSearchBar } from "@/components/dashboard/SongSearchBar";
-import { PaginationComponent } from "@/app/dashboard/@components/pagination/PaginationComponent";
+import { PaginationComponent } from "@/app/dashboard/components/pagination/PaginationComponent";
 import { useSongSorting } from "./hooks/useSongSorting";
 import { useSongFiltering } from "./hooks/useSongFiltering";
 import { useSongTable } from "./hooks/useSongTable";
@@ -14,13 +14,11 @@ import { useSongTable } from "./hooks/useSongTable";
 interface SongsClientComponentTestingProps {
   songs: Song[];
   isAdmin?: boolean;
-  totalItems: number;
 }
 
 export default function SongsClientComponentTesting({
   songs,
   isAdmin,
-  totalItems,
 }: SongsClientComponentTestingProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;

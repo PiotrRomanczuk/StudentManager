@@ -1,8 +1,8 @@
 import { ErrorComponent } from "../../components/dashboard/ErrorComponent";
 import NoSongsFound from "../../components/dashboard/NoSongsFound";
-import UserPage from "./@components/main/userPage";
-import AdminPage from "./@components/main/adminPage";
-import { getUserAndAdmin } from "./@utils/getUserAndAdmin";
+import UserPage from "./components/main/userPage";
+import AdminPage from "./components/main/adminPage";
+import { getUserAndAdmin } from "./utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
 import { BASE_URL } from "@/constants/BASE_URL";
 export default async function Page() {

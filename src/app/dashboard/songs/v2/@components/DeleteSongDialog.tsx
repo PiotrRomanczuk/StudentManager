@@ -30,7 +30,7 @@ export function DeleteSongDialog({
             Are you sure you want to delete this song?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete "{songTitle}". This action cannot be
+            This will permanently delete &quot;{songTitle}&quot;. This action cannot be
             undone.
           </AlertDialogDescription>
         </AlertDialogHeader>

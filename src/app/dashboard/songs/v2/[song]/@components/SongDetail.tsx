@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import {
   Music,
   BarChart,
-  Key,
   Edit,
   Trash2,
   ExternalLink,
@@ -23,15 +22,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { LessonSong } from "./FetchLessonsSong";
 
 interface SongDetailsProps {
   song: Song;
-  isAdmin: boolean;
-  lessons: LessonSong[];
 }
 
-export default function SongDetails({ song, isAdmin, lessons }: SongDetailsProps) {
+export default function SongDetails({ song }: SongDetailsProps) {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this song?")) {
       const supabase = await createClient();
