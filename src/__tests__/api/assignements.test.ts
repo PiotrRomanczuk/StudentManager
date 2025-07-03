@@ -2,6 +2,13 @@ import '@testing-library/jest-dom';
 import { NextRequest } from 'next/server';
 import { GET, POST } from '@/app/api/assignements/route';
 
+// Dynamic base URL based on environment
+const getBaseUrl = () => {
+  return process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3000' 
+    : 'https://test.example';
+};
+
 // Mock Supabase client
 const mockSupabase = {
   from: jest.fn(),
@@ -31,7 +38,7 @@ describe('/api/assignements', () => {
       });
       mockSupabase.from.mockReturnValue({ select: selectMock });
 
-      const request = new NextRequest('http://localhost:3000/api/assignements');
+      const request = new NextRequest(`${getBaseUrl()}/api/assignements`);
       const response = await GET(request);
       const data = await response.json();
 
@@ -48,7 +55,7 @@ describe('/api/assignements', () => {
       });
       mockSupabase.from.mockReturnValue({ select: selectMock });
 
-      const request = new NextRequest('http://localhost:3000/api/assignements');
+      const request = new NextRequest(`${getBaseUrl()}/api/assignements`);
       const response = await GET(request);
       const data = await response.json();
 
@@ -77,7 +84,7 @@ describe('/api/assignements', () => {
       });
       mockSupabase.from.mockReturnValue({ insert: insertMock });
 
-      const request = new NextRequest('http://localhost:3000/api/assignements', {
+      const request = new NextRequest(`${getBaseUrl()}/api/assignements`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -104,7 +111,7 @@ describe('/api/assignements', () => {
     });
 
     it('should return 400 for missing required fields', async () => {
-      const request = new NextRequest('http://localhost:3000/api/assignements', {
+      const request = new NextRequest(`${getBaseUrl()}/api/assignements`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -133,7 +140,7 @@ describe('/api/assignements', () => {
       });
       mockSupabase.from.mockReturnValue({ insert: insertMock });
 
-      const request = new NextRequest('http://localhost:3000/api/assignements', {
+      const request = new NextRequest(`${getBaseUrl()}/api/assignements`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
