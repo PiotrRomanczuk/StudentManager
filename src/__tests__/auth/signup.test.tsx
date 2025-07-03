@@ -1,6 +1,5 @@
-/// <reference types="@testing-library/jest-dom" />
-// Ensure jest-dom matchers are available for type checking
 import '@testing-library/jest-dom';
+// Ensure jest-dom matchers are available for type checking
 import { render, screen, waitFor } from '@testing-library/react';
 import SignUpPage from '@/app/auth/signup/page';
 import userEvent from '@testing-library/user-event';
@@ -10,7 +9,7 @@ jest.mock('@/app/auth/signup/actions', () => ({
   signup: jest.fn(),
 }));
 
-const { signup } = require('@/app/auth/signup/actions');
+import { signup } from '@/app/auth/signup/actions';
 
 describe('SignUpPage', () => {
   beforeEach(() => {

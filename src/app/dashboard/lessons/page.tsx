@@ -108,7 +108,12 @@ export default async function Page({
               <LessonsTableMobile lessons={lessonsWithProfiles} />
             </div>
             <div className="hidden sm:block">
+              <div className="hidden sm:block">
               <LessonsTable lessons={lessonsWithProfiles} />
+            </div>
+            <div className="block sm:hidden">
+              <LessonsTableMobile lessons={lessonsWithProfiles} />
+            </div>
             </div>
           </>
         )}

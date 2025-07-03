@@ -1,18 +1,21 @@
 import { login, signInWithGoogle, logout } from '@/app/auth/signin/actions';
 import { signup } from '@/app/auth/signup/actions';
 import { createClient } from '@/utils/supabase/clients/server';
+import { redirect } from 'next/navigation';
 
 // Mock Supabase client
 jest.mock('@/utils/supabase/clients/server');
-jest.mock('next/navigation', () => ({
-  redirect: jest.fn(),
+jest.mock('next/navigation');
+jest.mock('next/cache', () => ({
   revalidatePath: jest.fn(),
 }));
 
 const mockCreateClient = createClient as jest.MockedFunction<typeof createClient>;
 
+(redirect as unknown as jest.Mock).mockImplementation(() => { throw new Error('NEXT_REDIRECT'); });
+
 describe('Auth Actions', () => {
-  let mockSupabase: any;
+  let mockSupabase: unknown;
 
   beforeEach(() => {
     mockSupabase = {
@@ -21,6 +24,7 @@ describe('Auth Actions', () => {
         signInWithOAuth: jest.fn(),
         signOut: jest.fn(),
         getUser: jest.fn(),
+        signUp: jest.fn(),
       },
       from: jest.fn().mockReturnThis(),
       insert: jest.fn().mockReturnThis(),
@@ -36,8 +40,8 @@ describe('Auth Actions', () => {
   describe('login', () => {
     it('should successfully log in with valid credentials', async () => {
       const formData = new FormData();
-      formData.append('email', 'test@example.com');
-      formData.append('password', 'password123');
+      formData.append('email', 'test@test.com');
+      formData.append('password', 'test123');
       formData.append('rememberMe', 'on');
 
       mockSupabase.auth.signInWithPassword.mockResolvedValue({

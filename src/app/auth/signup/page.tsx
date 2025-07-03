@@ -24,11 +24,19 @@ export default function SignUpPage() {
     const confirmPassword = formData.get("confirmPassword") as string;
 
     if (password !== confirmPassword) {
-      throw new Error("Passwords do not match");
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
     }
 
-    const result = await signup(formData);
-    if (!result.success) {
+    try {
+      const result = await signup(formData);
+      if (!result.success) {
+        setError("Error signing up");
+        setLoading(false);
+        return;
+      }
+    } catch {
       setError("Error signing up");
       setLoading(false);
       return;

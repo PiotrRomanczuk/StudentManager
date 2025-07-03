@@ -206,14 +206,14 @@ export const validatePassword = (password: string) => {
 };
 
 // Test assertions
-export const expectAuthError = (error: any, expectedMessage?: string) => {
+export const expectAuthError = (error: unknown, expectedMessage?: string) => {
   expect(error).toBeInstanceOf(Error);
   if (expectedMessage) {
     expect(error.message).toContain(expectedMessage);
   }
 };
 
-export const expectSuccessfulAuth = (result: any) => {
+export const expectSuccessfulAuth = (result: unknown) => {
   expect(result).toBeDefined();
   expect(result.error).toBeNull();
 };

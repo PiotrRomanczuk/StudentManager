@@ -7,6 +7,28 @@ import { revalidatePath } from "next/cache";
 export async function createLesson(formData: FormData) {
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profileError || !profile) {
+    throw new Error("Profile not found");
+  }
+
+  if (profile.role !== "admin" && profile.role !== "teacher") {
+    throw new Error("Unauthorized");
+  }
+
   const teacherId = formData.get("teacher_id");
   const studentId = formData.get("student_id");
   const date = formData.get("date");
@@ -17,14 +39,6 @@ export async function createLesson(formData: FormData) {
 
   if (!teacherId || !studentId || !date || !time) {
     throw new Error("Missing required fields");
-  }
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    throw new Error("User not authenticated");
   }
 
   try {

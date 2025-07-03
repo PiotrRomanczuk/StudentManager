@@ -1,4 +1,3 @@
-/// <reference types="@testing-library/jest-dom" />
 import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -19,7 +18,7 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-const { login, signInWithGoogle } = require('@/app/auth/signin/actions');
+import { login, signInWithGoogle } from '@/app/auth/signin/actions';
 
 describe('LoginPage', () => {
   beforeEach(() => {

@@ -22,7 +22,7 @@ export async function signup(formData: FormData) {
   });
 
   if (signupError) {
-    throw new Error("Error creating user:" + signupError);
+    throw new Error(signupError.message || "Error creating user");
   }
 
   if (user) {
@@ -32,18 +32,20 @@ export async function signup(formData: FormData) {
     // Step 3: Insert profile information
     const { error: profileError } = await supabase
       .from("profiles")
-      .insert([{ 
-        user_id: userId,
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        isStudent: true,
-        isTeacher: false,
-        isAdmin: false
-      }]);
+      .insert([
+        {
+          user_id: userId,
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          isStudent: true,
+          isTeacher: false,
+          isAdmin: false,
+        },
+      ]);
 
     if (profileError) {
-      throw new Error("Error creating user profile:" + profileError);
+      throw new Error(profileError.message || "Error creating user profile");
     } else {
       return { success: true };
     }

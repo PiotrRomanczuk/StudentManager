@@ -4,6 +4,27 @@ import { redirect } from "next/navigation";
 export const updateLesson = async (formData: FormData) => {
   "use server";
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profileError || !profile) {
+    throw new Error("Profile not found");
+  }
+
+  if (profile.role !== "admin" && profile.role !== "teacher") {
+    throw new Error("Unauthorized");
+  }
 
   const title = formData.get("title") as string;
   const notes = formData.get("notes") as string;

@@ -1,68 +1,54 @@
-/// <reference types="@testing-library/jest-dom" />
 import '@testing-library/jest-dom';
 import { NextRequest } from 'next/server';
 import { GET, POST } from '@/app/api/assignements/route';
 
 // Mock Supabase client
+const mockSupabase = {
+  from: jest.fn(),
+  auth: {
+    getUser: jest.fn().mockResolvedValue({ data: { user: { id: 'user-id' } }, error: null }),
+  },
+};
+
 jest.mock('@/utils/supabase/clients/server', () => ({
-  createClient: jest.fn(() => ({
-    from: jest.fn(() => ({
-      select: jest.fn(() => ({
-        eq: jest.fn(() => Promise.resolve({ data: [], error: null })),
-      })),
-      insert: jest.fn(() => ({
-        select: jest.fn(() => ({
-          single: jest.fn(() => Promise.resolve({ data: null, error: null })),
-        })),
-      })),
-    })),
-    auth: {
-      getUser: jest.fn(() => Promise.resolve({ data: { user: null }, error: null })),
-    },
-  })),
+  createClient: jest.fn(() => mockSupabase),
 }));
 
 describe('/api/assignements', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockSupabase.from.mockReset();
   });
 
   describe('GET', () => {
     it('should return tasks when authenticated', async () => {
-      const mockSupabase = require('@/utils/supabase/clients/server').createClient();
-      mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockResolvedValue({ 
-            data: [
-              { id: 1, title: 'Task 1', description: 'Description 1' },
-              { id: 2, title: 'Task 2', description: 'Description 2' }
-            ], 
-            error: null 
-          }),
-        }),
+      const selectMock = jest.fn().mockResolvedValue({
+        data: [
+          { id: 1, title: 'Task 1', description: 'Description 1' },
+          { id: 2, title: 'Task 2', description: 'Description 2' }
+        ],
+        error: null
       });
+      mockSupabase.from.mockReturnValue({ select: selectMock });
 
-      const request = new NextRequest();
+      const request = new NextRequest('http://localhost:3000/api/assignements');
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
       expect(data.tasks).toBeDefined();
       expect(Array.isArray(data.tasks)).toBe(true);
+      expect(selectMock).toHaveBeenCalledWith('*');
     });
 
     it('should handle database errors gracefully', async () => {
-      const mockSupabase = require('@/utils/supabase/clients/server').createClient();
-      mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockResolvedValue({ 
-            data: null, 
-            error: { message: 'Database connection failed' } 
-          }),
-        }),
+      const selectMock = jest.fn().mockResolvedValue({
+        data: null,
+        error: { message: 'Database connection failed' }
       });
+      mockSupabase.from.mockReturnValue({ select: selectMock });
 
-      const request = new NextRequest();
+      const request = new NextRequest('http://localhost:3000/api/assignements');
       const response = await GET(request);
       const data = await response.json();
 
@@ -74,24 +60,22 @@ describe('/api/assignements', () => {
 
   describe('POST', () => {
     it('should create a task with valid data', async () => {
-      const mockSupabase = require('@/utils/supabase/clients/server').createClient();
-      const mockInsert = jest.fn().mockReturnValue({
+      const singleMock = jest.fn().mockResolvedValue({
+        data: {
+          id: 1,
+          title: 'New Task',
+          description: 'New Description',
+          teacher_id: 1,
+          student_id: 2
+        },
+        error: null
+      });
+      const insertMock = jest.fn().mockReturnValue({
         select: jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ 
-            data: { 
-              id: 1, 
-              title: 'New Task', 
-              description: 'New Description',
-              teacher_id: 1,
-              student_id: 2
-            }, 
-            error: null 
-          }),
-        }),
+          single: singleMock
+        })
       });
-      mockSupabase.from.mockReturnValue({
-        insert: mockInsert,
-      });
+      mockSupabase.from.mockReturnValue({ insert: insertMock });
 
       const request = new NextRequest('http://localhost:3000/api/assignements', {
         method: 'POST',
@@ -110,9 +94,10 @@ describe('/api/assignements', () => {
       expect(response.status).toBe(201);
       expect(data.task).toBeDefined();
       expect(data.task.title).toBe('New Task');
-      expect(mockInsert).toHaveBeenCalledWith([{
+      expect(insertMock).toHaveBeenCalledWith([{
         title: 'New Task',
         description: 'New Description',
+        due_date: undefined,
         teacher_id: 1,
         student_id: 2,
       }]);
@@ -137,17 +122,16 @@ describe('/api/assignements', () => {
     });
 
     it('should handle database errors during creation', async () => {
-      const mockSupabase = require('@/utils/supabase/clients/server').createClient();
-      mockSupabase.from.mockReturnValue({
-        insert: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            single: jest.fn().mockResolvedValue({ 
-              data: null, 
-              error: { message: 'Insert failed' } 
-            }),
-          }),
-        }),
+      const singleMock = jest.fn().mockResolvedValue({
+        data: null,
+        error: { message: 'Insert failed' }
       });
+      const insertMock = jest.fn().mockReturnValue({
+        select: jest.fn().mockReturnValue({
+          single: singleMock
+        })
+      });
+      mockSupabase.from.mockReturnValue({ insert: insertMock });
 
       const request = new NextRequest('http://localhost:3000/api/assignements', {
         method: 'POST',
@@ -168,4 +152,4 @@ describe('/api/assignements', () => {
       expect(data.error).toContain('Insert failed');
     });
   });
-}); 
+});

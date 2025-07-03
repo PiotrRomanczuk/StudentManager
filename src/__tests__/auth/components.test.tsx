@@ -16,7 +16,7 @@ describe('Auth Components', () => {
 
       expect(screen.getByText('Welcome back')).toBeInTheDocument();
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /^sign in$/i })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /sign in with google/i })).toBeInTheDocument();
     });
@@ -25,7 +25,7 @@ describe('Auth Components', () => {
       render(<LoginPage />);
 
       const emailInput = screen.getByLabelText(/email/i);
-      const passwordInput = screen.getByLabelText(/password/i);
+      const passwordInput = screen.getByLabelText(/^password$/i);
 
       await userEvent.type(emailInput, 'test@example.com');
       await userEvent.type(passwordInput, 'password123');
@@ -37,7 +37,7 @@ describe('Auth Components', () => {
     it('should toggle password visibility', async () => {
       render(<LoginPage />);
 
-      const passwordInput = screen.getByLabelText(/password/i);
+      const passwordInput = screen.getByLabelText(/^password$/i);
       const toggleButton = screen.getByRole('button', { name: /show password/i });
 
       expect(passwordInput).toHaveAttribute('type', 'password');
@@ -81,7 +81,7 @@ describe('Auth Components', () => {
       expect(screen.getByLabelText(/first name/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/last name/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/confirm password/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /sign up/i })).toBeInTheDocument();
     });
@@ -92,7 +92,7 @@ describe('Auth Components', () => {
       const firstNameInput = screen.getByLabelText(/first name/i);
       const lastNameInput = screen.getByLabelText(/last name/i);
       const emailInput = screen.getByLabelText(/email/i);
-      const passwordInput = screen.getByLabelText(/password/i);
+      const passwordInput = screen.getByLabelText(/^password$/i);
       const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
 
       await userEvent.type(firstNameInput, 'John');
@@ -128,7 +128,7 @@ describe('Auth Components', () => {
       const firstNameInput = screen.getByLabelText(/first name/i);
       const lastNameInput = screen.getByLabelText(/last name/i);
       const emailInput = screen.getByLabelText(/email/i);
-      const passwordInput = screen.getByLabelText(/password/i);
+      const passwordInput = screen.getByLabelText(/^password$/i);
       const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
 
       expect(firstNameInput).toHaveAttribute('required');

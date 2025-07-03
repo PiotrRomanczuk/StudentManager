@@ -20,7 +20,7 @@ export async function login(formData: FormData) {
 
   const { error } = await supabase.auth.signInWithPassword(dataForm);
   if (error) {
-    throw new Error("Error signing in:" + error);
+    throw new Error(error.message || "Error signing in");
   }
 
   revalidatePath("/", "layout");
@@ -46,7 +46,7 @@ export async function signInWithGoogle() {
 
   if (error) {
     console.error("Error signing in with Google:", error);
-    throw new Error("Error signing in with Google:" + error);
+    throw new Error(error.message || "Error signing in with Google");
   }
 
   console.log("Google sign-in data:", data);

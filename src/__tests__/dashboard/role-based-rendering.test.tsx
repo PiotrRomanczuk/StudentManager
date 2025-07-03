@@ -1,4 +1,3 @@
-/// <reference types="@testing-library/jest-dom" />
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import Dashboard from '@/app/dashboard/components/dashboard/Dashboard';
@@ -60,9 +59,9 @@ describe('Dashboard Role-Based Rendering', () => {
       expect(screen.queryByText('Testing')).not.toBeInTheDocument();
 
       // Regular items should still be visible
-      expect(screen.getByText('Dashboard')).toBeInTheDocument();
-      expect(screen.getByText('Songs')).toBeInTheDocument();
-      expect(screen.getByText('Lessons')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /dashboard/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /songs/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /lessons/i })).toBeInTheDocument();
     });
 
     it('should always show common navigation items regardless of admin status', () => {
@@ -73,9 +72,9 @@ describe('Dashboard Role-Based Rendering', () => {
       );
 
       // Common items should be visible for admin
-      expect(screen.getByText('Dashboard')).toBeInTheDocument();
-      expect(screen.getByText('Songs')).toBeInTheDocument();
-      expect(screen.getByText('Lessons')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /dashboard/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /songs/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /lessons/i })).toBeInTheDocument();
 
       // Re-render as non-admin
       rerender(
@@ -85,9 +84,9 @@ describe('Dashboard Role-Based Rendering', () => {
       );
 
       // Common items should still be visible for non-admin
-      expect(screen.getByText('Dashboard')).toBeInTheDocument();
-      expect(screen.getByText('Songs')).toBeInTheDocument();
-      expect(screen.getByText('Lessons')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /dashboard/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /songs/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /lessons/i })).toBeInTheDocument();
     });
   });
 
@@ -124,10 +123,10 @@ describe('Dashboard Role-Based Rendering', () => {
       expect(screen.getByText('Student Dashboard')).toBeInTheDocument();
       expect(screen.getByText('View Schedule')).toBeInTheDocument();
       
-      // Student tabs
-      expect(screen.getByText('My Lessons')).toBeInTheDocument();
-      expect(screen.getByText('Assignments')).toBeInTheDocument();
-      expect(screen.getByText('Progress')).toBeInTheDocument();
+      // Student tabs - use more specific selectors
+      expect(screen.getByRole('button', { name: /my lessons/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /assignments/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /progress/i })).toBeInTheDocument();
     });
 
     it('should show student stats cards', () => {
@@ -142,7 +141,8 @@ describe('Dashboard Role-Based Rendering', () => {
     it('should display recent songs', () => {
       render(<UserPage songs={mockSongs} />);
 
-      expect(screen.getByText('Recent Songs')).toBeInTheDocument();
+      // Use more specific selector for the section header
+      expect(screen.getByRole('heading', { name: /recent songs/i })).toBeInTheDocument();
       expect(screen.getByText('Test Song 1')).toBeInTheDocument();
       expect(screen.getByText('Test Song 2')).toBeInTheDocument();
     });

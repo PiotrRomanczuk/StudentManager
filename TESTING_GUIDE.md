@@ -18,9 +18,7 @@ npm test
 npm run test:watch
 
 # Run Jest tests with coverage
-npm run test:coverage
 
-# Run Playwright E2E tests
 npm run test:e2e
 ```
 
