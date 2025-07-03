@@ -4,10 +4,13 @@ import { GET, POST } from '@/app/api/assignements/route';
 
 // Dynamic base URL based on environment
 const getBaseUrl = () => {
-  return process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:3000' 
-    : 'https://test.example';
+  const env = process.env.NODE_ENV;
+  if (env === 'development') return 'http://localhost:3000';
+  // fallback for CI or unknown envs
+  return 'https://test.example';
 };
+
+console.log('NODE_ENV:', process.env.NODE_ENV, 'Base URL:', getBaseUrl());
 
 // Mock Supabase client
 const mockSupabase = {
