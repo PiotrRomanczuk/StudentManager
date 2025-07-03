@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { GET, POST } from '@/app/api/assignements/route';
+import { expect } from '@jest/globals';
 
 // Mock Supabase client
 const mockSupabase = {
@@ -92,7 +93,7 @@ describe('/api/assignements', () => {
         json: jest.fn().mockResolvedValue(requestBody)
       };
 
-      const response = await POST(mockRequest as Request);
+      const response = await POST(mockRequest as unknown as Request);
       const data = await response.json();
 
       expect(response.status).toBe(201);
@@ -119,7 +120,7 @@ describe('/api/assignements', () => {
         json: jest.fn().mockResolvedValue(requestBody)
       };
 
-      const response = await POST(mockRequest as Request);
+      const response = await POST(mockRequest as unknown as Request);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -152,7 +153,7 @@ describe('/api/assignements', () => {
         json: jest.fn().mockResolvedValue(requestBody)
       };
 
-      const response = await POST(mockRequest as Request);
+      const response = await POST(mockRequest as unknown as Request);
       const data = await response.json();
 
       expect(response.status).toBe(500);

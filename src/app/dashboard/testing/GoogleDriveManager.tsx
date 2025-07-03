@@ -83,7 +83,7 @@ export default function GoogleDriveManager({
       // Refresh the file list after successful upload
       await refreshFiles();
     } catch (error) {
-      setError(error.message);
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
     }
   };
 
@@ -104,38 +104,11 @@ export default function GoogleDriveManager({
       // Refresh the file list after successful deletion
       await refreshFiles();
     } catch (error) {
-      setError(error.message);
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await fetch("/api/gdrive/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload file");
-      }
-
-      // Refresh the file list
-      const { files, error } = await getDriveFiles();
-      if (error) {
-        setError(error);
-      } else {
-        setFiles(files || []);
-      }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
 
   if (error) {
     return (
