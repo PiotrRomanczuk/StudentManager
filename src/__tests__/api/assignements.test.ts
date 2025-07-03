@@ -9,8 +9,6 @@ const getBaseUrl = () => {
   return 'https://test.example';
 };
 
-console.log('NODE_ENV:', process.env.NODE_ENV, 'Base URL:', getBaseUrl());
-
 // Mock Supabase client
 const mockSupabase = {
   from: jest.fn(),
@@ -84,18 +82,20 @@ describe('/api/assignements', () => {
       });
       mockSupabase.from.mockReturnValue({ insert: insertMock });
 
-      const request = new Request(`${getBaseUrl()}/api/assignements`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: 'New Task',
-          description: 'New Description',
-          teacher_id: 1,
-          student_id: 2,
-        }),
-      });
+      // Create a simple request object that works in all environments
+      const requestBody = {
+        title: 'New Task',
+        description: 'New Description',
+        teacher_id: 1,
+        student_id: 2,
+      };
 
-      const response = await POST(request);
+      // Mock the request.json() method
+      const mockRequest = {
+        json: jest.fn().mockResolvedValue(requestBody)
+      };
+
+      const response = await POST(mockRequest as any);
       const data = await response.json();
 
       expect(response.status).toBe(201);
@@ -111,16 +111,18 @@ describe('/api/assignements', () => {
     });
 
     it('should return 400 for missing required fields', async () => {
-      const request = new Request(`${getBaseUrl()}/api/assignements`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: 'New Task',
-          // Missing teacher_id and student_id
-        }),
-      });
+      // Create a simple request object that works in all environments
+      const requestBody = {
+        title: 'New Task',
+        // Missing teacher_id and student_id
+      };
 
-      const response = await POST(request);
+      // Mock the request.json() method
+      const mockRequest = {
+        json: jest.fn().mockResolvedValue(requestBody)
+      };
+
+      const response = await POST(mockRequest as any);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -140,18 +142,20 @@ describe('/api/assignements', () => {
       });
       mockSupabase.from.mockReturnValue({ insert: insertMock });
 
-      const request = new Request(`${getBaseUrl()}/api/assignements`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: 'New Task',
-          description: 'New Description',
-          teacher_id: 1,
-          student_id: 2,
-        }),
-      });
+      // Create a simple request object that works in all environments
+      const requestBody = {
+        title: 'New Task',
+        description: 'New Description',
+        teacher_id: 1,
+        student_id: 2,
+      };
 
-      const response = await POST(request);
+      // Mock the request.json() method
+      const mockRequest = {
+        json: jest.fn().mockResolvedValue(requestBody)
+      };
+
+      const response = await POST(mockRequest as any);
       const data = await response.json();
 
       expect(response.status).toBe(500);
