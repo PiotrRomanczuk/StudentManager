@@ -1,14 +1,6 @@
 import '@testing-library/jest-dom';
 import { GET, POST } from '@/app/api/assignements/route';
 
-// Dynamic base URL based on environment
-const getBaseUrl = () => {
-  const env = process.env.NODE_ENV;
-  if (env === 'development') return 'http://localhost:3000';
-  // fallback for CI or unknown envs
-  return 'https://test.example';
-};
-
 // Mock Supabase client
 const mockSupabase = {
   from: jest.fn(),
@@ -20,6 +12,11 @@ const mockSupabase = {
 jest.mock('@/utils/supabase/clients/server', () => ({
   createClient: jest.fn(() => mockSupabase),
 }));
+
+// Mock request interface
+interface MockRequest {
+  json: jest.Mock;
+}
 
 describe('/api/assignements', () => {
   beforeEach(() => {
@@ -91,11 +88,11 @@ describe('/api/assignements', () => {
       };
 
       // Mock the request.json() method
-      const mockRequest = {
+      const mockRequest: MockRequest = {
         json: jest.fn().mockResolvedValue(requestBody)
       };
 
-      const response = await POST(mockRequest as any);
+      const response = await POST(mockRequest as Request);
       const data = await response.json();
 
       expect(response.status).toBe(201);
@@ -118,11 +115,11 @@ describe('/api/assignements', () => {
       };
 
       // Mock the request.json() method
-      const mockRequest = {
+      const mockRequest: MockRequest = {
         json: jest.fn().mockResolvedValue(requestBody)
       };
 
-      const response = await POST(mockRequest as any);
+      const response = await POST(mockRequest as Request);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -151,11 +148,11 @@ describe('/api/assignements', () => {
       };
 
       // Mock the request.json() method
-      const mockRequest = {
+      const mockRequest: MockRequest = {
         json: jest.fn().mockResolvedValue(requestBody)
       };
 
-      const response = await POST(mockRequest as any);
+      const response = await POST(mockRequest as Request);
       const data = await response.json();
 
       expect(response.status).toBe(500);
