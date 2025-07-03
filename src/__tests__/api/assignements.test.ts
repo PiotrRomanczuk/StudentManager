@@ -40,8 +40,7 @@ describe('/api/assignements', () => {
       });
       mockSupabase.from.mockReturnValue({ select: selectMock });
 
-      const request = new Request(`${getBaseUrl()}/api/assignements`);
-      const response = await GET(request);
+      const response = await GET();
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -57,8 +56,7 @@ describe('/api/assignements', () => {
       });
       mockSupabase.from.mockReturnValue({ select: selectMock });
 
-      const request = new Request(`${getBaseUrl()}/api/assignements`);
-      const response = await GET(request);
+      const response = await GET();
       const data = await response.json();
 
       expect(response.status).toBe(500);

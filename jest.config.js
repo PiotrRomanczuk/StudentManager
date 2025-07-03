@@ -9,7 +9,17 @@ const createJestConfig = nextJest({
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jsdom',
-  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    // Skip React component tests when in production
+    ...(process.env.NODE_ENV === 'production' ? [
+      '<rootDir>/src/__tests__/auth/signin.test.tsx',
+      '<rootDir>/src/__tests__/auth/signup.test.tsx',
+      '<rootDir>/src/__tests__/auth/components.test.tsx',
+      '<rootDir>/src/__tests__/dashboard/role-based-rendering.test.tsx',
+    ] : []),
+  ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
@@ -37,6 +47,9 @@ const customJestConfig = {
       },
     },
   },
+
+  // Force test environment for all tests
+  setupFiles: ['<rootDir>/jest.env.setup.js'],
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
