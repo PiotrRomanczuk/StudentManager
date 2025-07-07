@@ -1,31 +1,25 @@
-import { createClient } from "@/utils/supabase/clients/server";
+import { cookies } from "next/headers";
+import { BASE_URL } from "@/constants/BASE_URL";
 
 export async function deleteLesson(lessonId: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    const cookieHeader = (await cookies()).toString();
+    
+    const response = await fetch(`${BASE_URL}/api/lessons/${lessonId}`, {
+      method: "DELETE",
+      headers: {
+        Cookie: cookieHeader,
+      },
+    });
 
-  if (!user) {
-    throw new Error("User not found");
-  }
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to delete lesson");
+    }
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("user_id", user.id)
-    .single();
-
-  if (profileError || !profile) {
-    throw new Error("Profile not found");
-  }
-
-  if (profile.role !== "admin" && profile.role !== "teacher") {
-    throw new Error("Unauthorized");
-  }
-
-  const { error } = await supabase.from("lessons").delete().eq("id", lessonId);
-  if (error) {
-    throw new Error(error.message);
+    return await response.json();
+  } catch (error) {
+    console.error("Error deleting lesson:", error);
+    throw error;
   }
 }
