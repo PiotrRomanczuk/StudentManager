@@ -42,12 +42,12 @@ export function Calendar() {
   useEffect(() => {
     async function checkAuth() {
       try {
-        console.log("Checking authentication status...");
+
         const response = await fetch("/api/calendar/events");
-        console.log("Auth response status:", response.status);
+        
         
         if (response.status === 401) {
-          console.log("Not authenticated");
+          
           setIsAuthenticated(false);
           setAuthError("Please connect your Google Calendar");
         } else if (!response.ok) {
@@ -56,7 +56,7 @@ export function Calendar() {
           setError(errorData.error || "Failed to fetch calendar events");
           setIsAuthenticated(false);
         } else {
-          console.log("Successfully authenticated");
+          
           setIsAuthenticated(true);
           const data = await response.json();
           setEvents(data.events || []);

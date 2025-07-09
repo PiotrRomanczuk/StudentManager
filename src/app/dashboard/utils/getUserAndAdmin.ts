@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export async function getUserAndAdmin(supabase: any) {
+import { SupabaseClient } from "@supabase/supabase-js";
+
+export async function getUserAndAdmin(supabase: SupabaseClient) {
   const { data: user, error: userIdError } = await supabase.auth.getUser();
   if (userIdError) throw new Error("Authentication error");
 

@@ -96,7 +96,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
     isAdmin: true,
   },
   {
-    name: "Assignements",
+    name: "Assignments",
     icon: (
       <svg
         className="w-5 h-5"
@@ -113,7 +113,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
         />
       </svg>
     ),
-    href: "/dashboard/assignements",
+    href: "/dashboard/assignments",
     forStudent: false,
     isAdmin: false,
   },

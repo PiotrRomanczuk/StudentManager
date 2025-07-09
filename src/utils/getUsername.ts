@@ -10,7 +10,8 @@ export async function getUsername(id: string) {
   return user?.email;
 }
 
-export async function getUserIsAdmin(id: string) {
+export async function getIsAdmin(id: string) {
+ 
   const supabase = await createClient();
   const { data: user } = await supabase
     .from("profiles")

@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
           >
             Team
           </button>
-          {/* TODO: Add a section with id="contact" for this link to work */}
+          {/* Note: Add a section with id="contact" for this link to work */}
           <button
             onClick={() => scrollToSection("contact")}
             className="hover:text-white transition bg-transparent border-none cursor-pointer p-0 m-0 text-inherit"

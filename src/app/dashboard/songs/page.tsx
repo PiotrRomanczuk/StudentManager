@@ -1,39 +1,77 @@
-import { createClient } from "@/utils/supabase/clients/server";
+import { Container } from "@/components/ui/container";
+import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
+import SongsClientComponentTesting from "./@components/SongsClientComponentTesting";
+import { AdminControls } from "./@components/AdminControls";
+import { cookies } from "next/headers";
 import { getUserAndAdmin } from "../utils/getUserAndAdmin";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/clients/server";
+import { fetchSongsData } from "./api/fetchSongs";
+import { fetchProfilesData } from "./api/fetchProfiles";
+import { getSongsByStudent } from "./FetchStudentSongs";
 
-export default async function SongsPage() {
-  const supabase = await createClient();
-  const { isAdmin } = await getUserAndAdmin(supabase);
+type Params = { user_id: string };
 
-  if (isAdmin) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-8">
-              Which version would you like to use?
-            </h1>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <Link
-                href="/dashboard/songs/v1"
-                className="flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
-              >
-                Version 1
-              </Link>
-              <Link
-                href="/dashboard/songs/v2"
-                className="flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
-              >
-                Version 2
-              </Link>
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Params>;
+}) {
+  try {
+    const { user_id } = await searchParams;
+    const supabase = await createClient();
+    const { user, isAdmin } = await getUserAndAdmin(supabase);
+    const cookieHeader = (await cookies()).toString();
+
+    // Fetch profiles first so they're available in both conditions
+    const { profiles } = await fetchProfilesData(cookieHeader);
+
+    if (user_id) {
+      const songs = await getSongsByStudent(user_id);
+      if (!songs) {
+        throw new Error("Failed to fetch songs for student");
+      }
+
+      return (
+        <Container className="max-w-3xl border">
+          <div className="my-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mx-8 mb-4">
+              <h1 className="text-2xl x-4 font-bold">Songs</h1>
+              {isAdmin && <AdminControls profiles={profiles} />}
             </div>
+            <SongsClientComponentTesting
+              songs={songs}
+              isAdmin={false}
+            />
           </div>
+        </Container>
+      );
+    }
+
+    const { songs } = await fetchSongsData(user?.id, cookieHeader);
+
+    if (!songs) {
+      throw new Error("Failed to fetch songs");
+    }
+
+    return (
+      <Container className="max-w-3xl border">
+        <div className="my-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mx-8 mb-4">
+            <h1 className="text-2xl x-4 font-bold">Songs</h1>
+            {isAdmin && <AdminControls profiles={profiles} />}
+          </div>
+          <SongsClientComponentTesting
+            songs={songs}
+            isAdmin={isAdmin}
+          />
         </div>
-      </div>
+      </Container>
+    );
+  } catch (error: unknown) {
+    return (
+      <ErrorComponent
+        error={error instanceof Error ? error.message : "An error occurred"}
+      />
     );
   }
-
-  redirect("/dashboard/songs/v1");
 }

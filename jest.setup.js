@@ -43,6 +43,13 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }))
 
+global.IntersectionObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -92,4 +99,4 @@ if (typeof global.Request === 'undefined') {
   global.Request = Request;
   global.Response = Response;
   global.Headers = Headers;
-} 
+}

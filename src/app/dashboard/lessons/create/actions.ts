@@ -1,34 +1,11 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/clients/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { BASE_URL } from "@/constants/BASE_URL";
 
 export async function createLesson(formData: FormData) {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    throw new Error("User not authenticated");
-  }
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("user_id", user.id)
-    .single();
-
-  if (profileError || !profile) {
-    throw new Error("Profile not found");
-  }
-
-  if (profile.role !== "admin" && profile.role !== "teacher") {
-    throw new Error("Unauthorized");
-  }
-
   const teacherId = formData.get("teacher_id");
   const studentId = formData.get("student_id");
   const date = formData.get("date");
@@ -42,36 +19,28 @@ export async function createLesson(formData: FormData) {
   }
 
   try {
-    // Call the increment_lesson_number function to get the next lesson number
-    const { data: lessonNumberData, error: lessonNumberError } =
-      await supabase.rpc("increment_lesson_number", {
-        p_student_id: studentId,
-        p_teacher_id: teacherId,
-      });
-
-    if (lessonNumberError) {
-      throw new Error("Error fetching lesson number:" + lessonNumberError);
-    }
-
-    const lessonNumber = lessonNumberData;
-
-    const { error } = await supabase.from("lessons").insert({
-      teacher_id: teacherId,
-      student_id: studentId,
-      date: date,
-      time: time,
-      creator_user_id: user.id,
-      lesson_number: lessonNumber,
-      title: title || null,
-      notes: notes || null,
-      status: status || "SCHEDULED",
+    const cookieHeader = (await cookies()).toString();
+    
+    const response = await fetch(`${BASE_URL}/api/lessons/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieHeader,
+      },
+      body: JSON.stringify({
+        teacherId,
+        studentId,
+        date,
+        time,
+        title: title || null,
+        notes: notes || null,
+        status: status || "SCHEDULED",
+      }),
     });
 
-    if (error) {
-      console.error(error);
-      throw new Error(
-        `Error creating lesson: ${error.message || JSON.stringify(error)}`,
-      );
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to create lesson");
     }
 
     revalidatePath("/dashboard/lessons");

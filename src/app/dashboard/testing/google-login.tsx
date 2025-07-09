@@ -20,7 +20,7 @@ export default async function GoogleLogin() {
       // Store the tokens in cookies or your preferred storage method
       // Note: In a production environment, you should use secure HTTP-only cookies
       // and implement proper token refresh logic
-      console.log("Successfully obtained tokens:", tokens);
+  
     } catch (error) {
       errorMsg = "Failed to exchange code for tokens.";
       console.error("Error exchanging code for tokens:", error);

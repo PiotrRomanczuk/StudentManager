@@ -12,7 +12,7 @@ export const downloadImage = async (supabase: SupabaseClient, path: string) => {
     const url = URL.createObjectURL(data);
     return url;
   } catch (error) {
-    throw new Error("Error downloading image:" + error);
+    throw new Error("Error downloading image: " + error);
   }
 };
 

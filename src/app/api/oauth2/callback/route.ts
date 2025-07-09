@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   try {
     const { tokens } = await oAuth2Client.getToken(code);
 
-    console.log("Tokens:", tokens);
+
     const sessionExpiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
 
     const cookieStore = await cookies();

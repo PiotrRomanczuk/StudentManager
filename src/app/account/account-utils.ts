@@ -15,12 +15,12 @@ export const getProfile = async (user: User): Promise<IProfile | null> => {
       .single();
 
     if (error && status !== 406) {
-      throw new Error(`Error loading user data! ${error}`);
+      throw new Error(`Error loading user data: ${error}`);
     }
 
     return data;
   } catch {
-    throw new Error(`Error loading user data!`);
+    throw new Error(`Error loading user data`);
   }
 };
 
@@ -38,7 +38,7 @@ export const updateProfile = async ({
   avatar_url: string | null;
 }) => {
   try {
-    const { error } = await supabase.from("").upsert({
+    const { error } = await supabase.from("profiles").upsert({
       id: user?.id as string,
       full_name: fullname,
       username,
@@ -49,7 +49,7 @@ export const updateProfile = async ({
     if (error) throw error;
     return true;
   } catch {
-    throw new Error("Error updating the data!");
+    throw new Error("Error updating the data");
   }
 };
 
@@ -72,7 +72,7 @@ export const useFetchProfile = (
         });
       }
     } catch {
-      throw new Error("Error loading user data!");
+      throw new Error("Error loading user data");
     } finally {
       setLoading(false);
     }
@@ -93,9 +93,9 @@ export const useHandleUpdateProfile = (
         website: profile.website,
         avatar_url: profile.avatar_url,
       });
-      throw new Error("Profile updated!");
+      // Profile updated successfully
     } catch {
-      throw new Error("Error updating the data!");
+      throw new Error("Error updating the data");
     } finally {
       setLoading(false);
     }

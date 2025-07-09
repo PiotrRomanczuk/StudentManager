@@ -48,9 +48,7 @@ export async function removeSongFromLesson(formData: FormData, slug: string) {
     );
   }
 
-  console.log(
-    `Attempting to delete song with ID ${songId} from lesson ${trimmedSlug}`,
-  );
+
 
   const { error: lessonError } = await supabase
     .from("lesson_songs")
@@ -67,9 +65,7 @@ export async function removeSongFromLesson(formData: FormData, slug: string) {
       "Error removing lesson song:" + lessonError.message || lessonError,
     );
   } else {
-    console.log(
-      `Successfully removed song with ID ${songId} from lesson ${trimmedSlug}`,
-    );
+    // Successfully removed song
   }
 
   revalidatePath(`/lessons/${trimmedSlug}/manage-songs`);

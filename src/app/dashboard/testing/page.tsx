@@ -11,7 +11,7 @@ export default async function TestingPage() {
     "734d25a3-75f8-46c8-bceb-bac84bcf405f",
   );
 
-  console.log(data);
+  
 
   if (error) {
     console.error("Error getting user:", error);
