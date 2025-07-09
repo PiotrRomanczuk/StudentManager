@@ -2,11 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/clients/server";
 import { songInputSchema } from "@/schemas/songInputSchema";
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient();
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
 
     const {
       data: { user },

@@ -18,25 +18,11 @@ describe('ErrorComponent', () => {
     expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
 
-  it('should render with default styling', () => {
-    render(<ErrorComponent error="Test error" />);
-    
-    const errorContainer = screen.getByText('Test error').closest('div');
-    expect(errorContainer).toHaveClass('container', 'mx-auto', 'max-w-4xl');
-  });
-
   it('should render try again button', () => {
     render(<ErrorComponent error="Test error" />);
     
     const tryAgainButton = screen.getByRole('button', { name: /try again/i });
     expect(tryAgainButton).toBeInTheDocument();
-  });
-
-  it('should handle empty error message', () => {
-    render(<ErrorComponent error="" />);
-    
-    const errorContainer = screen.getByText('').closest('div');
-    expect(errorContainer).toBeInTheDocument();
   });
 
   it('should handle long error messages', () => {

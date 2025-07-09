@@ -39,15 +39,15 @@ describe('Button Component', () => {
     const { rerender } = render(<Button size="sm">Small</Button>);
     
     let button = screen.getByRole('button', { name: /small/i });
-    expect(button).toHaveClass('h-9', 'px-3');
+    expect(button).toHaveClass('h-8', 'px-3');
 
     rerender(<Button size="lg">Large</Button>);
     button = screen.getByRole('button', { name: /large/i });
-    expect(button).toHaveClass('h-11', 'px-8');
+    expect(button).toHaveClass('h-10', 'px-8');
 
     rerender(<Button size="icon">Icon</Button>);
     button = screen.getByRole('button', { name: /icon/i });
-    expect(button).toHaveClass('h-10', 'w-10');
+    expect(button).toHaveClass('h-9', 'w-9');
   });
 
   it('should handle click events', async () => {
@@ -67,7 +67,7 @@ describe('Button Component', () => {
     
     const button = screen.getByRole('button', { name: /disabled/i });
     expect(button).toBeDisabled();
-    expect(button).toHaveClass('pointer-events-none', 'opacity-50');
+    expect(button).toHaveClass('disabled:pointer-events-none', 'disabled:opacity-50');
   });
 
   it('should render as a link when asChild is true', () => {

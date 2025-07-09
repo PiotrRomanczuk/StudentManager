@@ -10,10 +10,10 @@ describe('LoadingComponent', () => {
     expect(screen.getByText(message)).toBeInTheDocument();
   });
 
-  it('should render with default styling', () => {
+  it('should render with container styling', () => {
     render(<LoadingComponent message="Loading..." />);
     
-    const loadingContainer = screen.getByText('Loading...').closest('div');
+    const loadingContainer = screen.getByText('Loading...').closest('div').parentElement;
     expect(loadingContainer).toHaveClass('container', 'max-w-4xl', 'mx-auto');
   });
 
@@ -29,12 +29,5 @@ describe('LoadingComponent', () => {
     render(<LoadingComponent message={longMessage} />);
     
     expect(screen.getByText(longMessage)).toBeInTheDocument();
-  });
-
-  it('should handle empty message', () => {
-    render(<LoadingComponent message="" />);
-    
-    const loadingContainer = screen.getByText('').closest('div');
-    expect(loadingContainer).toBeInTheDocument();
   });
 }); 

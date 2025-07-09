@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     }
 
     // Base response with user data and admin status
-    const response: any = {
+    const response: Record<string, unknown> = {
       user: { ...user },
       isAdmin,
     };
@@ -137,7 +137,13 @@ export async function GET(request: Request) {
     return NextResponse.json(response);
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: errorMessage }, { status: 401 });
+    if (
+      errorMessage === "Authentication error" ||
+      errorMessage === "No authenticated user found"
+    ) {
+      return NextResponse.json({ error: errorMessage }, { status: 401 });
+    }
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 

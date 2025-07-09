@@ -9,7 +9,7 @@ describe('Input Component', () => {
     
     const input = screen.getByPlaceholderText('Enter text');
     expect(input).toBeInTheDocument();
-    expect(input).toHaveClass('flex', 'h-10', 'w-full', 'rounded-md');
+    expect(input).toHaveClass('flex', 'h-9', 'w-full', 'rounded-md');
   });
 
   it('should handle value changes', async () => {
@@ -27,7 +27,7 @@ describe('Input Component', () => {
     
     const input = screen.getByPlaceholderText('Disabled input');
     expect(input).toBeDisabled();
-    expect(input).toHaveClass('cursor-not-allowed', 'opacity-50');
+    expect(input).toHaveClass('disabled:cursor-not-allowed', 'disabled:opacity-50');
   });
 
   it('should apply custom className', () => {

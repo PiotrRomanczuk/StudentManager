@@ -7,7 +7,7 @@ export default async function TestingPage() {
   );
 
   // Get current user
-  const { data, error } = await supabase.auth.admin.getUserById(
+  const { error } = await supabase.auth.admin.getUserById(
     "734d25a3-75f8-46c8-bceb-bac84bcf405f",
   );
 

@@ -5,11 +5,18 @@ import AdminPage from "./components/main/adminPage";
 import { getUserAndAdmin } from "./utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
 import { BASE_URL } from "@/constants/BASE_URL";
+
 export default async function Page() {
   const supabase = await createClient();
-  const { user, isAdmin } = await getUserAndAdmin(supabase);
-
-
+  let user, isAdmin;
+  try {
+    const result = await getUserAndAdmin(supabase);
+    user = result.user;
+    isAdmin = result.isAdmin;
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Please sign in to view your dashboard";
+    return <ErrorComponent error={errorMessage} />;
+  }
 
   if (!user?.id) {
     return <ErrorComponent error="Please sign in to view your dashboard" />;
@@ -19,9 +26,7 @@ export default async function Page() {
     return <AdminPage />;
   }
 
-  
   // Fetch songs for the user from the API
-
   const response = await fetch(
     `${BASE_URL}/api/song/user-songs?userId=${user.id}`,
   );

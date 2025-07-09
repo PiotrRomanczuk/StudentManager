@@ -1,116 +1,124 @@
-// import '@testing-library/jest-dom';
-// import { render, screen } from '@testing-library/react';
-// import Page from '@/app/page';
+import '@testing-library/jest-dom';
+import { render, screen } from "@testing-library/react";
+import Page from "@/app/page";
 
-// // Mock Next.js navigation
-// jest.mock('next/navigation', () => ({
-//   useRouter() {
-//     return {
-//       push: jest.fn(),
-//       replace: jest.fn(),
-//       prefetch: jest.fn(),
-//       back: jest.fn(),
-//       forward: jest.fn(),
-//       refresh: jest.fn(),
-//     }
-//   },
-// }));
+// Mock Next.js Image component
+jest.mock("next/image", () => {
+  return function MockImage({ src, alt, ...props }: any) {
+    return <img src={src} alt={alt} {...props} />;
+  };
+});
 
-// describe('Landing Page', () => {
-//   it('should render all main sections', () => {
-//     render(<Page />);
-    
-//     // Check for main sections
-//     expect(screen.getByText(/manage your music lessons/i)).toBeInTheDocument(); // Hero
-//     expect(screen.getByText(/features/i)).toBeInTheDocument(); // Features
-//     expect(screen.getByText(/testimonials/i)).toBeInTheDocument(); // Testimonials
-//     expect(screen.getByText(/pricing/i)).toBeInTheDocument(); // Pricing
-//     expect(screen.getByText(/team/i)).toBeInTheDocument(); // Team
-//     expect(screen.getByText(/contact/i)).toBeInTheDocument(); // Contact
-//   });
+// Mock framer-motion
+jest.mock("framer-motion", () => ({
+  motion: {
+    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    a: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+    nav: ({ children, ...props }: any) => <nav {...props}>{children}</nav>,
+  },
+}));
 
-//   it('should render navigation bar', () => {
-//     render(<Page />);
-    
-//     expect(screen.getByText(/student manager/i)).toBeInTheDocument();
-//     expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument();
-//     expect(screen.getByRole('link', { name: /features/i })).toBeInTheDocument();
-//     expect(screen.getByRole('link', { name: /pricing/i })).toBeInTheDocument();
-//     expect(screen.getByRole('link', { name: /contact/i })).toBeInTheDocument();
-//   });
+describe("Landing Page", () => {
+  it("should render hero section", () => {
+    render(<Page />);
+    // Check for hero content
+    expect(screen.getByRole('heading', { name: /master the art of guitar teaching/i })).toBeInTheDocument();
+    expect(screen.getByText(/transform your guitar teaching studio/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /get started free/i })).toBeInTheDocument();
+    // Use getAllByText for documentation (button and link)
+    const documentationLinks = screen.getAllByText(/documentation/i);
+    expect(documentationLinks.length).toBeGreaterThan(0);
+  });
 
-//   it('should render authentication buttons in navbar', () => {
-//     render(<Page />);
-    
-//     expect(screen.getByRole('link', { name: /sign in/i })).toBeInTheDocument();
-//     expect(screen.getByRole('link', { name: /sign up/i })).toBeInTheDocument();
-//   });
+  it("should render navigation bar", () => {
+    render(<Page />);
+    // Check for navigation elements - use getAllByRole and check first one
+    const navs = screen.getAllByRole("navigation");
+    expect(navs.length).toBeGreaterThan(0);
+    expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /signin/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /signup/i })).toBeInTheDocument();
+  });
 
-//   it('should render hero section with call-to-action buttons', () => {
-//     render(<Page />);
-    
-//     expect(screen.getByRole('link', { name: /get started/i })).toBeInTheDocument();
-//     expect(screen.getByRole('link', { name: /learn more/i })).toBeInTheDocument();
-//   });
+  it("should render features section", () => {
+    render(<Page />);
+    expect(screen.getByRole('heading', { name: /powerful features/i })).toBeInTheDocument();
+  });
 
-//   it('should render footer', () => {
-//     render(<Page />);
-    
-//     // Footer should contain copyright or company information
-//     expect(screen.getByText(/©|copyright|student manager/i)).toBeInTheDocument();
-//   });
+  it("should render testimonials section", () => {
+    render(<Page />);
+    expect(screen.getByRole('heading', { name: /testimonials/i })).toBeInTheDocument();
+  });
 
-//   it('should have proper navigation structure', () => {
-//     render(<Page />);
-    
-//     const nav = screen.getByRole('navigation');
-//     expect(nav).toBeInTheDocument();
-    
-//     // Check for main navigation links
-//     const links = screen.getAllByRole('link');
-//     expect(links.length).toBeGreaterThan(5); // Should have multiple navigation links
-//   });
+  it("should render pricing section", () => {
+    render(<Page />);
+    // Use heading for pricing
+    expect(screen.getByRole('heading', { name: /pricing/i })).toBeInTheDocument();
+    expect(screen.getByText(/choose the right plan/i)).toBeInTheDocument();
+    // Use heading for each plan
+    expect(screen.getByRole('heading', { name: /solo guitar teacher/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /guitar teaching studio/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /music school/i })).toBeInTheDocument();
+  });
 
-//   it('should render contact form section', () => {
-//     render(<Page />);
-    
-//     // Look for contact form elements
-//     expect(screen.getByText(/contact us/i)).toBeInTheDocument();
-//     expect(screen.getByText(/get in touch/i)).toBeInTheDocument();
-//   });
+  it("should render team section", () => {
+    render(<Page />);
+    expect(screen.getByRole('heading', { name: /meet the team/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /piotr romanczuk/i })).toBeInTheDocument();
+  });
 
-//   it('should render pricing section with plans', () => {
-//     render(<Page />);
-    
-//     expect(screen.getByText(/pricing plans/i)).toBeInTheDocument();
-//     expect(screen.getByText(/basic/i)).toBeInTheDocument();
-//     expect(screen.getByText(/pro/i)).toBeInTheDocument();
-//     expect(screen.getByText(/enterprise/i)).toBeInTheDocument();
-//   });
+  it("should render contact section", () => {
+    render(<Page />);
+    expect(screen.getByRole('heading', { name: /contact us/i })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/your name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/you@example\.com/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/how can we help you\?/i)).toBeInTheDocument();
+  });
 
-//   it('should render testimonials section', () => {
-//     render(<Page />);
-    
-//     expect(screen.getByText(/what our users say/i)).toBeInTheDocument();
-//     expect(screen.getByText(/testimonials/i)).toBeInTheDocument();
-//   });
+  it("should have proper navigation links", () => {
+    render(<Page />);
+    const homeLink = screen.getByRole("link", { name: /home/i });
+    const signInLink = screen.getByRole("link", { name: /signin/i });
+    const signUpLink = screen.getByRole("link", { name: /signup/i });
+    expect(homeLink).toHaveAttribute("href", "/");
+    expect(signInLink).toHaveAttribute("href", "/auth/signin");
+    expect(signUpLink).toHaveAttribute("href", "/auth/signup");
+  });
 
-//   it('should render team section', () => {
-//     render(<Page />);
-    
-//     expect(screen.getByText(/meet our team/i)).toBeInTheDocument();
-//     expect(screen.getByText(/team/i)).toBeInTheDocument();
-//   });
+  it("should have call-to-action buttons", () => {
+    render(<Page />);
+    const getStartedButton = screen.getByRole("link", { name: /get started free/i });
+    // Use getAllByRole for documentation (button and link)
+    const documentationLinks = screen.getAllByRole("link", { name: /documentation/i });
+    expect(getStartedButton).toHaveAttribute("href", "/auth/signin");
+    // At least one documentation link should have the correct href
+    expect(documentationLinks.some(link => link.getAttribute('href') === '/documentation')).toBe(true);
+  });
 
-//   it('should have proper semantic structure', () => {
-//     render(<Page />);
-    
-//     // Should have main sections
-//     const sections = screen.getAllByRole('region');
-//     expect(sections.length).toBeGreaterThan(0);
-    
-//     // Should have proper headings
-//     const headings = screen.getAllByRole('heading');
-//     expect(headings.length).toBeGreaterThan(5);
-//   });
-// }); 
+  it("should have proper semantic structure", () => {
+    render(<Page />);
+    const navs = screen.getAllByRole("navigation");
+    expect(navs.length).toBeGreaterThan(0);
+    expect(screen.getByRole("heading", { name: /master the art of guitar teaching/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /powerful features/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /testimonials/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /pricing/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /meet the team/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /contact us/i })).toBeInTheDocument();
+    expect(screen.getByRole("contentinfo")).toBeInTheDocument();
+  });
+
+  it("should have hero image", () => {
+    render(<Page />);
+    const heroImage = screen.getByAltText(/dashboard preview/i);
+    expect(heroImage).toBeInTheDocument();
+    expect(heroImage).toHaveAttribute("src", "/MOCKUP UI.png");
+  });
+
+  it("should have team member image", () => {
+    render(<Page />);
+    const teamImage = screen.getByAltText(/piotr romanczuk/i);
+    expect(teamImage).toBeInTheDocument();
+    expect(teamImage).toHaveAttribute("src", "/My_Picture.jpg");
+  });
+}); 

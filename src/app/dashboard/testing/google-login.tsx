@@ -12,11 +12,10 @@ export default async function GoogleLogin() {
   const cookieStore = await cookies();
   const code = cookieStore.get("code")?.value;
 
-  let tokens;
   let errorMsg = "";
   if (code) {
     try {
-      tokens = await oAuth2Client.getToken(code);
+      await oAuth2Client.getToken(code);
       // Store the tokens in cookies or your preferred storage method
       // Note: In a production environment, you should use secure HTTP-only cookies
       // and implement proper token refresh logic

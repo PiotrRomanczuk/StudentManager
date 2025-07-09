@@ -39,10 +39,10 @@ export async function getUserAndAdmin(supabase: SupabaseClient) {
     return { user: { ...user.user }, isAdmin: newProfile?.isAdmin || false };
   }
 
-  // If there's a different error, throw it
+  // If there's a different error in admin check, treat as non-admin instead of throwing
   if (userIsAdminError) {
     console.error("Error checking permissions:", userIsAdminError);
-    throw new Error("Error checking permissions");
+    return { user: { ...user.user }, isAdmin: false };
   }
 
   return { user: { ...user.user }, isAdmin: isAdmin?.isAdmin || false };
