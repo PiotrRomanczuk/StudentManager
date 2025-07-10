@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import DASHBOARD_LIST from "./DASHBOARD_LIST";
+import DASHBOARD_LIST from "./SIDEBAR_LIST";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 /**
- * Dashboard component that handles the layout and navigation for the dashboard
+ * Sidebar component that handles the layout and navigation for the dashboard
  * @param children - The content to be rendered in the main area
  * @param isAdmin - Boolean flag indicating if the current user has admin privileges
  *
@@ -15,9 +15,9 @@ import { Menu, X } from "lucide-react";
  * - The isAdmin prop should be set based on the user's role in your authentication system
  * - Example: isAdmin={user?.role === 'admin'} or isAdmin={user?.isAdmin}
  * - Only admin users will see restricted sections like Students, Assignments, etc.
- * - Regular users will only see basic sections like Dashboard, Songs, and Lessons
+ * - Regular users will only see basic sections like Sidebar, Songs, and Lessons
  */
-const Dashboard = ({
+const Sidebar = ({
   children,
   isAdmin = false,
 }: {
@@ -121,4 +121,4 @@ const Dashboard = ({
   );
 };
 
-export default Dashboard;
+export default Sidebar;

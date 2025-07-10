@@ -9,7 +9,7 @@ export async function handleSongCreate(songToCreate: Partial<Song>) {
 
     if (result.success) {
       toast.success(`Song created successfully: ${result.data.title}`);
-      redirect("/dashboard/songs/v2");
+      redirect("/dashboard/songs");
     }
   } catch (error) {
     console.error("Failed to create song:", error);
@@ -30,5 +30,5 @@ export async function handleSongCreate(songToCreate: Partial<Song>) {
 }
 
 export function handleCancel() {
-  redirect("/dashboard/songs/v2");
+  redirect("/dashboard/songs");
 }

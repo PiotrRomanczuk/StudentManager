@@ -1,7 +1,7 @@
 import NavBar from "@/components/dashboard/NavBar/NavBar";
-import Dashboard from "./components/dashboard/Dashboard";
 import { getUserAndAdmin } from "./utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
+import Sidebar from "./components/sidebar/Sidebar";
 // import { UserProvider } from "@/context/userContext";
 
 interface LayoutProps {
@@ -17,7 +17,7 @@ export default async function RootLayout({ children }: LayoutProps) {
       {/* <UserProvider> */}
       <NavBar />
       <div className="w-full min-h-full">
-        <Dashboard isAdmin={isAdmin}>{children}</Dashboard>
+        <Sidebar isAdmin={isAdmin}>{children}</Sidebar>
       </div>
       {/* </UserProvider> */}
     </div>

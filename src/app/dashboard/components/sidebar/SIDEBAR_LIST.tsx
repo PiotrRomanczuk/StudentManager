@@ -6,9 +6,9 @@ interface SidebarItem {
   isAdmin: boolean;
 }
 
-const DASHBOARD_LIST: SidebarItem[] = [
+const SIDEBAR_LIST: SidebarItem[] = [
   {
-    name: "Dashboard",
+    name: "Main",
     icon: (
       <svg
         className="w-5 h-5"
@@ -135,7 +135,7 @@ const DASHBOARD_LIST: SidebarItem[] = [
         />
       </svg>
     ),
-    href: "/task-management",
+    href: "/dashboard/task-management",
     forStudent: false,
     isAdmin: true,
   },
@@ -197,4 +197,4 @@ const DASHBOARD_LIST: SidebarItem[] = [
   },
 ];
 
-export default DASHBOARD_LIST;
+export default SIDEBAR_LIST;

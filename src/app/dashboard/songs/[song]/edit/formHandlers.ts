@@ -17,7 +17,7 @@ export async function handleSongUpdate(
 
     if (result.success) {
       toast.success(`Song updated successfully: ${updatedSong.title}`);
-      redirect(`/dashboard/songs/v2/${song.id}`);
+      redirect(`/dashboard/songs/${song.id}`);
     }
   } catch (error) {
     console.error("Failed to update song:", error);
@@ -28,5 +28,5 @@ export async function handleSongUpdate(
 }
 
 export function handleCancel(songId: string) {
-  redirect(`/dashboard/songs/v2/${songId}`);
+  redirect(`/dashboard/songs/${songId}`);
 }

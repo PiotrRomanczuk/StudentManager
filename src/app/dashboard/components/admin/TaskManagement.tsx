@@ -10,6 +10,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   CheckCircle, 
@@ -26,8 +34,11 @@ import {
   Brain,
   Target,
   Settings,
-  FileText
+  FileText,
+  Edit,
+  Eye
 } from "lucide-react";
+import Link from "next/link";
 
 interface Task {
   id: string;
@@ -605,6 +616,7 @@ export const TaskManagement = () => {
                   <TableHead>Priority</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Description</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -635,6 +647,71 @@ export const TaskManagement = () => {
                       <p className="text-sm text-gray-600 truncate">
                         {task.description || "No description available"}
                       </p>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2 border border-red-500 p-2 bg-yellow-100">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm" className="bg-blue-500 text-white hover:bg-blue-600">
+                              <Eye className="h-4 w-4 mr-1" />
+                              View
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl">
+                            <DialogHeader>
+                              <DialogTitle>{task.title}</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div>
+                                <h4 className="font-semibold text-gray-900">Description</h4>
+                                <p className="text-gray-600 mt-1">{task.description || "No description available"}</p>
+                              </div>
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <h4 className="font-semibold text-gray-900">Category</h4>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    {getCategoryIcon(task.category)}
+                                    <span>{task.category}</span>
+                                  </div>
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-gray-900">Priority</h4>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    {getPriorityIcon(task.priority)}
+                                    <span>{task.priority}</span>
+                                  </div>
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-gray-900">Status</h4>
+                                  <div className="mt-1">{getStatusBadge(task.status)}</div>
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-gray-900">Estimated Effort</h4>
+                                  <p className="text-gray-600 mt-1">{task.estimatedEffort || "Not specified"}</p>
+                                </div>
+                              </div>
+                              {task.assignee && (
+                                <div>
+                                  <h4 className="font-semibold text-gray-900">Assignee</h4>
+                                  <p className="text-gray-600 mt-1">{task.assignee}</p>
+                                </div>
+                              )}
+                              {task.dueDate && (
+                                <div>
+                                  <h4 className="font-semibold text-gray-900">Due Date</h4>
+                                  <p className="text-gray-600 mt-1">{task.dueDate}</p>
+                                </div>
+                              )}
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                        <Link href={`/dashboard/task-management/tasks/${task.id}`}>
+                          <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600">
+                            <Edit className="h-4 w-4 mr-1" />
+                            Edit
+                          </Button>
+                        </Link>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

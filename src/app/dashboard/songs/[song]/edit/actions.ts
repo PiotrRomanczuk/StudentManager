@@ -51,7 +51,7 @@ export async function updateSong(song: Song) {
     }
 
     const updatedSong = data[0];
-    revalidatePath(`/dashboard/songs/v2/${song.id}`);
+    revalidatePath(`/dashboard/songs/${song.id}`);
 
     return { success: true, data: updatedSong };
   } catch (error) {
@@ -94,7 +94,7 @@ export async function createSong(song: Partial<Song>) {
       throw new Error("No song was created");
     }
 
-    revalidatePath("/dashboard/songs/v2");
+    revalidatePath("/dashboard/songs");
     return { success: true, data };
   } catch (error) {
     console.error("Error in createSong:", error);

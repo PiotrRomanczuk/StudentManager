@@ -49,7 +49,7 @@ export function SongRow({
           <div className="flex flex-nowrap justify-end items-center gap-1">
             {actions.includes("view") && (
               <Button
-                onClick={() => router.push(`/dashboard/songs/v2/${song.id}`)}
+                onClick={() => router.push(`/dashboard/songs/${song.id}`)}
                 variant="ghost"
                 size="icon"
                 aria-label="View"
@@ -61,7 +61,7 @@ export function SongRow({
             {actions.includes("edit") && (
               <Button
                 onClick={() =>
-                  router.push(`/dashboard/songs/v2/${song.id}/edit`)
+                  router.push(`/dashboard/songs/${song.id}/edit`)
                 }
                 className="hover:scale-110 transition-transform hover:bg-admin-green-light"
               >

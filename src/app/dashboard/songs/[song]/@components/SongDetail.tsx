@@ -36,7 +36,7 @@ export default function SongDetails({ song }: SongDetailsProps) {
       if (error) {
         console.error("Error deleting song:", error);
       } else {
-        redirect("/dashboard/songs/v2");
+        redirect("/dashboard/songs");
       }
     }
   };

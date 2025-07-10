@@ -3,7 +3,7 @@ import { getUserAndAdmin } from "@/app/dashboard/utils/getUserAndAdmin";
 import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
 import { TaskManagementClient } from "./TaskManagementClient";
 
-export default async function TaskManagementPage() {
+export default async function DevelopmentTasksPage() {
   const supabase = await createClient();
   
   try {
@@ -18,9 +18,9 @@ export default async function TaskManagementPage() {
     }
 
     return (
-      <div className="p-4 sm:p-6">
+      <div className="w-full">
         <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Task Management</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Task Management</h1>
           <p className="mt-2 text-gray-600">
             Manage project tasks, track progress, and monitor development priorities.
           </p>
