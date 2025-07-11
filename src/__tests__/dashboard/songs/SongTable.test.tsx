@@ -159,7 +159,7 @@ describe('SongTable', () => {
   });
 
   it('should handle different action combinations', () => {
-    const actions = ['view'] as const;
+    const actions = ['view'] as ('view')[];
     render(<SongTable {...defaultProps} actions={actions} />);
     
     // Should only render view buttons

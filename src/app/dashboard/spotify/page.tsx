@@ -1,4 +1,4 @@
-import SpotifyTokenFetcher from "@/components/SpotifyTokenFetcher";
+import SpotifyTokenFetcher from "@/app/dashboard/spotify/SpotifyTokenFetcher";
 
 export default function Page() {
   const clientId = process.env.SPOTIFY_CLIENT_ID;

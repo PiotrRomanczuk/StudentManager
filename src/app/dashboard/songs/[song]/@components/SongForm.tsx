@@ -29,7 +29,7 @@ import {
   FORM_FIELDS,
   LEVEL_OPTIONS,
   MUSICAL_KEYS,
-} from "../../../../../components/dashboard/forms/CONSTANTS";
+} from "../../CONSTANTS";
 
 const songSchema = z.object({
   title: z.string().min(1, "Title is required"),

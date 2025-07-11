@@ -3,6 +3,7 @@
 /.next
 /.vscode
 /node_modules
+/coverage
 # Sentry Config File
 .env.sentry-build-plugin
 

@@ -10,8 +10,8 @@ interface Task {
   id: string;
   title: string;
   category: string;
-  priority: typeof PRIORITIES[number];
-  status: typeof STATUSES[number];
+  priority: "Critical" | "High" | "Medium" | "Low";
+  status: "Not Started" | "In Progress" | "Completed" | "Blocked";
   description?: string;
   estimatedEffort?: string;
   assignee?: string;

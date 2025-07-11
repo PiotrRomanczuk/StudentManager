@@ -10,13 +10,13 @@ import { Button } from "@/components/ui/button";
 import { LessonsTable } from "./LessonsTable";
 import { LessonsTableMobile } from "./LessonsTableMobile";
 import { getUserAndAdmin } from "../utils/getUserAndAdmin";
-import SearchBar from "@/components/Search-bar";
+import SearchBar from "@/components/common/SearchBar";
 import NoLesson from "./[slug]/@components/NoLesson";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LessonFilters } from "./@components/LessonFilters";
 import { fetchLessonsData } from "./api/fetchLessons";
 import { fetchProfilesData } from "../songs/api/fetchProfiles";
-import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
+import { ErrorComponent } from "@/components/common/ErrorComponent";
 
 type Params = { user_id: string; sort?: string; filter?: string };
 

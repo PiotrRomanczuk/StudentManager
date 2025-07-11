@@ -1,6 +1,6 @@
 "use client";
 
-import { SongSearchBar } from "@/components/dashboard/SongSearchBar";
+import { SongSearchBar } from "@/app/dashboard/songs/SongSearchBar";
 import { Button } from "@/components/ui/button";
 import { addSongToLesson } from "./actions";
 import type { Song } from "@/types/Song";

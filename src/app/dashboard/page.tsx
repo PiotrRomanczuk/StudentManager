@@ -1,5 +1,5 @@
-import { ErrorComponent } from "../../components/dashboard/ErrorComponent";
-import NoSongsFound from "../../components/dashboard/NoSongsFound";
+import { ErrorComponent } from "../../components/common/ErrorComponent";
+import NoSongsFound from "../../components/common/NoSongsFound";
 import UserPage from "./components/main/userPage";
 import AdminPage from "./components/main/adminPage";
 import { getUserAndAdmin } from "./utils/getUserAndAdmin";

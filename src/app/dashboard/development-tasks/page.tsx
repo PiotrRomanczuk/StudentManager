@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { getUserAndAdmin } from "@/app/dashboard/utils/getUserAndAdmin";
-import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
+import { ErrorComponent } from "@/components/common/ErrorComponent";
 import { TaskManagementClient } from "./TaskManagementClient";
 
 export default async function DevelopmentTasksPage() {

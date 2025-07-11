@@ -1,6 +1,6 @@
 import { Container } from "@/components/ui/container";
-import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
-import SongsClientComponentTesting from "./@components/SongsClientComponentTesting";
+import { ErrorComponent } from "@/components/common/ErrorComponent";
+import SongsClientComponentTesting from "./@components/SongsClientComponent";
 import { AdminControls } from "./@components/AdminControls";
 import { cookies } from "next/headers";
 import { getUserAndAdmin } from "../utils/getUserAndAdmin";

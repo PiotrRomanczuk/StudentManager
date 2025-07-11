@@ -1,4 +1,4 @@
-import NavBar from "@/components/dashboard/NavBar/NavBar";
+import NavBar from "@/components/layout/NavBar/NavBar";
 import { getUserAndAdmin } from "./utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
 import Sidebar from "./components/sidebar/Sidebar";

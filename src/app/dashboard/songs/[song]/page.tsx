@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import SongDetails from "./@components/SongDetail";
 import SongNotFound from "./@components/SongNotFound";
-import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
+import { ErrorComponent } from "@/components/common/ErrorComponent";
 import { cookies } from "next/headers";
 import { BASE_URL } from "@/constants/BASE_URL";
 import { getUserAndAdmin } from "@/app/dashboard/utils/getUserAndAdmin";

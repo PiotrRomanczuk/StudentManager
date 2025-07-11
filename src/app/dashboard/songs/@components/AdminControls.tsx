@@ -1,4 +1,4 @@
-import SearchBar from "@/components/Search-bar";
+import SearchBar from "@/components/common/SearchBar";
 import Link from "next/link";
 import { User } from "@/types/User";
 

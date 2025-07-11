@@ -13,7 +13,7 @@ import {
 import { fetchAssignmentsData } from "./api/fetchAssignments";
 import { getUserAndAdmin } from "../utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
-import { ErrorComponent } from "@/components/dashboard/ErrorComponent";
+import { ErrorComponent } from "@/components/common/ErrorComponent";
 
 // Enhanced Task type with profile information
 interface Task {
