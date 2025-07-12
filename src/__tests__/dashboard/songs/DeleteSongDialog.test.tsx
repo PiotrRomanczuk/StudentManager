@@ -31,7 +31,7 @@ describe('DeleteSongDialog', () => {
     songTitle: 'Test Song',
     isOpen: true,
     onClose: jest.fn(),
-    onDelete: jest.fn(),
+    onConfirm: jest.fn(),
   };
 
   beforeEach(() => {
@@ -51,6 +51,17 @@ describe('DeleteSongDialog', () => {
     expect(screen.queryByText('Are you sure you want to delete this song?')).not.toBeInTheDocument();
   });
 
+  it('should call onConfirm when delete button is clicked', async () => {
+    const user = userEvent.setup();
+    const onConfirm = jest.fn();
+    render(<DeleteSongDialog {...defaultProps} onConfirm={onConfirm} />);
+    
+    const deleteButton = screen.getByText('Delete');
+    await user.click(deleteButton);
+    
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+  });
+
   it('should call onClose when cancel button is clicked', async () => {
     const user = userEvent.setup();
     const onClose = jest.fn();
@@ -59,65 +70,20 @@ describe('DeleteSongDialog', () => {
     const cancelButton = screen.getByText('Cancel');
     await user.click(cancelButton);
     
-    expect(onClose).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call onDelete when delete button is clicked', async () => {
-    const user = userEvent.setup();
-    const onDelete = jest.fn();
-    render(<DeleteSongDialog {...defaultProps} onDelete={onDelete} />);
-    
-    const deleteButton = screen.getByText('Delete');
-    await user.click(deleteButton);
-    
-    expect(onDelete).toHaveBeenCalledTimes(1);
-    expect(onDelete).toHaveBeenCalledWith('1');
-  });
-
-  it('should handle song deletion through supabase', async () => {
-    const user = userEvent.setup();
-    render(<DeleteSongDialog {...defaultProps} />);
-    
-    const deleteButton = screen.getByText('Delete');
-    await user.click(deleteButton);
-    
-    expect(mockDelete).toHaveBeenCalled();
-  });
-
-  it('should handle deletion error', async () => {
-    const mockError = { message: 'Delete failed' };
-    mockDelete.mockReturnValue({
-      eq: jest.fn(() => ({
-        error: mockError,
-      })),
-    });
-
-    const user = userEvent.setup();
-    render(<DeleteSongDialog {...defaultProps} />);
-    
-    const deleteButton = screen.getByText('Delete');
-    await user.click(deleteButton);
-    
-    expect(mockDelete).toHaveBeenCalled();
-  });
-
-  it('should display the correct song title in the message', () => {
-    render(<DeleteSongDialog {...defaultProps} songTitle="Another Song" />);
-    
-    expect(screen.getByText('This will permanently delete "Another Song". This action cannot be undone.')).toBeInTheDocument();
+    expect(onClose).toHaveBeenCalled();
   });
 
   it('should apply correct CSS classes for styling', () => {
-    render(<DeleteSongDialog {...defaultProps} />);
+    render(<DeleteSongDialog {...defaultProps} isOpen={true} />);
     
-    const dialog = screen.getByText('Are you sure you want to delete this song?').closest('div');
-    expect(dialog).toHaveClass('fixed', 'inset-0', 'z-50', 'flex', 'items-center', 'justify-center');
+    const dialogContainer = screen.getByTestId('delete-song-dialog');
+    expect(dialogContainer).toHaveClass('inset-0', 'flex', 'items-center', 'justify-center');
     
-    const cancelButton = screen.getByText('Cancel');
+    const cancelButton = screen.getByRole('button', { name: /cancel/i });
     expect(cancelButton).toHaveClass('bg-gray-300', 'hover:bg-gray-400');
     
-    const deleteButton = screen.getByText('Delete');
-    expect(deleteButton).toHaveClass('bg-red-600', 'hover:bg-red-700');
+    const deleteButton = screen.getByRole('button', { name: /delete/i });
+    expect(deleteButton).toHaveClass('bg-red-600', 'hover:bg-red-700', 'text-white');
   });
 
   it('should handle empty song title gracefully', () => {

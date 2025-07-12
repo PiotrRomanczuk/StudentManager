@@ -45,7 +45,7 @@ export function SongCardMobile({
 
   return (
     <>
-      <div className="border border-gray-200 rounded-2xl shadow-sm p-5 bg-white mb-4 transition-colors hover:shadow-md">
+      <div className="border border-gray-200 rounded-2xl shadow-sm p-5 bg-white mb-4 transition-colors hover:shadow-md" data-testid="song-card-mobile">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-xl font-bold text-blue-600">

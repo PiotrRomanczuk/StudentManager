@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/clients/client";
-import { ErrorComponent } from "../../../components/common/ErrorComponent";
+import { ErrorComponent } from "../@components/ErrorComponent";
 import {
   Card,
   CardHeader,

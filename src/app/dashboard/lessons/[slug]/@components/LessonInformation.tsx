@@ -13,6 +13,7 @@ import { Edit, CalendarDays, Clock, User } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/clients/client";
 import { redirect } from "next/navigation";
+import { LessonStatusEnum } from "@/schemas";
 
 type LessonInformationProps = {
   lesson: {
@@ -23,6 +24,7 @@ type LessonInformationProps = {
     notes?: string;
     created_at: string;
     updated_at: string;
+    status?: string;
   };
   formattedDate: string;
   formattedTime: string;
@@ -53,6 +55,18 @@ export default function LessonInformation({
     }
   };
 
+  // Get lesson status options from the schema
+  const lessonStatusOptions = LessonStatusEnum.options;
+  
+  // Validate and format status
+  const isValidStatus = lesson.status && lesson.status ? 
+    lessonStatusOptions.includes(lesson.status as any) : 
+    false;
+  
+  const displayStatus = isValidStatus && lesson.status ? 
+    lesson.status.replace(/_/g, " ") : 
+    "Unknown";
+
   return (
     <Card className="flex-1 border-lesson-blue-border">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -63,6 +77,11 @@ export default function LessonInformation({
           {lesson.lesson_number && (
             <span className="ml-2 px-2 py-1 rounded bg-lesson-blue-bg text-lesson-blue-text text-sm font-semibold border border-lesson-blue-border">
               Lesson #{lesson.lesson_number}
+            </span>
+          )}
+          {lesson.status && (
+            <span className="ml-2 px-2 py-1 rounded bg-lesson-blue-bg text-lesson-blue-text text-sm font-semibold border border-lesson-blue-border">
+              {displayStatus}
             </span>
           )}
         </div>

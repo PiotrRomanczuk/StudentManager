@@ -5,10 +5,11 @@ export function useSongFiltering(songs: Song[]) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredSongs = useMemo(() => {
-    if (!searchQuery) return songs;
+    if (!searchQuery.trim()) return songs;
 
+    const trimmedQuery = searchQuery.trim().toLowerCase();
     return songs.filter((song) =>
-      song.title.toLowerCase().includes(searchQuery.toLowerCase()),
+      song.title.toLowerCase().includes(trimmedQuery),
     );
   }, [songs, searchQuery]);
 

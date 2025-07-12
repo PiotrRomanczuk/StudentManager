@@ -66,7 +66,7 @@ describe('SongRow', () => {
     expect(screen.getByText('Test Song')).toBeInTheDocument();
     expect(screen.getByText('beginner')).toBeInTheDocument();
     expect(screen.getByText('C')).toBeInTheDocument();
-    expect(screen.getByText('1/15/2024')).toBeInTheDocument(); // updated_at date
+    expect(screen.getByText('15/01/2024')).toBeInTheDocument(); // updated_at date
   });
 
   it('should render all action buttons when all actions are provided', () => {
@@ -178,7 +178,7 @@ describe('SongRow', () => {
     
     render(<SongRow {...defaultProps} song={songWithStringDate} />);
     
-    expect(screen.getByText('1/15/2024')).toBeInTheDocument();
+    expect(screen.getByText('15/01/2024')).toBeInTheDocument();
   });
 
   it('should handle empty date gracefully', () => {

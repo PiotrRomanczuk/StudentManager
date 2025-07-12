@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Song } from "@/types/Song";
+import { Song } from "../../../../types/Song";
 
 interface SongSearchBarProps {
   songs: Song[];

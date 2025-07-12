@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Music } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/clients/server";
+import { SongStatusEnum } from "@/schemas";
 
 export default async function SongInformation({
   lesson,
@@ -63,6 +64,9 @@ export default async function SongInformation({
     songs.map((song: Song) => [song.id, song]),
   );
 
+  // Get song status options from the schema
+  const songStatusOptions = SongStatusEnum.options;
+
   const statusColorMap: Record<string, string> = {
     to_learn: "bg-yellow-100 text-yellow-800",
     started: "bg-blue-100 text-blue-800",
@@ -102,6 +106,16 @@ export default async function SongInformation({
                 index: number,
               ) => {
                 const song = songMap.get(lessonSong.song_id);
+                
+                // Validate song status against schema
+                const isValidStatus = lessonSong.song_status ? 
+                  songStatusOptions.includes(lessonSong.song_status as any) : 
+                  false;
+                
+                const displayStatus = isValidStatus ? 
+                  lessonSong.song_status.replace(/_/g, " ") : 
+                  "Unknown";
+                
                 return (
                   <li
                     key={`${lessonSong.song_id}-${index}`}
@@ -115,7 +129,7 @@ export default async function SongInformation({
                       <span
                         className={`ml-2 px-2 py-1 rounded text-xs font-semibold ${statusColorMap[lessonSong.song_status] || "bg-gray-100 text-gray-800"}`}
                       >
-                        {lessonSong.song_status.replace(/_/g, " ")}
+                        {displayStatus}
                       </span>
                       <Link
                         href={`/dashboard/songs/${lessonSong.song_id}`}

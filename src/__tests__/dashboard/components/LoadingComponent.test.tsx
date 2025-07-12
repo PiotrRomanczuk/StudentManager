@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { LoadingComponent } from '@/components/common/LoadingComponent';
+import { LoadingComponent } from '@/app/dashboard/@components/LoadingComponent';
 
 describe('LoadingComponent', () => {
   it('should render loading message', () => {

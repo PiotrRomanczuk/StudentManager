@@ -1,5 +1,13 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { NextRequest, NextResponse } from "next/server";
+import { 
+  LessonSchema, 
+  LessonWithProfilesSchema, 
+  LessonInputSchema,
+  type Lesson,
+  type LessonWithProfiles,
+  type LessonInput
+} from "@/schemas";
 
 export async function GET(
   request: NextRequest,
@@ -40,7 +48,14 @@ export async function GET(
       return NextResponse.json({ error: "Lesson not found" }, { status: 404 });
     }
 
-    return NextResponse.json(lesson);
+    // Validate the lesson data
+    try {
+      const validatedLesson = LessonWithProfilesSchema.parse(lesson);
+      return NextResponse.json(validatedLesson);
+    } catch (validationError) {
+      console.error("Lesson validation error:", validationError);
+      return NextResponse.json({ error: "Invalid lesson data" }, { status: 500 });
+    }
   } catch (error) {
     console.error("Error in lesson API:", error);
     return NextResponse.json(
@@ -78,14 +93,26 @@ export async function PUT(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
+    // Validate the update data
+    let validatedData: Partial<LessonInput>;
+    try {
+      validatedData = LessonInputSchema.partial().parse(body);
+    } catch (validationError) {
+      console.error("Lesson update validation error:", validationError);
+      return NextResponse.json(
+        { error: "Invalid lesson update data", details: validationError },
+        { status: 400 }
+      );
+    }
+
     const { data: lesson, error } = await supabase
       .from("lessons")
       .update({
-        title: body.title,
-        notes: body.notes,
-        date: body.date,
-        time: body.time,
-        status: body.status,
+        title: validatedData.title,
+        notes: validatedData.notes,
+        date: validatedData.date,
+        time: validatedData.time,
+        status: validatedData.status,
       })
       .eq("id", id)
       .select()
@@ -100,7 +127,14 @@ export async function PUT(
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json(lesson);
+    // Validate the updated lesson
+    try {
+      const validatedLesson = LessonWithProfilesSchema.parse(lesson);
+      return NextResponse.json(validatedLesson);
+    } catch (validationError) {
+      console.error("Updated lesson validation error:", validationError);
+      return NextResponse.json({ error: "Invalid lesson data" }, { status: 500 });
+    }
   } catch (error) {
     console.error("Error in lesson update API:", error);
     return NextResponse.json(

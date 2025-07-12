@@ -76,7 +76,7 @@ describe('Dashboard Page', () => {
     expect(screen.getByText(/dashboard/i)).toBeInTheDocument();
     // Use getAllByText and check for button specifically
     const lessonsElements = screen.getAllByText(/lessons/i);
-    const lessonsButton = lessonsElements.find((el: any) => el.tagName === 'BUTTON');/
+    const lessonsButton = lessonsElements.find((el: any) => el.tagName === 'BUTTON');
     expect(lessonsButton).toBeInTheDocument();
     
     const assignmentsElements = screen.getAllByText(/assignments/i);

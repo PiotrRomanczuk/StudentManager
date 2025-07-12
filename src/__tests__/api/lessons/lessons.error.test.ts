@@ -138,8 +138,8 @@ describe('/api/lessons - Error Handling', () => {
     it('should return 400 when required fields are missing', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const incompleteLesson = {
-        teacherId: 'teacher1',
-        // Missing studentId, date, time
+        teacher_id: '550e8400-e29b-41d4-a716-446655440003',
+        // Missing student_id, date, time
         title: 'Test Lesson',
       };
 
@@ -164,15 +164,15 @@ describe('/api/lessons - Error Handling', () => {
       const data = await response.json();
 
       expect(response.status).toBe(400);
-      expect(data.error).toBe('Missing required fields');
+      expect(data.error).toBe('Invalid lesson data');
     });
 
     it('should handle database error when creating lesson', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const newLesson = {
-        teacherId: 'teacher1',
-        studentId: 'student1',
-        date: '2024-01-01',
+        teacher_id: '550e8400-e29b-41d4-a716-446655440003',
+        student_id: '550e8400-e29b-41d4-a716-446655440002',
+        date: '2024-01-01T00:00:00.000Z',
         time: '10:00',
         title: 'Test Lesson',
         status: 'SCHEDULED',

@@ -1,5 +1,11 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { NextRequest, NextResponse } from "next/server";
+import { 
+  LessonInputSchema, 
+  LessonSchema,
+  type LessonInput,
+  type Lesson
+} from "@/schemas";
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,11 +31,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // Check for required fields
-    const { teacherId, studentId, date, time } = body;
-    if (!teacherId || !studentId || !date || !time) {
+    // Validate input data using the schema
+    let validatedData: LessonInput;
+    try {
+      validatedData = LessonInputSchema.parse(body);
+    } catch (validationError) {
+      console.error("Lesson input validation error:", validationError);
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Invalid lesson data", details: validationError },
         { status: 400 }
       );
     }
@@ -37,13 +46,14 @@ export async function POST(request: NextRequest) {
     const { data: lesson, error } = await supabase
       .from("lessons")
       .insert({
-        teacher_id: teacherId,
-        student_id: studentId,
-        date,
-        time,
-        title: body.title || null,
-        notes: body.notes || null,
-        status: body.status || "SCHEDULED",
+        teacher_id: validatedData.teacher_id,
+        student_id: validatedData.student_id,
+        date: validatedData.date,
+        time: validatedData.time,
+        title: validatedData.title || null,
+        notes: validatedData.notes || null,
+        status: validatedData.status || "SCHEDULED",
+        creator_user_id: user.id,
       })
       .select()
       .single();
@@ -53,7 +63,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json(lesson);
+    // Validate the created lesson
+    try {
+      const validatedLesson = LessonSchema.parse(lesson);
+      return NextResponse.json(validatedLesson);
+    } catch (validationError) {
+      console.error("Created lesson validation error:", validationError);
+      return NextResponse.json({ error: "Invalid lesson data" }, { status: 500 });
+    }
   } catch (error) {
     console.error("Error in lesson creation API:", error);
     return NextResponse.json(

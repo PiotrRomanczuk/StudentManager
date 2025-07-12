@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import NoSongsFound from '@/components/common/NoSongsFound';
+import NoSongsFound from '@/app/dashboard/@components/NoSongsFound';
 
 describe('NoSongsFound', () => {
   it('should render no songs found message', () => {

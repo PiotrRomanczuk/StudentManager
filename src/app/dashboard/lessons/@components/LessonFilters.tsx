@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LessonStatusEnum } from "@/schemas";
 
 interface LessonFiltersProps {
   currentSort: string;
@@ -34,6 +35,9 @@ export function LessonFilters({ currentSort, currentFilter }: LessonFiltersProps
     router.push(`?${params.toString()}`);
   };
 
+  // Get lesson status options from the schema
+  const lessonStatusOptions = LessonStatusEnum.options;
+
   return (
     <div className="flex items-center gap-4 w-full sm:w-auto">
       <Select defaultValue={currentSort} onValueChange={handleSortChange}>
@@ -52,9 +56,11 @@ export function LessonFilters({ currentSort, currentFilter }: LessonFiltersProps
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Status</SelectItem>
-          <SelectItem value="scheduled">Scheduled</SelectItem>
-          <SelectItem value="completed">Completed</SelectItem>
-          <SelectItem value="cancelled">Cancelled</SelectItem>
+          {lessonStatusOptions.map((status) => (
+            <SelectItem key={status} value={status.toLowerCase()}>
+              {status.replace(/_/g, " ")}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>

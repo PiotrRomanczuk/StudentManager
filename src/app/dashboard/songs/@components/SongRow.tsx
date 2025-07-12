@@ -64,6 +64,7 @@ export function SongRow({
                   router.push(`/dashboard/songs/${song.id}/edit`)
                 }
                 className="hover:scale-110 transition-transform hover:bg-admin-green-light"
+                aria-label="Edit"
               >
                 <Pencil size={16} className="text-admin-green-dark" />
               </Button>
@@ -73,6 +74,7 @@ export function SongRow({
                 variant="destructive"
                 onClick={() => setIsDeleteDialogOpen(true)}
                 className="hover:scale-110 transition-transform hover:bg-admin-gray-light"
+                aria-label="Delete"
               >
                 <Trash2 size={16} className="text-admin-gray-dark" />
               </Button>

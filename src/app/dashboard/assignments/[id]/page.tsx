@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, User, FileText } from "lucide-react";
 import { fetchAssignmentData } from "../api/fetchAssignments";
 import { cookies } from "next/headers";
-import { ErrorComponent } from "@/components/common/ErrorComponent";
+import { ErrorComponent } from "@/app/dashboard/@components/ErrorComponent";
 
 type Params = { id: string };
 

@@ -1,5 +1,5 @@
 "use client";
-import { Song } from "@/types/Song";
+import { Song } from "../../../../types/Song";
 import { SongCardMobile } from "./SongCardMobile";
 
 export function SongTableMobile({

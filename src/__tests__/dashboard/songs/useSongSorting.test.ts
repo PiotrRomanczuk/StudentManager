@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { renderHook, act } from '@testing-library/react';
 import { useSongSorting } from '@/app/dashboard/songs/@components/hooks/useSongSorting';
 import { Song } from '@/types/Song';
@@ -54,7 +55,10 @@ describe('useSongSorting', () => {
 
     expect(result.current.sortKey).toBe('updated_at');
     expect(result.current.sortDirection).toBe('desc');
-    expect(result.current.sortedSongs).toEqual(mockSongs);
+    // Songs should be sorted by updated_at in descending order
+    expect(result.current.sortedSongs[0].updated_at).toEqual(new Date('2024-01-17'));
+    expect(result.current.sortedSongs[1].updated_at).toEqual(new Date('2024-01-16'));
+    expect(result.current.sortedSongs[2].updated_at).toEqual(new Date('2024-01-15'));
   });
 
   it('should sort songs by title in ascending order', () => {

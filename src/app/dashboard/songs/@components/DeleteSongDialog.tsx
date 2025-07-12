@@ -24,7 +24,7 @@ export function DeleteSongDialog({
 }: DeleteSongDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent>
+      <AlertDialogContent className="inset-0 flex items-center justify-center" data-testid="delete-song-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle>
             Are you sure you want to delete this song?
@@ -35,10 +35,13 @@ export function DeleteSongDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="bg-gray-300 hover:bg-gray-400">
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-red-600 hover:bg-red-700 text-white"
+            autoFocus
           >
             Delete
           </AlertDialogAction>

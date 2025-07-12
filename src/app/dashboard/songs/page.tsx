@@ -1,6 +1,6 @@
 import { Container } from "@/components/ui/container";
-import { ErrorComponent } from "@/components/common/ErrorComponent";
-import SongsClientComponentTesting from "./@components/SongsClientComponent";
+import { ErrorComponent } from "@/app/dashboard/@components/ErrorComponent";
+import SongsClientComponent from "./@components/SongsClientComponent";
 import { AdminControls } from "./@components/AdminControls";
 import { cookies } from "next/headers";
 import { getUserAndAdmin } from "../utils/getUserAndAdmin";
@@ -38,7 +38,7 @@ export default async function Page({
               <h1 className="text-2xl x-4 font-bold">Songs</h1>
               {isAdmin && <AdminControls profiles={profiles} />}
             </div>
-            <SongsClientComponentTesting
+            <SongsClientComponent
               songs={songs}
               isAdmin={false}
             />
@@ -60,7 +60,7 @@ export default async function Page({
             <h1 className="text-2xl x-4 font-bold">Songs</h1>
             {isAdmin && <AdminControls profiles={profiles} />}
           </div>
-          <SongsClientComponentTesting
+          <SongsClientComponent
             songs={songs}
             isAdmin={isAdmin}
           />

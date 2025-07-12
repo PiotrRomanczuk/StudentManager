@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Lesson } from "@/types/Lesson";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { LessonStatusEnum } from "@/schemas";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PaginationComponent } from "@/app/dashboard/components/pagination/PaginationComponent";
+import { PaginationComponent } from "@/app/dashboard/@components/pagination/PaginationComponent";
 
 interface LessonsTableProps {
   lessons: Lesson[];
@@ -48,6 +49,9 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
   function getEmail(email: string) {
     return email.split("@")[0];
   }
+
+  // Get lesson status options from the schema
+  const lessonStatusOptions = LessonStatusEnum.options;
 
   function getStatusColor(status: string) {
     switch (status?.toLowerCase()) {
@@ -114,100 +118,111 @@ export function LessonsTable({ lessons }: LessonsTableProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {paginatedLessons.map((lesson: Lesson) => (
-                  <TableRow
-                    key={lesson.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <TableCell className="px-3 sm:px-6 py-4">
-                      <div className="flex items-center">
-                        <div className="h-8 sm:h-10 w-8 sm:w-10 rounded-full bg-lesson-blue-bg flex items-center justify-center">
-                          <span className="text-lesson-blue-text font-medium text-sm sm:text-base">
-                            L{lesson.lesson_number || "?"}
-                          </span>
-                        </div>
-                        <div className="ml-3 sm:ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {lesson.lesson_number
-                              ? `Lesson ${lesson.lesson_number}`
-                              : "Lesson"}
+                {paginatedLessons.map((lesson: Lesson) => {
+                  // Validate lesson status against schema
+                  const isValidStatus = lesson.status ? 
+                    lessonStatusOptions.includes(lesson.status as any) : 
+                    false;
+                  
+                  const displayStatus = lesson.status ? 
+                    (isValidStatus ? lesson.status.replace(/_/g, " ") : "Unknown") 
+                    : "Unknown";
+
+                  return (
+                    <TableRow
+                      key={lesson.id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      <TableCell className="px-3 sm:px-6 py-4">
+                        <div className="flex items-center">
+                          <div className="h-8 sm:h-10 w-8 sm:w-10 rounded-full bg-lesson-blue-bg flex items-center justify-center">
+                            <span className="text-lesson-blue-text font-medium text-sm sm:text-base">
+                              L{lesson.lesson_number || "?"}
+                            </span>
                           </div>
-                          <div className="sm:hidden text-xs text-gray-500 mt-1">
-                            {lesson.date
-                              ? formatDate(lesson.date.toString())
-                              : formatDate(lesson.created_at)}
+                          <div className="ml-3 sm:ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {lesson.lesson_number
+                                ? `Lesson ${lesson.lesson_number}`
+                                : "Lesson"}
+                            </div>
+                            <div className="sm:hidden text-xs text-gray-500 mt-1">
+                              {lesson.date
+                                ? formatDate(lesson.date.toString())
+                                : formatDate(lesson.created_at)}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
-                      <Badge
-                        variant="outline"
-                        className="bg-lesson-blue-bg text-lesson-blue-text border-lesson-blue-border"
-                      >
-                        {lesson.date
-                          ? formatDate(lesson.date.toString())
-                          : formatDate(lesson.created_at)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-lesson-purple-bg flex items-center justify-center">
-                          <User className="h-4 w-4 text-lesson-purple-text" />
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">
-                          {getEmail(lesson.profile?.email || "")}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-lesson-green-bg flex items-center justify-center">
-                          <User className="h-4 w-4 text-lesson-green-text" />
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">
-                          {getEmail(lesson.teacher_profile?.email || "")}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
-                      {lesson.time ? (
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
+                        <Badge
+                          variant="outline"
+                          className="bg-lesson-blue-bg text-lesson-blue-text border-lesson-blue-border"
+                        >
+                          {lesson.date
+                            ? formatDate(lesson.date.toString())
+                            : formatDate(lesson.created_at)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <div className="h-8 w-8 rounded-full bg-lesson-orange-bg flex items-center justify-center">
-                            <Clock className="h-4 w-4 text-lesson-orange-text" />
+                          <div className="h-8 w-8 rounded-full bg-lesson-purple-bg flex items-center justify-center">
+                            <User className="h-4 w-4 text-lesson-purple-text" />
                           </div>
                           <span className="text-sm font-medium text-gray-900">
-                            {lesson.time.toString()}
+                            {getEmail(lesson.profile?.email || "")}
                           </span>
                         </div>
-                      ) : (
-                        <span className="text-muted-foreground">—</span>
-                      )}
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
-                      <Badge
-                        variant="outline"
-                        className={`${getStatusColor(
-                          lesson.status || "scheduled",
-                        )} border-transparent`}
-                      >
-                        {lesson.status || "Scheduled"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="px-3 sm:px-6 py-4 text-right">
-                      <Button
-                        asChild
-                        size="sm"
-                        variant="outline"
-                        className="bg-lesson-blue-bg hover:bg-lesson-blue-bg/80 text-lesson-blue-text border-lesson-blue-border"
-                      >
-                        <Link href={`/dashboard/lessons/${lesson.id}`}>
-                          View Details
-                        </Link>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <div className="h-8 w-8 rounded-full bg-lesson-green-bg flex items-center justify-center">
+                            <User className="h-4 w-4 text-lesson-green-text" />
+                          </div>
+                          <span className="text-sm font-medium text-gray-900">
+                            {getEmail(lesson.teacher_profile?.email || "")}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
+                        {lesson.time ? (
+                          <div className="flex items-center gap-2">
+                            <div className="h-8 w-8 rounded-full bg-lesson-orange-bg flex items-center justify-center">
+                              <Clock className="h-4 w-4 text-lesson-orange-text" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-900">
+                              {lesson.time.toString()}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell px-3 sm:px-6 py-4">
+                        <Badge
+                          variant="outline"
+                          className={`${getStatusColor(
+                            lesson.status || "scheduled"
+                          )} border-transparent`}
+                        >
+                          {displayStatus}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="px-3 sm:px-6 py-4 text-right">
+                        <Button
+                          asChild
+                          size="sm"
+                          variant="outline"
+                          className="bg-lesson-blue-bg hover:bg-lesson-blue-bg/80 text-lesson-blue-text border-lesson-blue-border"
+                        >
+                          <Link href={`/dashboard/lessons/${lesson.id}`}>
+                            View Details
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>

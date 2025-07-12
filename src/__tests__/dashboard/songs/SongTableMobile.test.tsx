@@ -96,8 +96,9 @@ describe('SongTableMobile', () => {
   it('should apply correct CSS classes for styling', () => {
     render(<SongTableMobile {...defaultProps} />);
     
-    const container = screen.getByTestId('mobile-card-1').closest('div');
-    expect(container).toHaveClass('space-y-4');
+    // The space-y-3 class is on the div that contains the songs, not the container
+    const songsContainer = screen.getByTestId('mobile-card-1').parentElement;
+    expect(songsContainer).toHaveClass('space-y-3');
   });
 
   it('should display song information correctly', () => {

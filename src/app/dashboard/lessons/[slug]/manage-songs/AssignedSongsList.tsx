@@ -5,6 +5,7 @@ import type { Song } from "@/types/Song";
 import { removeSongFromLesson } from "./actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { SongStatusEnum } from "@/schemas";
 
 type LessonSong = {
   song_id: string;
@@ -33,6 +34,10 @@ export default function AssignedSongsList({
   slug,
 }: AssignedSongsListProps) {
   const router = useRouter();
+  
+  // Get song status options from the schema
+  const songStatusOptions = SongStatusEnum.options;
+
   return (
     <div className="bg-admin-gray-lightest p-6 rounded-lg border border-admin-gray-light">
       <h2 className="text-xl font-semibold mb-4 text-admin-gray-darker">
@@ -50,6 +55,16 @@ export default function AssignedSongsList({
               const lessonSong = lessonSongs?.find(
                 (ls) => ls.song_id === song.id,
               );
+              
+              // Validate song status against schema
+              const isValidStatus = lessonSong && lessonSong.song_status ? 
+                songStatusOptions.includes(lessonSong.song_status as any) : 
+                false;
+              
+              const displayStatus = isValidStatus && lessonSong ? 
+                lessonSong.song_status.replace(/_/g, " ") : 
+                "Unknown";
+              
               return (
                 <li
                   key={song.id}
@@ -62,7 +77,7 @@ export default function AssignedSongsList({
                     <span
                       className={`ml-2 px-2 py-1 rounded text-xs font-semibold ${statusColorMap[lessonSong.song_status] || "bg-gray-100 text-gray-800"}`}
                     >
-                      {lessonSong.song_status.replace(/_/g, " ")}
+                      {displayStatus}
                     </span>
                   )}
                   <form

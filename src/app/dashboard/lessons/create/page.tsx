@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LessonStatusEnum } from "@/schemas";
 
 function getCurrentDateTime() {
   const now = new Date();
@@ -54,6 +55,9 @@ export default async function Page() {
     );
   }
 
+  // Get lesson status options from the schema
+  const lessonStatusOptions = LessonStatusEnum.options;
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
@@ -75,7 +79,7 @@ export default async function Page() {
             <form className="space-y-6" action={createLesson}>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="teacher_id">Teacher</Label>
+                  <Label htmlFor="teacher_id">Teacher *</Label>
                   <Select name="teacher_id" required defaultValue={teachers?.[0]?.user_id}>
                     <SelectTrigger className="mt-1">
                       <SelectValue placeholder="Select a teacher" />
@@ -94,7 +98,7 @@ export default async function Page() {
                 </div>
 
                 <div>
-                  <Label htmlFor="student_id">Student</Label>
+                  <Label htmlFor="student_id">Student *</Label>
                   <Select name="student_id" required>
                     <SelectTrigger className="mt-1">
                       <SelectValue placeholder="Select a student" />
@@ -114,20 +118,19 @@ export default async function Page() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="date">Date</Label>
+                    <Label htmlFor="date">Date *</Label>
                     <Input
                       type="date"
                       id="date"
                       name="date"
                       defaultValue={date}
                       required
-                      // min={date}
                       className="mt-1"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="time">Time</Label>
+                    <Label htmlFor="time">Time *</Label>
                     <Input
                       type="time"
                       id="time"
@@ -146,11 +149,24 @@ export default async function Page() {
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="SCHEDULED">Scheduled</SelectItem>
-                      <SelectItem value="COMPLETED">Completed</SelectItem>
-                      <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                      {lessonStatusOptions.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status.replace(/_/g, " ")}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="title">Title</Label>
+                  <Input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Enter lesson title (optional)"
+                    className="mt-1"
+                  />
                 </div>
 
                 <div>

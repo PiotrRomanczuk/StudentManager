@@ -1,7 +1,7 @@
-import { ErrorComponent } from "../../components/common/ErrorComponent";
-import NoSongsFound from "../../components/common/NoSongsFound";
-import UserPage from "./components/main/userPage";
-import AdminPage from "./components/main/adminPage";
+import { ErrorComponent } from "./@components/ErrorComponent";
+import NoSongsFound from "./@components/NoSongsFound";
+import UserPage from "./@components/main/userPage";
+import AdminPage from "./@components/main/adminPage";
 import { getUserAndAdmin } from "./utils/getUserAndAdmin";
 import { createClient } from "@/utils/supabase/clients/server";
 import { BASE_URL } from "@/constants/BASE_URL";

@@ -156,14 +156,14 @@ describe('SongCardMobile', () => {
     
     render(<SongCardMobile {...defaultProps} song={songWithStringDate} />);
     
-    expect(screen.getByText('1/15/2024')).toBeInTheDocument();
+    expect(screen.getByText('15/01/2024')).toBeInTheDocument();
   });
 
   it('should apply correct CSS classes for styling', () => {
     render(<SongCardMobile {...defaultProps} />);
     
-    const card = screen.getByText('Test Song').closest('div');
-    expect(card).toHaveClass('bg-white', 'rounded-lg', 'shadow-md', 'p-4');
+    const cardContainer = screen.getByTestId('song-card-mobile');
+    expect(cardContainer).toHaveClass('border', 'border-gray-200', 'rounded-2xl', 'shadow-sm', 'p-5', 'bg-white');
     
     const viewButton = screen.getByLabelText('View');
     expect(viewButton).toHaveClass('hover:scale-110', 'transition-transform', 'hover:bg-admin-blue-light');
@@ -200,16 +200,17 @@ describe('SongCardMobile', () => {
     // Should not crash with empty properties
   });
 
-  it('should display chords information', () => {
+  it('should display level and key information', () => {
     render(<SongCardMobile {...defaultProps} />);
     
-    expect(screen.getByText('C G Am F')).toBeInTheDocument();
+    expect(screen.getByText('beginner')).toBeInTheDocument();
+    expect(screen.getByText('C')).toBeInTheDocument();
   });
 
-  it('should display audio files information', () => {
+  it('should display date information', () => {
     render(<SongCardMobile {...defaultProps} />);
     
-    expect(screen.getByText('test.mp3')).toBeInTheDocument();
+    expect(screen.getByText('15/01/2024')).toBeInTheDocument();
   });
 
   it('should handle different action combinations', () => {

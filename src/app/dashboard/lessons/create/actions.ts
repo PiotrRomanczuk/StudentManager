@@ -4,21 +4,42 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { BASE_URL } from "@/constants/BASE_URL";
+import { 
+  LessonInputSchema, 
+  type LessonInput 
+} from "@/schemas";
 
 export async function createLesson(formData: FormData) {
-  const teacherId = formData.get("teacher_id");
-  const studentId = formData.get("student_id");
-  const date = formData.get("date");
-  const time = formData.get("time");
-  const title = formData.get("title");
-  const notes = formData.get("notes");
-  const status = formData.get("status");
-
-  if (!teacherId || !studentId || !date || !time) {
-    throw new Error("Missing required fields");
-  }
-
   try {
+    // Extract and validate form data
+    const teacherId = formData.get("teacher_id") as string;
+    const studentId = formData.get("student_id") as string;
+    const date = formData.get("date") as string;
+    const time = formData.get("time") as string;
+    const title = formData.get("title") as string;
+    const notes = formData.get("notes") as string;
+    const status = formData.get("status") as string;
+
+    // Prepare data for validation
+    const lessonData: Partial<LessonInput> = {
+      teacher_id: teacherId,
+      student_id: studentId,
+      date: date ? new Date(date).toISOString() : undefined,
+      time: time || undefined,
+      title: title || undefined,
+      notes: notes || undefined,
+      status: status as any || undefined,
+    };
+
+    // Validate the data using the schema
+    let validatedData: LessonInput;
+    try {
+      validatedData = LessonInputSchema.parse(lessonData);
+    } catch (validationError) {
+      console.error("Lesson validation error:", validationError);
+      throw new Error("Invalid lesson data. Please check all required fields.");
+    }
+
     const cookieHeader = (await cookies()).toString();
     
     const response = await fetch(`${BASE_URL}/api/lessons/create`, {
@@ -27,15 +48,7 @@ export async function createLesson(formData: FormData) {
         "Content-Type": "application/json",
         Cookie: cookieHeader,
       },
-      body: JSON.stringify({
-        teacherId,
-        studentId,
-        date,
-        time,
-        title: title || null,
-        notes: notes || null,
-        status: status || "SCHEDULED",
-      }),
+      body: JSON.stringify(validatedData),
     });
 
     if (!response.ok) {

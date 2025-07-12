@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { getUserAndAdmin } from "@/app/dashboard/utils/getUserAndAdmin";
-import { ErrorComponent } from "@/components/common/ErrorComponent";
+import { ErrorComponent } from "@/app/dashboard/@components/ErrorComponent";
 import { TaskEditClient } from "./TaskEditClient";
 import { notFound } from "next/navigation";
 

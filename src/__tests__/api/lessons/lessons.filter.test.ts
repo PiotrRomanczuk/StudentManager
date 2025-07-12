@@ -43,7 +43,15 @@ describe('/api/lessons - Filtering and Sorting', () => {
     it('should filter lessons by student_id when userId is provided', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const mockLessons = [
-        { id: '1', lesson_number: 1, student_id: 'user123', teacher_id: 'teacher1', date: '2024-01-01', time: '10:00', status: 'SCHEDULED' },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440001', 
+          lesson_number: 1, 
+          student_id: '550e8400-e29b-41d4-a716-446655440002', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-01T00:00:00.000Z', 
+          time: '10:00', 
+          status: 'SCHEDULED' 
+        },
       ];
 
       mockSupabase.auth.getUser.mockResolvedValue({
@@ -67,7 +75,15 @@ describe('/api/lessons - Filtering and Sorting', () => {
     it('should filter lessons by teacher_id when userId is provided', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const mockLessons = [
-        { id: '1', lesson_number: 1, student_id: 'student1', teacher_id: 'user123', date: '2024-01-01', time: '10:00', status: 'SCHEDULED' },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440001', 
+          lesson_number: 1, 
+          student_id: '550e8400-e29b-41d4-a716-446655440004', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440005', 
+          date: '2024-01-01T00:00:00.000Z', 
+          time: '10:00', 
+          status: 'SCHEDULED' 
+        },
       ];
 
       mockSupabase.auth.getUser.mockResolvedValue({
@@ -93,7 +109,15 @@ describe('/api/lessons - Filtering and Sorting', () => {
     it('should filter lessons by status when filter parameter is provided', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const mockLessons = [
-        { id: '1', lesson_number: 1, student_id: 'student1', teacher_id: 'teacher1', date: '2024-01-01', time: '10:00', status: 'COMPLETED' },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440001', 
+          lesson_number: 1, 
+          student_id: '550e8400-e29b-41d4-a716-446655440002', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-01T00:00:00.000Z', 
+          time: '10:00', 
+          status: 'COMPLETED' 
+        },
       ];
 
       mockSupabase.auth.getUser.mockResolvedValue({
@@ -117,8 +141,24 @@ describe('/api/lessons - Filtering and Sorting', () => {
     it('should not filter when filter is "all"', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const mockLessons = [
-        { id: '1', lesson_number: 1, student_id: 'student1', teacher_id: 'teacher1', date: '2024-01-01', time: '10:00', status: 'SCHEDULED' },
-        { id: '2', lesson_number: 2, student_id: 'student2', teacher_id: 'teacher1', date: '2024-01-02', time: '11:00', status: 'COMPLETED' },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440001', 
+          lesson_number: 1, 
+          student_id: '550e8400-e29b-41d4-a716-446655440002', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-01T00:00:00.000Z', 
+          time: '10:00', 
+          status: 'SCHEDULED' 
+        },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440004', 
+          lesson_number: 2, 
+          student_id: '550e8400-e29b-41d4-a716-446655440005', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-02T00:00:00.000Z', 
+          time: '11:00', 
+          status: 'COMPLETED' 
+        },
       ];
 
       mockSupabase.auth.getUser.mockResolvedValue({
@@ -144,8 +184,24 @@ describe('/api/lessons - Filtering and Sorting', () => {
     it('should sort lessons by created_at by default', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const mockLessons = [
-        { id: '1', lesson_number: 1, student_id: 'student1', teacher_id: 'teacher1', date: '2024-01-01', time: '10:00', status: 'SCHEDULED' },
-        { id: '2', lesson_number: 2, student_id: 'student2', teacher_id: 'teacher1', date: '2024-01-02', time: '11:00', status: 'COMPLETED' },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440001', 
+          lesson_number: 1, 
+          student_id: '550e8400-e29b-41d4-a716-446655440002', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-01T00:00:00.000Z', 
+          time: '10:00', 
+          status: 'SCHEDULED' 
+        },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440004', 
+          lesson_number: 2, 
+          student_id: '550e8400-e29b-41d4-a716-446655440005', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-02T00:00:00.000Z', 
+          time: '11:00', 
+          status: 'COMPLETED' 
+        },
       ];
 
       mockSupabase.auth.getUser.mockResolvedValue({
@@ -169,8 +225,24 @@ describe('/api/lessons - Filtering and Sorting', () => {
     it('should sort lessons by date when sort=date is provided', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const mockLessons = [
-        { id: '1', lesson_number: 1, student_id: 'student1', teacher_id: 'teacher1', date: '2024-01-01', time: '10:00', status: 'SCHEDULED' },
-        { id: '2', lesson_number: 2, student_id: 'student2', teacher_id: 'teacher1', date: '2024-01-02', time: '11:00', status: 'COMPLETED' },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440001', 
+          lesson_number: 1, 
+          student_id: '550e8400-e29b-41d4-a716-446655440002', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-01T00:00:00.000Z', 
+          time: '10:00', 
+          status: 'SCHEDULED' 
+        },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440004', 
+          lesson_number: 2, 
+          student_id: '550e8400-e29b-41d4-a716-446655440005', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-02T00:00:00.000Z', 
+          time: '11:00', 
+          status: 'COMPLETED' 
+        },
       ];
 
       mockSupabase.auth.getUser.mockResolvedValue({
@@ -194,8 +266,24 @@ describe('/api/lessons - Filtering and Sorting', () => {
     it('should sort lessons by lesson_number when sort=lesson_number is provided', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const mockLessons = [
-        { id: '1', lesson_number: 1, student_id: 'student1', teacher_id: 'teacher1', date: '2024-01-01', time: '10:00', status: 'SCHEDULED' },
-        { id: '2', lesson_number: 2, student_id: 'student2', teacher_id: 'teacher1', date: '2024-01-02', time: '11:00', status: 'COMPLETED' },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440001', 
+          lesson_number: 1, 
+          student_id: '550e8400-e29b-41d4-a716-446655440002', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-01T00:00:00.000Z', 
+          time: '10:00', 
+          status: 'SCHEDULED' 
+        },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440004', 
+          lesson_number: 2, 
+          student_id: '550e8400-e29b-41d4-a716-446655440005', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-02T00:00:00.000Z', 
+          time: '11:00', 
+          status: 'COMPLETED' 
+        },
       ];
 
       mockSupabase.auth.getUser.mockResolvedValue({
@@ -221,8 +309,24 @@ describe('/api/lessons - Filtering and Sorting', () => {
     it('should handle both userId filter and sort parameter', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const mockLessons = [
-        { id: '1', lesson_number: 1, student_id: 'user123', teacher_id: 'teacher1', date: '2024-01-01', time: '10:00', status: 'SCHEDULED' },
-        { id: '2', lesson_number: 2, student_id: 'user123', teacher_id: 'teacher1', date: '2024-01-02', time: '11:00', status: 'COMPLETED' },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440001', 
+          lesson_number: 1, 
+          student_id: '550e8400-e29b-41d4-a716-446655440006', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-01T00:00:00.000Z', 
+          time: '10:00', 
+          status: 'SCHEDULED' 
+        },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440004', 
+          lesson_number: 2, 
+          student_id: '550e8400-e29b-41d4-a716-446655440006', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-02T00:00:00.000Z', 
+          time: '11:00', 
+          status: 'COMPLETED' 
+        },
       ];
 
       mockSupabase.auth.getUser.mockResolvedValue({
@@ -246,8 +350,24 @@ describe('/api/lessons - Filtering and Sorting', () => {
     it('should handle status filter and sort parameter', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const mockLessons = [
-        { id: '1', lesson_number: 1, student_id: 'student1', teacher_id: 'teacher1', date: '2024-01-01', time: '10:00', status: 'COMPLETED' },
-        { id: '2', lesson_number: 2, student_id: 'student2', teacher_id: 'teacher1', date: '2024-01-02', time: '11:00', status: 'COMPLETED' },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440001', 
+          lesson_number: 1, 
+          student_id: '550e8400-e29b-41d4-a716-446655440002', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-01T00:00:00.000Z', 
+          time: '10:00', 
+          status: 'COMPLETED' 
+        },
+        { 
+          id: '550e8400-e29b-41d4-a716-446655440004', 
+          lesson_number: 2, 
+          student_id: '550e8400-e29b-41d4-a716-446655440005', 
+          teacher_id: '550e8400-e29b-41d4-a716-446655440003', 
+          date: '2024-01-02T00:00:00.000Z', 
+          time: '11:00', 
+          status: 'COMPLETED' 
+        },
       ];
 
       mockSupabase.auth.getUser.mockResolvedValue({
@@ -260,7 +380,7 @@ describe('/api/lessons - Filtering and Sorting', () => {
         error: null,
       }));
 
-      const mockRequest = createMockNextRequest('http://localhost:3000/api/lessons?filter=COMPLETED&sort=lesson_number');
+      const mockRequest = createMockNextRequest('http://localhost:3000/api/lessons?filter=COMPLETED&sort=date');
       const response = await GET(mockRequest);
       const data = await response.json();
 

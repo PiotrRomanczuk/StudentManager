@@ -14,6 +14,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
 import { updateLesson } from "./action";
 import { Lesson } from "@/types/Lesson";
+import { LessonStatusEnum } from "@/schemas";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type LessonEditFormProps = {
   lesson: Lesson;
@@ -24,6 +32,30 @@ export default function LessonEditClientForm({
   lesson,
   slug,
 }: LessonEditFormProps) {
+  // Get lesson status options from the schema
+  const lessonStatusOptions = LessonStatusEnum.options;
+
+  // Format date for input field
+  const formatDateForInput = (date: any) => {
+    if (!date) return "";
+    try {
+      const dateObj = new Date(date);
+      return dateObj.toISOString().split('T')[0];
+    } catch {
+      return "";
+    }
+  };
+
+  // Format time for input field
+  const formatTimeForInput = (time: any) => {
+    if (!time) return "";
+    // Handle different time formats
+    if (typeof time === 'string') {
+      return time;
+    }
+    return "";
+  };
+
   return (
     <div className="container max-w-3xl py-10 flex">
       <Link
@@ -50,7 +82,7 @@ export default function LessonEditClientForm({
                 id="title"
                 name="title"
                 placeholder="Enter lesson title"
-                defaultValue={lesson.lesson_number}
+                defaultValue={lesson.title || ""}
               />
             </div>
             <div className="space-y-2">
@@ -59,7 +91,7 @@ export default function LessonEditClientForm({
                 id="date"
                 name="date"
                 type="date"
-                // defaultValue={lesson.date.toISOString().split('T')[0]}
+                defaultValue={formatDateForInput(lesson.date)}
               />
             </div>
             <div className="space-y-2">
@@ -68,8 +100,23 @@ export default function LessonEditClientForm({
                 id="time"
                 name="time"
                 type="time"
-                // defaultValue={lesson.hour_date}
+                defaultValue={formatTimeForInput(lesson.time)}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="status">Status</Label>
+              <Select name="status" defaultValue={lesson.status || "SCHEDULED"}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  {lessonStatusOptions.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {status.replace(/_/g, " ")}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="notes">Notes</Label>
@@ -78,12 +125,14 @@ export default function LessonEditClientForm({
                 name="notes"
                 placeholder="Enter additional notes or instructions"
                 className="min-h-[150px]"
-                defaultValue={lesson.notes}
+                defaultValue={lesson.notes || ""}
               />
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" type="button" asChild>
+              <Link href={`/dashboard/lessons/${slug}`}>Cancel</Link>
+            </Button>
             <Button type="submit">Save Changes</Button>
           </CardFooter>
         </Card>

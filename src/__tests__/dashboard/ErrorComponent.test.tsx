@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ErrorComponent } from '@/components/common/ErrorComponent';
+import { ErrorComponent } from '@/app/dashboard/@components/ErrorComponent';
 
 // Mock sonner toast
 jest.mock('sonner', () => ({

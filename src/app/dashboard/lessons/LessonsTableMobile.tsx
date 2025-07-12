@@ -5,11 +5,12 @@ import Link from "next/link";
 import type { Lesson } from "@/types/Lesson";
 import type { User as UserType } from "@/types/User";
 import { useState } from "react";
+import { LessonStatusEnum } from "@/schemas";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { PaginationComponent } from "@/app/dashboard/components/pagination/PaginationComponent";
+import { PaginationComponent } from "@/app/dashboard/@components/pagination/PaginationComponent";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface LessonWithProfiles extends Lesson {
@@ -63,6 +64,9 @@ export function LessonsTableMobile({
     }
   }
 
+  // Get lesson status options from the schema
+  const lessonStatusOptions = LessonStatusEnum.options;
+
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -105,88 +109,99 @@ export function LessonsTableMobile({
   return (
     <div className="space-y-4">
       <div className="grid gap-4">
-        {paginatedLessons.map((lesson: LessonWithProfiles) => (
-          <Card key={lesson.id} className="overflow-hidden">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-lesson-blue-bg flex items-center justify-center">
-                    <span className="text-lesson-blue-text font-medium">
-                      L{lesson.lesson_number || "?"}
+        {paginatedLessons.map((lesson: LessonWithProfiles) => {
+          // Validate lesson status against schema
+          const isValidStatus = lesson.status && lesson.status ? 
+            lessonStatusOptions.includes(lesson.status as any) : 
+            false;
+          
+          const displayStatus = isValidStatus && lesson.status ? 
+            lesson.status.replace(/_/g, " ") : 
+            "Unknown";
+
+          return (
+            <Card key={lesson.id} className="overflow-hidden">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-lesson-blue-bg flex items-center justify-center">
+                      <span className="text-lesson-blue-text font-medium">
+                        L{lesson.lesson_number || "?"}
+                      </span>
+                    </div>
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {lesson.lesson_number
+                          ? `Lesson ${lesson.lesson_number}`
+                          : "Lesson"}
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="mt-1 bg-lesson-blue-bg text-lesson-blue-text border-lesson-blue-border"
+                      >
+                        {lesson.date
+                          ? formatDate(lesson.date.toString())
+                          : formatDate(lesson.created_at)}
+                      </Badge>
+                    </div>
+                  </div>
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="outline"
+                    className="bg-lesson-blue-bg hover:bg-lesson-blue-bg/80 text-lesson-blue-text border-lesson-blue-border"
+                  >
+                    <Link href={`/dashboard/lessons/${lesson.id}`}>
+                      View Details
+                    </Link>
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-full bg-lesson-purple-bg flex items-center justify-center">
+                      <User className="h-4 w-4 text-lesson-purple-text" />
+                    </div>
+                    <span className="text-gray-900">
+                      {getEmail(lesson.profile?.email || "")}
                     </span>
                   </div>
-                  <div>
-                    <div className="font-medium text-gray-900">
-                      {lesson.lesson_number
-                        ? `Lesson ${lesson.lesson_number}`
-                        : "Lesson"}
+
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-full bg-lesson-green-bg flex items-center justify-center">
+                      <User className="h-4 w-4 text-lesson-green-text" />
                     </div>
+                    <span className="text-gray-900">
+                      {getEmail(lesson.teacher_profile?.email || "")}
+                    </span>
+                  </div>
+
+                  {lesson.time && (
+                    <div className="flex items-center gap-2">
+                      <div className="h-8 w-8 rounded-full bg-lesson-orange-bg flex items-center justify-center">
+                        <Clock className="h-4 w-4 text-lesson-orange-text" />
+                      </div>
+                      <span className="text-gray-900">
+                        {lesson.time.toString()}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-2">
                     <Badge
                       variant="outline"
-                      className="mt-1 bg-lesson-blue-bg text-lesson-blue-text border-lesson-blue-border"
+                      className={`${getStatusColor(
+                        lesson.status || "scheduled",
+                      )} border-transparent`}
                     >
-                      {lesson.date
-                        ? formatDate(lesson.date.toString())
-                        : formatDate(lesson.created_at)}
+                      {displayStatus}
                     </Badge>
                   </div>
                 </div>
-                <Button
-                  asChild
-                  size="sm"
-                  variant="outline"
-                  className="bg-lesson-blue-bg hover:bg-lesson-blue-bg/80 text-lesson-blue-text border-lesson-blue-border"
-                >
-                  <Link href={`/dashboard/lessons/${lesson.id}`}>
-                    View Details
-                  </Link>
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-full bg-lesson-purple-bg flex items-center justify-center">
-                    <User className="h-4 w-4 text-lesson-purple-text" />
-                  </div>
-                  <span className="text-gray-900">
-                    {getEmail(lesson.profile?.email || "")}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-full bg-lesson-green-bg flex items-center justify-center">
-                    <User className="h-4 w-4 text-lesson-green-text" />
-                  </div>
-                  <span className="text-gray-900">
-                    {getEmail(lesson.teacher_profile?.email || "")}
-                  </span>
-                </div>
-
-                {lesson.time && (
-                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-lesson-orange-bg flex items-center justify-center">
-                      <Clock className="h-4 w-4 text-lesson-orange-text" />
-                    </div>
-                    <span className="text-gray-900">
-                      {lesson.time.toString()}
-                    </span>
-                  </div>
-                )}
-
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant="outline"
-                    className={`${getStatusColor(
-                      lesson.status || "scheduled",
-                    )} border-transparent`}
-                  >
-                    {lesson.status || "Scheduled"}
-                  </Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {totalPages > 1 && (

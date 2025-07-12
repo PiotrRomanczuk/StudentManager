@@ -4,9 +4,9 @@ import { useMemo, useState } from "react";
 import { SongTable } from "./SongTable";
 import { SongTableMobile } from "./SongTableMobile";
 import { TEACHER_TABLE_HEADERS, STUDENT_TABLE_HEADERS } from "./TABLE_HEADERS";
-import { Song } from "@/types/Song";
+import { Song } from "../../../../types/Song";
 import { SongSearchBar } from "./SongSearchBar";
-import { PaginationComponent } from "@/app/dashboard/components/pagination/PaginationComponent";
+import { PaginationComponent } from "../../@components/pagination/PaginationComponent";
 import { useSongSorting } from "./hooks/useSongSorting";
 import { useSongFiltering } from "./hooks/useSongFiltering";
 import { useSongTable } from "./hooks/useSongTable";
@@ -23,44 +23,11 @@ export default function SongsClientComponent({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
-  const { sortConfig, handleSort, getSortIndicator } = useSongSorting();
-  const { setSearchQuery, filteredSongs } = useSongFiltering(songs);
-
-  // Apply sorting to filtered songs
-  const sortedAndFilteredSongs = useMemo(() => {
-    if (!sortConfig.key) return filteredSongs;
-
-    return [...filteredSongs].sort((a, b) => {
-      const aValue = a[sortConfig.key as keyof Song];
-      const bValue = b[sortConfig.key as keyof Song];
-
-      if (aValue === null || aValue === undefined) return 1;
-      if (bValue === null || bValue === undefined) return -1;
-
-      if (typeof aValue === "string" && typeof bValue === "string") {
-        return sortConfig.direction === "asc"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      }
-
-      if (aValue instanceof Date && bValue instanceof Date) {
-        return sortConfig.direction === "asc"
-          ? aValue.getTime() - bValue.getTime()
-          : bValue.getTime() - aValue.getTime();
-      }
-
-      if (typeof aValue === "number" && typeof bValue === "number") {
-        return sortConfig.direction === "asc"
-          ? aValue - bValue
-          : bValue - aValue;
-      }
-
-      return 0;
-    });
-  }, [filteredSongs, sortConfig]);
+  const { searchQuery, setSearchQuery, filteredSongs } = useSongFiltering(songs);
+  const { sortKey, sortDirection, sortedSongs, handleSort, getSortIndicator } = useSongSorting(filteredSongs);
 
   const { currentSongs } = useSongTable(
-    sortedAndFilteredSongs,
+    sortedSongs,
     currentPage,
     itemsPerPage,
   );
@@ -71,7 +38,7 @@ export default function SongsClientComponent({
     : (["view"] as const);
   const showStatus = !isAdmin;
 
-  const totalPages = Math.ceil(sortedAndFilteredSongs.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedSongs.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

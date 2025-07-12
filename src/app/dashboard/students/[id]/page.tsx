@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { ErrorComponent } from "../../../../components/common/ErrorComponent";
+import { ErrorComponent } from "../../@components/ErrorComponent";
 
 export default async function StudentDetailPage({
   params,
