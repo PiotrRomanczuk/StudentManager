@@ -1,16 +1,4 @@
 import { Song } from '@/types/Song';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { useState, useMemo, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { SongsTableDesktop } from './SongsTableDesktop';
 import { SongsTableMobile } from './SongsTableMobile';
 import { SongsTablePagination } from './SongsTablePagination';

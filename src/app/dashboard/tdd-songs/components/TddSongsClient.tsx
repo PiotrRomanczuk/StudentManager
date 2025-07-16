@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { useSongApi } from "../hooks/useSongApi";
 import { SongsTable } from "./SongsTable";
 import { SimplePagination } from "./SimplePagination";
@@ -32,7 +32,6 @@ export default function TddSongsClient({
   initialSortBy = 'created_at',
   initialSortOrder = 'desc'
 }: TddSongsClientProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   
   const {
@@ -45,7 +44,7 @@ export default function TddSongsClient({
   } = useSongApi({ userId, isAdmin, autoFetch: false });
 
   // Get current URL parameters
-  const getCurrentParams = () => {
+  const getCurrentParams = useCallback(() => {
     const page = parseInt(searchParams.get('page') || initialPage.toString());
     const limit = parseInt(searchParams.get('limit') || initialLimit.toString());
     const search = searchParams.get('search') || initialSearch;
@@ -56,7 +55,7 @@ export default function TddSongsClient({
     const sortOrder = (searchParams.get('sortOrder') || initialSortOrder) as 'asc' | 'desc';
     
     return { page, limit, search, level, key, author, sortBy, sortOrder };
-  };
+  }, [searchParams, initialPage, initialLimit, initialSearch, initialLevel, initialKey, initialAuthor, initialSortBy, initialSortOrder]);
 
   // Fetch songs when URL parameters change
   useEffect(() => {
@@ -76,7 +75,7 @@ export default function TddSongsClient({
     } else {
       fetchUserSongs();
     }
-  }, [searchParams, isAdmin, fetchAllSongs, fetchUserSongs]);
+  }, [searchParams, isAdmin, fetchAllSongs, fetchUserSongs, getCurrentParams]);
 
   const handleViewSong = (song: Song) => {
     console.log("View song:", song);

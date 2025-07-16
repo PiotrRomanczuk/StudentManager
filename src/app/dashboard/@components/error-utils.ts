@@ -15,8 +15,7 @@ export function determineErrorType(
   error: string | Error,
   statusCode?: number
 ): DashboardErrorProps['errorType'] {
-  const message = typeof error === 'string' ? error : error.message;
-  const lowerMessage = message.toLowerCase();
+  const lowerMessage = typeof error === 'string' ? error : error.message;
 
   // Check for authentication errors
   if (
@@ -88,27 +87,19 @@ export function generateErrorId(): string {
  * Extracts additional information based on error type
  */
 export function getAdditionalInfo(
-  errorType: DashboardErrorProps['errorType'],
-  error: string | Error
+  errorType: DashboardErrorProps['errorType']
 ): string {
-  const message = typeof error === 'string' ? error : error.message;
-
   switch (errorType) {
     case 'auth':
       return "Please ensure you're signed in with the correct account. If the problem persists, try signing out and signing back in.";
-    
     case 'network':
       return "Check your internet connection and try again. If the problem continues, the server might be temporarily unavailable.";
-    
     case 'permission':
       return "This action requires specific permissions. Contact your administrator if you believe you should have access.";
-    
     case 'data':
       return "The requested data could not be found or loaded. This might be due to a temporary issue or the data may have been moved.";
-    
     case 'server':
       return "We're experiencing technical difficulties. Our team has been notified and is working to resolve this issue.";
-    
     default:
       return "An unexpected error occurred. Please try again, and if the problem persists, contact support.";
   }
@@ -122,12 +113,11 @@ export function createErrorConfig(
   statusCode?: number,
   customErrorId?: string
 ): DashboardErrorProps {
-  const message = typeof error === 'string' ? error : error.message;
   const errorType = determineErrorType(error, statusCode);
-  const additionalInfo = getAdditionalInfo(errorType, error);
+  const additionalInfo = getAdditionalInfo(errorType);
 
   return {
-    error: message,
+    error: typeof error === 'string' ? error : error.message,
     errorType,
     statusCode,
     additionalInfo,
@@ -152,8 +142,8 @@ export function handleCommonErrors(
   } else if (typeof error === 'string') {
     errorMessage = error;
   } else if (error && typeof error === 'object' && 'status' in error) {
-    statusCode = (error as any).status;
-    errorMessage = (error as any).message || errorMessage;
+    statusCode = (error as unknown as { status: number }).status;
+    errorMessage = (error as unknown as { message?: string }).message || errorMessage;
   }
 
   // Add context to error message if provided

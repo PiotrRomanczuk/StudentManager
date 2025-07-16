@@ -3,7 +3,6 @@ import { toast } from 'sonner';
 import {
   getAllSongs,
   getUserSongs,
-  getSongById,
   createSong,
   updateSong,
   deleteSong,
@@ -20,7 +19,6 @@ import {
   getAdminFavorites,
   getAdminUserSongs,
   handleSongApiError,
-  type SongsResponse,
   type FavoritesResponse,
   type SongStats,
   type BulkImportResult,

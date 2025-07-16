@@ -1,26 +1,8 @@
 import { BASE_URL } from "@/constants/BASE_URL";
 import { fetchApi, APIError } from "./api-helpers";
+import { Song } from "@/types/Song";
 
 // Types for API responses
-export interface Song {
-  id: string;
-  title: string;
-  author?: string;
-  level?: string;
-  key?: string;
-  chords?: string;
-  audio_files?: string[];
-  ultimate_guitar_link?: string;
-  short_title?: string;
-  created_at: string;
-  updated_at: string;
-  status?: string; // For songs with status (from lessons)
-}
-
-export interface SongWithStatus extends Song {
-  status: string;
-}
-
 export interface PaginationInfo {
   page: number;
   limit: number;
@@ -31,7 +13,7 @@ export interface PaginationInfo {
 export interface SongsResponse {
   songs: Song[];
   pagination?: PaginationInfo;
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
 }
 
 export interface FavoritesResponse {
@@ -64,7 +46,7 @@ export interface ValidationResult {
   validation_results: Array<{
     index: number;
     valid: boolean;
-    errors?: any[];
+    errors?: unknown[];
   }>;
   summary: {
     total: number;
@@ -129,11 +111,11 @@ export async function getUserSongs(userId?: string): Promise<SongsResponse> {
 /**
  * Get songs for a specific student
  */
-export async function getStudentSongs(studentId: string): Promise<{ songs: SongWithStatus[]; total: number }> {
+export async function getStudentSongs(studentId: string): Promise<{ songs: Song[]; total: number }> {
   const url = new URL(`${BASE_URL}/api/song/student-songs`);
   url.searchParams.append("studentId", studentId);
 
-  return fetchApi<{ songs: SongWithStatus[]; total: number }>(url.toString());
+  return fetchApi<{ songs: Song[]; total: number }>(url.toString());
 }
 
 /**
@@ -222,10 +204,10 @@ export async function getUserFavorites(userId: string): Promise<FavoritesRespons
 /**
  * Add a song to favorites
  */
-export async function addToFavorites(userId: string, songId: string): Promise<any> {
+export async function addToFavorites(userId: string, songId: string): Promise<unknown> {
   const url = `${BASE_URL}/api/song/favorites`;
   
-  return fetchApi<any>(url, {
+  return fetchApi<unknown>(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -335,11 +317,11 @@ export async function getSongStats(): Promise<SongStats> {
 /**
  * Get user test songs
  */
-export async function getUserTestSongs(userId: string): Promise<SongWithStatus[]> {
+export async function getUserTestSongs(userId: string): Promise<Song[]> {
   const url = new URL(`${BASE_URL}/api/song/user-test-song`);
   url.searchParams.append("userId", userId);
 
-  return fetchApi<SongWithStatus[]>(url.toString());
+  return fetchApi<Song[]>(url.toString());
 }
 
 // Error handling utilities

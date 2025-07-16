@@ -1,71 +1,73 @@
-// Pure functions for song API business logic - testable without Next.js dependencies
+// // Pure functions for song API business logic - testable without Next.js dependencies
 
-export interface SongQueryParams {
-  level?: string;
-  key?: string;
-  author?: string;
-  search?: string;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: string;
-}
+// import { Song } from "@/types/Song";
 
-export interface SongResponse {
-  songs: any[];
-  count?: number;
-}
+// export interface SongQueryParams {
+//   level?: string;
+//   key?: string;
+//   author?: string;
+//   search?: string;
+//   page?: number;
+//   limit?: number;
+//   sortBy?: string;
+//   sortOrder?: string;
+// }
 
-export interface SongError {
-  error: string;
-  status: number;
-}
+// export interface SongResponse {
+//   songs: Song[];
+//   count?: number;
+// }
 
-export type SongResult = SongResponse | SongError;
+// export interface SongError {
+//   error: string;
+//   status: number;
+// }
 
-export async function getSongsHandler(
-  supabase: any,
-  user: any,
-  profile: any,
-  query: SongQueryParams
-): Promise<SongResult> {
-  if (!user) {
-    return { error: 'Unauthorized', status: 401 };
-  }
+// export type SongResult = SongResponse | SongError;
 
-  if (!profile) {
-    return { error: 'Forbidden', status: 403 };
-  }
+// export async function getSongsHandler(
+//   supabase: unknown,
+//   user: { id: string } | null,
+//   profile: { isAdmin?: boolean } | null,
+//   query: SongQueryParams
+// ): Promise<SongResult> {
+//   if (!user) {
+//     return { error: 'Unauthorized', status: 401 };
+//   }
 
-  const {
-    level,
-    key,
-    author,
-    search,
-    page = 1,
-    limit = 50,
-    sortBy = 'created_at',
-    sortOrder = 'desc',
-  } = query;
+//   if (!profile) {
+//     return { error: 'Forbidden', status: 403 };
+//   }
 
-  let dbQuery = supabase.from('songs').select('*', { count: 'exact' });
+//   const {
+//     level,
+//     key,
+//     author,
+//     search,
+//     page = 1,
+//     limit = 50,
+//     sortBy = 'created_at',
+//     sortOrder = 'desc',
+//   } = query;
 
-  if (!profile.isAdmin) {
-    dbQuery = dbQuery.eq('userId', user.id);
-  }
-  if (level) dbQuery = dbQuery.eq('level', level);
-  if (key) dbQuery = dbQuery.eq('key', key);
-  if (author) dbQuery = dbQuery.eq('author', author);
-  if (search) dbQuery = dbQuery.ilike('title', `%${search}%`);
+//   let dbQuery = (supabase as unknown as { from: (table: string) => { select: (columns: string, options: { count: string }) => any } }).from('songs').select('*', { count: 'exact' });
 
-  dbQuery = dbQuery.order(sortBy, { ascending: sortOrder === 'asc' });
-  dbQuery = dbQuery.range((page - 1) * limit, page * limit - 1);
+//   if (!profile.isAdmin) {
+//     dbQuery = dbQuery.eq('userId', user.id);
+//   }
+//   if (level) dbQuery = dbQuery.eq('level', level);
+//   if (key) dbQuery = dbQuery.eq('key', key);
+//   if (author) dbQuery = dbQuery.eq('author', author);
+//   if (search) dbQuery = dbQuery.ilike('title', `%${search}%`);
 
-  const { data: songs, error, count } = await dbQuery;
+//   dbQuery = dbQuery.order(sortBy, { ascending: sortOrder === 'asc' });
+//   dbQuery = dbQuery.range((page - 1) * limit, page * limit - 1);
 
-  if (error) {
-    return { error: error.message, status: 500 };
-  }
+//   const { data: songs, error, count } = await dbQuery;
 
-  return { songs, count, status: 200 };
-} 
+//   if (error) {
+//     return { error: error.message, status: 500 };
+//   }
+
+//   return { songs, count, status: 200 };
+// } 

@@ -1,9 +1,6 @@
 import NavBar from "@/app/dashboard/@components/NavBar/NavBar";
-import { getUserAndAdmin } from "./utils/getUserAndAdmin";
-import { createClient } from "@/utils/supabase/clients/server";
 import Sidebar from "./@components/sidebar/Sidebar";
 import { redirect } from "next/navigation";
-// import { UserProvider } from "@/context/userContext";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -24,7 +21,7 @@ export default async function RootLayout({ children }: LayoutProps) {
         {/* </UserProvider> */}
       </div>
     );
-  } catch (error) {
+  } catch {
     // Redirect to signin page if user is not authenticated
     redirect('/auth/signin');
   }

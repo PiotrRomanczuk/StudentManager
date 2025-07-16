@@ -1,11 +1,7 @@
 import { User, Session } from "@supabase/supabase-js";
 
-export interface AuthUser extends User {
-  // Add any custom user properties here
-}
-
 export interface AuthSession extends Session {
-  user: AuthUser;
+  user: User;
 }
 
 export interface AuthError {
@@ -14,7 +10,7 @@ export interface AuthError {
 }
 
 export interface AuthResponse {
-  user: AuthUser | null;
+  user: User | null;
   session: AuthSession | null;
   error?: AuthError;
 }
@@ -34,6 +30,6 @@ export interface Profile {
 }
 
 export interface UserWithProfile {
-  user: AuthUser;
+  user: User;
   profile: Profile;
 } 

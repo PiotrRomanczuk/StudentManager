@@ -11,14 +11,14 @@ export async function GET(
       process.env.SUPABASE_SERVICE_ROLE_KEY // Use server-side env var
     );
 
-    const { data: user, error } = await supabase.auth.admin.getUserById(params.id);
+    const { data: user } = await supabase.auth.admin.getUserById(params.id);
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+    if (user.error) {
+      return NextResponse.json({ error: user.error.message }, { status: 400 });
     }
 
     return NextResponse.json({ user });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

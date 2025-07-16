@@ -135,7 +135,7 @@ export function DashboardErrorSite({
       try {
         await retryAction();
         toast.success("Operation completed successfully");
-      } catch (err) {
+      } catch {
         toast.error("Failed to retry operation");
       } finally {
         setIsRetrying(false);

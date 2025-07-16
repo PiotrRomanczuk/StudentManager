@@ -50,7 +50,7 @@ export default async function TddSongsPage({ searchParams }: PageProps) {
         />
       </div>
     );
-  } catch (error) {
+  } catch {
     // Redirect to signin page if user is not authenticated
     redirect('/auth/signin');
   }

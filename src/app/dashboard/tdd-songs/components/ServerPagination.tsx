@@ -12,8 +12,6 @@ interface ServerPaginationProps {
   itemsPerPage: number;
   showItemsPerPage?: boolean;
   className?: string;
-  router?: ReturnType<typeof useRouter>;
-  searchParams?: URLSearchParams;
 }
 
 export function ServerPagination({
@@ -23,11 +21,10 @@ export function ServerPagination({
   itemsPerPage,
   showItemsPerPage = false,
   className = '',
-  router: injectedRouter,
-  searchParams: injectedSearchParams,
 }: ServerPaginationProps) {
-  const router = injectedRouter || useRouter();
-  const searchParams = injectedSearchParams || useSearchParams();
+  // Always use hooks from next/navigation
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Calculate display information
   const startItem = totalItems > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0;
