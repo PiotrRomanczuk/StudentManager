@@ -1,8 +1,7 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { NextRequest, NextResponse } from "next/server";
 import { 
-  SongStatusEnum,
-  type SongStatus
+  SongStatusEnum
 } from "@/schemas";
 
 export async function GET(

@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  eslint: 
-{
-  ignoreDuringBuilds: ['src/__tests__/'],
-},
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
   images: {
     remotePatterns: [
       {

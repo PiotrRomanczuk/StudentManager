@@ -1,6 +1,7 @@
 require('@testing-library/jest-dom');
 
 // Mock Next.js router
+/*
 jest.mock('next/navigation', () => ({
   useRouter() {
     return {
@@ -21,6 +22,7 @@ jest.mock('next/navigation', () => ({
   redirect: jest.fn(),
   revalidatePath: jest.fn(),
 }))
+*/
 
 // Mock Next.js Image component
 jest.mock('next/image', () => ({

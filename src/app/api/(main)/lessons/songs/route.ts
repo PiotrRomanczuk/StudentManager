@@ -2,7 +2,6 @@ import { createClient } from "@/utils/supabase/clients/server";
 import { NextRequest, NextResponse } from "next/server";
 import { 
   LessonSongSchema,
-  SongStatusEnum,
   type LessonSong
 } from "@/schemas";
 

@@ -19,11 +19,11 @@ export async function GET(req: NextRequest) {
     // Check if user has permission
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("isAdmin, isTeacher")
       .eq("user_id", user.id)
       .single();
 
-    if (!profile || (profile.role !== "admin" && profile.role !== "teacher")) {
+    if (!profile || (!profile.isAdmin && !profile.isTeacher)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Process songs based on format
-    let exportData: any;
+    let exportData: string;
     let contentType: string;
     let filename: string;
 
@@ -85,9 +85,9 @@ export async function GET(req: NextRequest) {
 
       case "csv":
         const csvHeaders = ["title", "author", "level", "key", "chords", "ultimate_guitar_link", "created_at"];
-        const csvData = songs?.map((song: any) => 
+        const csvData = songs?.map((song: Record<string, unknown>) => 
           csvHeaders.map(header => {
-            const value = song[header as keyof typeof song];
+            const value = song[header];
             return typeof value === 'string' ? `"${value.replace(/"/g, '""')}"` : value;
           }).join(',')
         ) || [];

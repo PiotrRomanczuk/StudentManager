@@ -18,11 +18,11 @@ export async function POST(request: NextRequest) {
     // Check if user has permission
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("isAdmin, isTeacher")
       .eq("user_id", user.id)
       .single();
 
-    if (!profile || (profile.role !== "admin" && profile.role !== "teacher")) {
+    if (!profile || (!profile.isAdmin && !profile.isTeacher)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
             successCount++;
           }
         }
-      } catch (error) {
+      } catch {
         results.push({
           title: song.title,
           status: "error",

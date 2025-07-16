@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { DifficultyLevelEnum, MusicKeyEnum, URLField, DescriptionField } from "./CommonSchema";
+import { DifficultyLevelEnum, MusicKeyEnum, URLField } from "./CommonSchema";
 
 // Song schema for validation
 export const SongSchema = z.object({

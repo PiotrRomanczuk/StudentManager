@@ -9,14 +9,14 @@ export async function getUserAndAdmin(supabase: SupabaseClient) {
   }
 
   // First, try to get the existing profile
-  const { data: isAdmin, error: userIsAdminError } = await supabase
+  const { data: profile, error: userProfileError } = await supabase
     .from("profiles")
-    .select("isAdmin")
+    .select("isAdmin, isStudent, isTeacher")
     .eq("user_id", user.user.id)
     .single();
 
   // If no profile exists, create one with default values
-  if (userIsAdminError && userIsAdminError.code === 'PGRST116') {
+  if (userProfileError && userProfileError.code === 'PGRST116') {
     // PGRST116 is the error code for "no rows returned" when using .single()
     const { data: newProfile, error: createError } = await supabase
       .from("profiles")
@@ -28,7 +28,7 @@ export async function getUserAndAdmin(supabase: SupabaseClient) {
         isTeacher: false,
         canEdit: false
       })
-      .select("isAdmin")
+      .select("isAdmin, isStudent, isTeacher")
       .single();
 
     if (createError) {
@@ -39,11 +39,11 @@ export async function getUserAndAdmin(supabase: SupabaseClient) {
     return { user: { ...user.user }, isAdmin: newProfile?.isAdmin || false };
   }
 
-  // If there's a different error in admin check, treat as non-admin instead of throwing
-  if (userIsAdminError) {
-    console.error("Error checking permissions:", userIsAdminError);
+  // If there's a different error in profile check, treat as non-admin instead of throwing
+  if (userProfileError) {
+    console.error("Error checking permissions:", userProfileError);
     return { user: { ...user.user }, isAdmin: false };
   }
 
-  return { user: { ...user.user }, isAdmin: isAdmin?.isAdmin || false };
+  return { user: { ...user.user }, isAdmin: profile?.isAdmin || false };
 }

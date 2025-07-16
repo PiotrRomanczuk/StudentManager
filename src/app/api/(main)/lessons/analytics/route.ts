@@ -47,8 +47,8 @@ export async function GET(request: NextRequest) {
     }
 
     const totalLessons = allLessons?.length || 0;
-    const completedLessons = allLessons?.filter((l: any) => l.status === "COMPLETED").length || 0;
-    const cancelledLessons = allLessons?.filter((l: any) => l.status === "CANCELLED").length || 0;
+    const completedLessons = allLessons?.filter((l: { status: string }) => l.status === "COMPLETED").length || 0;
+    const cancelledLessons = allLessons?.filter((l: { status: string }) => l.status === "CANCELLED").length || 0;
     const completionRate = totalLessons > 0 ? (completedLessons / totalLessons) * 100 : 0;
 
     // Get average lesson duration
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
 
     let avgDuration = 0;
     if (!durationError && lessonDurations) {
-      const totalDuration = lessonDurations.reduce((sum: any, ld: any) => sum + (ld.duration || 0), 0);
+      const totalDuration = lessonDurations.reduce((sum: number, ld: { duration?: number }) => sum + (ld.duration || 0), 0);
       avgDuration = lessonDurations.length > 0 ? totalDuration / lessonDurations.length : 0;
     }
 
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
     };
 
     if (!progressError && studentProgress) {
-      const statusCounts = studentProgress.reduce((acc: {[key: string]: any}, sp: any) => {
+      const statusCounts = studentProgress.reduce((acc: {[key: string]: number}, sp: { song_status: string }) => {
         acc[sp.song_status] = (acc[sp.song_status] || 0) + 1;
         return acc;
       }, {});
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
         songsMastered: statusCounts.mastered || 0,
         averageProgress: studentProgress.length > 0 ? 
           (statusCounts.mastered || 0) / studentProgress.length * 100 : 0,
-        levelDistribution: studentProgress.reduce((acc: {[key: string]: any}, sp: any) => {
+        levelDistribution: studentProgress.reduce((acc: {[key: string]: number}, sp: { songs?: { level?: string } }) => {
           const level = sp.songs?.level || 'unknown';
           acc[level] = (acc[level] || 0) + 1;
           return acc;
@@ -106,9 +106,19 @@ export async function GET(request: NextRequest) {
         profile:profiles!lessons_teacher_id_fkey(email, firstName, lastName)
       `);
 
-    let teacherPerformance = {};
+    let teacherPerformance: {[key: string]: {
+      totalLessons: number;
+      completedLessons: number;
+      completionRate: number;
+      teacher: { email?: string; firstName?: string; lastName?: string };
+    }} = {};
     if (!teacherError && teacherMetrics) {
-      teacherPerformance = teacherMetrics.reduce((acc: {[key: string]: any}, lesson: any) => {
+      teacherPerformance = teacherMetrics.reduce((acc: {[key: string]: {
+        totalLessons: number;
+        completedLessons: number;
+        completionRate: number;
+        teacher: { email?: string; firstName?: string; lastName?: string };
+      }}, lesson: { teacher_id: string; status: string; profile: { email?: string; firstName?: string; lastName?: string } }) => {
         const teacherId = lesson.teacher_id;
         if (!acc[teacherId]) {
           acc[teacherId] = {
@@ -132,15 +142,15 @@ export async function GET(request: NextRequest) {
       .from("lessons")
       .select("date, status, time");
 
-    let timeBasedAnalytics = {
-      peakHours: {} as {[key: string]: any},
-      weeklyDistribution: {} as {[key: string]: any},
-      monthlyTrends: {} as {[key: string]: any}
+    const timeBasedAnalytics = {
+      peakHours: {} as {[key: string]: number},
+      weeklyDistribution: {} as {[key: string]: number},
+      monthlyTrends: {} as {[key: string]: number}
     };
 
     if (!timeError && timeAnalytics) {
       // Analyze peak hours
-      timeAnalytics.forEach((lesson: any) => {
+      timeAnalytics.forEach((lesson: { time?: string }) => {
         if (lesson.time) {
           const hour = lesson.time.split(':')[0];
           timeBasedAnalytics.peakHours[hour] = (timeBasedAnalytics.peakHours[hour] || 0) + 1;
@@ -148,7 +158,7 @@ export async function GET(request: NextRequest) {
       });
 
       // Analyze weekly distribution
-      timeAnalytics.forEach((lesson: any) => {
+      timeAnalytics.forEach((lesson: { date?: string }) => {
         if (lesson.date) {
           const dayOfWeek = new Date(lesson.date).getDay();
           const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

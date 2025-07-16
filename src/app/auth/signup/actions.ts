@@ -3,15 +3,13 @@
 import { createClient } from "@/utils/supabase/clients/server";
 // import { redirect } from "next/navigation";
 
+import { validateSignUpForm } from "@/lib/auth-validation";
+
 export async function signup(formData: FormData) {
   const supabase = await createClient();
 
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-    firstName: formData.get("firstName") as string,
-    lastName: formData.get("lastName") as string,
-  };
+  // Validate form data
+  const data = validateSignUpForm(formData);
 
   const {
     data: { user },

@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { lessons, operation = "create" } = body;
+    const { lessons } = body;
 
     if (!Array.isArray(lessons) || lessons.length === 0) {
       return NextResponse.json({ error: "Lessons array is required and cannot be empty" }, { status: 400 });
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     const results = {
       created: [] as Lesson[],
-      errors: [] as any[],
+      errors: [] as Array<{ index: number; error: string; details?: unknown; data?: unknown }>,
       total: lessons.length,
       success: 0,
       failed: 0
@@ -166,7 +166,7 @@ export async function PUT(request: NextRequest) {
 
     const results = {
       updated: [] as Lesson[],
-      errors: [] as any[],
+      errors: [] as Array<{ index: number; error: string; details?: unknown; lessonId?: string }>,
       total: updates.length,
       success: 0,
       failed: 0
@@ -286,7 +286,7 @@ export async function DELETE(request: NextRequest) {
 
     const results = {
       deleted: [] as string[],
-      errors: [] as any[],
+      errors: [] as Array<{ index: number; error: string; lessonId?: string; details?: unknown }>,
       total: lessonIds.length,
       success: 0,
       failed: 0

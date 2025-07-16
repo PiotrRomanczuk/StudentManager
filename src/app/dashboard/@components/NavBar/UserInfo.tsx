@@ -1,47 +1,26 @@
 "use client";
 
-import { createClient } from "@/utils/supabase/clients/client";
 import { Button } from "@/components/ui/button";
 import { LogOut, User } from "lucide-react";
-import { logout } from "@/app/auth/signin/actions";
-import { useEffect, useState } from "react";
-
-interface UserMetadata {
-  name?: string;
-  avatar_url?: string;
-  [key: string]: string | undefined;
-}
-
-interface UserData {
-  id: string;
-  email?: string;
-  user_metadata?: UserMetadata;
-}
+import { useAuth } from "@/hooks/useAuth";
 
 const UserInfo = () => {
-  const [user, setUser] = useState<UserData | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { user, loading, error, signOut } = useAuth();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const supabase = createClient();
-        const { data, error } = await supabase.auth.getUser();
-        if (error) throw error;
-        setUser(data?.user);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      }
-    };
-
-    fetchUser();
-  }, []);
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 text-muted-foreground">
+        <User className="h-4 w-4" />
+        <span className="text-sm">Loading...</span>
+      </div>
+    );
+  }
 
   if (error || !user) {
     return (
       <div className="text-red-500 flex items-center gap-2">
         <User className="h-4 w-4" />
-        No user {error}
+        <span className="text-sm">No user {error}</span>
       </div>
     );
   }
@@ -55,7 +34,7 @@ const UserInfo = () => {
       <Button
         variant="ghost"
         size="sm"
-        onClick={logout}
+        onClick={signOut}
         className="hover:bg-destructive/10 hover:text-destructive transition-all duration-300 ease-in-out hover:scale-105 hover:translate-x-1"
       >
         <LogOut className="h-4 w-4 mr-2" />

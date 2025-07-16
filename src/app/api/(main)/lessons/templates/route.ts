@@ -1,8 +1,6 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { NextRequest, NextResponse } from "next/server";
 import { 
-  LessonInputSchema,
-  type LessonInput
 } from "@/schemas";
 
 export async function GET(request: NextRequest) {

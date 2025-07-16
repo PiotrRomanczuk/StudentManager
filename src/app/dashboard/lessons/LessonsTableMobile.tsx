@@ -112,7 +112,7 @@ export function LessonsTableMobile({
         {paginatedLessons.map((lesson: LessonWithProfiles) => {
           // Validate lesson status against schema
           const isValidStatus = lesson.status && lesson.status ? 
-            lessonStatusOptions.includes(lesson.status as any) : 
+            lessonStatusOptions.includes(lesson.status as "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "RESCHEDULED") : 
             false;
           
           const displayStatus = isValidStatus && lesson.status ? 

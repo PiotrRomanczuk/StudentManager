@@ -3,8 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { 
   LessonInputSchema, 
   LessonSchema,
-  type LessonInput,
-  type Lesson
+  type LessonInput
 } from "@/schemas";
 
 export async function POST(request: NextRequest) {

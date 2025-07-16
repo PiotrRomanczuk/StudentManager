@@ -30,8 +30,8 @@ export async function createClient(
       },
     },
     auth: {
-      autoRefreshToken: false,
-      persistSession: false,
+      autoRefreshToken: true,
+      persistSession: true,
     },
   });
 }

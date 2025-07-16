@@ -36,10 +36,10 @@ export default function LessonEditClientForm({
   const lessonStatusOptions = LessonStatusEnum.options;
 
   // Format date for input field
-  const formatDateForInput = (date: any) => {
+  const formatDateForInput = (date: unknown) => {
     if (!date) return "";
     try {
-      const dateObj = new Date(date);
+      const dateObj = new Date(date as string);
       return dateObj.toISOString().split('T')[0];
     } catch {
       return "";
@@ -47,7 +47,7 @@ export default function LessonEditClientForm({
   };
 
   // Format time for input field
-  const formatTimeForInput = (time: any) => {
+  const formatTimeForInput = (time: unknown) => {
     if (!time) return "";
     // Handle different time formats
     if (typeof time === 'string') {

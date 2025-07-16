@@ -2,9 +2,7 @@
 import { createClient } from "@/utils/supabase/clients/server";
 
 export default async function TestingPage() {
-  const supabase = await createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
-  );
+  const supabase = await createClient();
 
   // Get current user
   const { error } = await supabase.auth.admin.getUserById(

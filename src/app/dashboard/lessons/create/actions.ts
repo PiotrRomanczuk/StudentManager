@@ -28,7 +28,7 @@ export async function createLesson(formData: FormData) {
       time: time || undefined,
       title: title || undefined,
       notes: notes || undefined,
-      status: status as any || undefined,
+      status: (status as "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "RESCHEDULED") || undefined,
     };
 
     // Validate the data using the schema

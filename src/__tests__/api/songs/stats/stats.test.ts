@@ -34,7 +34,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should return song statistics for admin user', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true };
 
     mockSupabase.auth.getUser.mockResolvedValue({
       data: { user: mockUser },
@@ -51,8 +51,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(200);
@@ -71,8 +70,7 @@ describe('Song Stats API GET Operations', () => {
       error: null,
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(401);
@@ -81,7 +79,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should return 403 when user is not admin', async () => {
     const mockUser = { id: 'user123', email: 'user@example.com' };
-    const mockProfile = { role: 'teacher' };
+    const mockProfile = { isAdmin: false };
 
     mockSupabase.auth.getUser.mockResolvedValue({
       data: { user: mockUser },
@@ -95,8 +93,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(403);
@@ -105,7 +102,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should calculate songs by level correctly', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true };
     const mockSongsByLevel = [
       { level: 'beginner' },
       { level: 'beginner' },
@@ -137,8 +134,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(200);
@@ -151,7 +147,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should calculate songs by key correctly', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true };
     const mockSongsByKey = [
       { key: 'C' },
       { key: 'C' },
@@ -183,8 +179,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(200);
@@ -197,7 +192,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should calculate top authors correctly', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true };
     const mockTopAuthors = [
       { author: 'Artist 1' },
       { author: 'Artist 1' },
@@ -229,8 +224,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(200);
@@ -243,7 +237,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should calculate songs with audio correctly', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true };
 
     mockSupabase.auth.getUser.mockResolvedValue({
       data: { user: mockUser },
@@ -269,8 +263,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(200);
@@ -282,7 +275,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should calculate recent songs correctly', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true };
 
     mockSupabase.auth.getUser.mockResolvedValue({
       data: { user: mockUser },
@@ -308,8 +301,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(200);
@@ -318,7 +310,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should handle database errors gracefully', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true };
 
     mockSupabase.auth.getUser.mockResolvedValue({
       data: { user: mockUser },
@@ -339,8 +331,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(500);
@@ -349,7 +340,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should handle empty statistics', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true };
 
     mockSupabase.auth.getUser.mockResolvedValue({
       data: { user: mockUser },
@@ -366,8 +357,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(200);
@@ -380,7 +370,7 @@ describe('Song Stats API GET Operations', () => {
 
   it('should calculate average songs per author correctly', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true };
     const mockTopAuthors = [
       { author: 'Artist 1' },
       { author: 'Artist 1' },
@@ -412,8 +402,7 @@ describe('Song Stats API GET Operations', () => {
       return createChainedMock({ data: [], error: null });
     });
 
-    const request = new NextRequest('http://localhost:3000/api/song/stats');
-    const response = await GET(request);
+    const response = await GET();
     const result = await response.json();
 
     expect(response.status).toBe(200);

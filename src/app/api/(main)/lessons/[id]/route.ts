@@ -1,11 +1,8 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { NextRequest, NextResponse } from "next/server";
 import { 
-  LessonSchema, 
   LessonWithProfilesSchema, 
   LessonInputSchema,
-  type Lesson,
-  type LessonWithProfiles,
   type LessonInput
 } from "@/schemas";
 

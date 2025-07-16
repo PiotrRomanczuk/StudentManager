@@ -37,7 +37,7 @@ export const createSerializableLesson = (lesson: Lesson) => {
   }
 };
 
-export const validateLessonData = (data: any): SchemaLesson | null => {
+export const validateLessonData = (data: unknown): SchemaLesson | null => {
   try {
     return LessonSchema.parse(data);
   } catch (error) {

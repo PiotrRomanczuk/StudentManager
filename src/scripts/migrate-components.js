@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-
 // Component migration mapping
 const componentMigrations = {
   // Global UI components (already in correct place)

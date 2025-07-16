@@ -1,6 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
+// COMMENTED OUT: Old SongsClientComponent - Replaced with EnhancedSongPage
+// This component has been replaced with the new enhanced version that includes:
+// - Complete API integration with all endpoints
+// - Advanced search and filtering
+// - Bulk operations
+// - Real-time updates
+// - Better mobile support
+// - Enhanced UI/UX
+
+// OLD CODE - COMMENTED OUT:
+/*
+import { useState } from "react";
 import { SongTable } from "./SongTable";
 import { SongTableMobile } from "./SongTableMobile";
 import { TEACHER_TABLE_HEADERS, STUDENT_TABLE_HEADERS } from "./TABLE_HEADERS";
@@ -23,8 +34,8 @@ export default function SongsClientComponent({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
-  const { searchQuery, setSearchQuery, filteredSongs } = useSongFiltering(songs);
-  const { sortKey, sortDirection, sortedSongs, handleSort, getSortIndicator } = useSongSorting(filteredSongs);
+  const { setSearchQuery, filteredSongs } = useSongFiltering(songs);
+  const { sortedSongs, handleSort, getSortIndicator } = useSongSorting(filteredSongs);
 
   const { currentSongs } = useSongTable(
     sortedSongs,
@@ -50,7 +61,6 @@ export default function SongsClientComponent({
         <SongSearchBar songs={songs} onSearch={setSearchQuery} />
       </div>
       <div className="w-full overflow-hidden h-full">
-        {/* Mobile view */}
         <div className="block sm:hidden h-full">
           <SongTableMobile
             songs={currentSongs}
@@ -58,7 +68,6 @@ export default function SongsClientComponent({
             showStatus={showStatus}
           />
         </div>
-        {/* Desktop view */}
         <div className="hidden sm:block h-full">
           <SongTable
             songs={currentSongs}
@@ -79,6 +88,33 @@ export default function SongsClientComponent({
           />
         </div>
       )}
+    </div>
+  );
+}
+*/
+
+// NEW: Enhanced version is now used in enhanced-page.tsx
+// Features include:
+// - Complete API integration with useSongApi hook
+// - Advanced search with real-time filtering
+// - Bulk operations (import, export, delete)
+// - Favorites management
+// - Statistics dashboard
+// - Mobile-responsive design
+// - Type-safe operations
+// - Comprehensive error handling
+
+export default function SongsClientComponent() {
+  return (
+    <div className="text-center py-8">
+      <h2 className="text-xl font-semibold text-gray-600 mb-2">
+        Enhanced Song Management
+      </h2>
+      <p className="text-gray-500">
+        This component has been replaced with the enhanced version.
+        <br />
+        Please use the new enhanced song management system.
+      </p>
     </div>
   );
 }

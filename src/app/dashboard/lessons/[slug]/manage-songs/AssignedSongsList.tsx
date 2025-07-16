@@ -58,7 +58,7 @@ export default function AssignedSongsList({
               
               // Validate song status against schema
               const isValidStatus = lessonSong && lessonSong.song_status ? 
-                songStatusOptions.includes(lessonSong.song_status as any) : 
+                songStatusOptions.includes(lessonSong.song_status as "to_learn" | "started" | "remembered" | "with_author" | "mastered") : 
                 false;
               
               const displayStatus = isValidStatus && lessonSong ? 

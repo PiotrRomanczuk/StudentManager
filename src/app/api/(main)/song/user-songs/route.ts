@@ -20,7 +20,15 @@ export async function GET(req: NextRequest) {
       );
     }
     if (!lessons || lessons.length === 0) {
-      return NextResponse.json({ songs: [], total: 0 });
+      return NextResponse.json({ 
+        songs: [], 
+        pagination: {
+          page: 1,
+          limit: 50,
+          total: 0,
+          totalPages: 0
+        }
+      });
     }
     const lessonIds = lessons.map((lesson: { id: string }) => lesson.id);
 
@@ -36,7 +44,15 @@ export async function GET(req: NextRequest) {
       );
     }
     if (!lessonSongs || lessonSongs.length === 0) {
-      return NextResponse.json({ songs: [], total: 0 });
+      return NextResponse.json({ 
+        songs: [], 
+        pagination: {
+          page: 1,
+          limit: 50,
+          total: 0,
+          totalPages: 0
+        }
+      });
     }
     const songIdToStatus = lessonSongs.reduce(
       (
@@ -70,7 +86,17 @@ export async function GET(req: NextRequest) {
       ...song,
       status: songIdToStatus[(song as { id: string }).id] || null,
     }));
-    return NextResponse.json({ songs: songsWithStatus, total: count });
+    
+    const totalPages = Math.ceil((count || 0) / 50);
+    return NextResponse.json({ 
+      songs: songsWithStatus, 
+      pagination: {
+        page: 1,
+        limit: 50,
+        total: count || 0,
+        totalPages
+      }
+    });
   } else {
     const {
       data: allSongs,
@@ -83,6 +109,16 @@ export async function GET(req: NextRequest) {
         { status: 500 },
       );
     }
-    return NextResponse.json({ songs: allSongs, total: count });
+    
+    const totalPages = Math.ceil((count || 0) / 50);
+    return NextResponse.json({ 
+      songs: allSongs, 
+      pagination: {
+        page: 1,
+        limit: 50,
+        total: count || 0,
+        totalPages
+      }
+    });
   }
 }

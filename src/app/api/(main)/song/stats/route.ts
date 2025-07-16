@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/clients/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const supabase = await createClient();
 
@@ -17,11 +17,11 @@ export async function GET(req: NextRequest) {
     // Check if user is admin
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("isAdmin")
       .eq("user_id", user.id)
       .single();
 
-    if (!profile || profile.role !== "admin") {
+    if (!profile || !profile.isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

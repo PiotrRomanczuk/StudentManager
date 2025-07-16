@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/clients/server";
-import { SongSearchSchema, SongFilterSchema } from "@/schemas/SongSchema";
+import { } from "@/schemas/SongSchema";
 import { PaginationSchema } from "@/schemas/CommonSchema";
 
 export async function GET(req: NextRequest) {

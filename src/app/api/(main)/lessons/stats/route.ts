@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
       .select("lesson_id", { count: "exact" });
 
     const uniqueLessonsWithSongs = songsError ? 0 : 
-      new Set(lessonsWithSongs?.map((ls: any) => ls.lesson_id) || []).size;
+      new Set(lessonsWithSongs?.map((ls: { lesson_id: string }) => ls.lesson_id) || []).size;
 
     // Get average lessons per student (if userId not specified)
     let avgLessonsPerStudent = 0;
@@ -88,19 +88,19 @@ export async function GET(request: NextRequest) {
 
       let studentCount = 0;
       if (!studentError && studentStats) {
-        studentCount = new Set(studentStats.map((l: any) => l.student_id)).size;
+        studentCount = new Set(studentStats.map((l: { student_id: string }) => l.student_id)).size;
       }
       avgLessonsPerStudent = studentCount > 0 ? (totalLessons || 0) / studentCount : 0;
     }
 
     // Get upcoming lessons (scheduled for future)
-    const { count: upcomingLessons, error: upcomingError } = await baseQuery
+    const { count: upcomingLessons } = await baseQuery
       .eq("status", "SCHEDULED")
       .gte("date", new Date().toISOString());
 
     // Get completed lessons this month
     const currentMonthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).toISOString();
-    const { count: completedThisMonth, error: completedError } = await baseQuery
+    const { count: completedThisMonth } = await baseQuery
       .eq("status", "COMPLETED")
       .gte("date", currentMonthStart);
 

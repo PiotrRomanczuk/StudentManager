@@ -5,21 +5,17 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/clients/server";
 
+import { validateSignInForm } from "@/lib/auth-validation";
+
 export async function login(formData: FormData) {
   const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const dataForm = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-    options: {
-      rememberMe: formData.get("rememberMe") === "on",
-    },
-  };
+  // Validate form data
+  const dataForm = validateSignInForm(formData);
 
   const { error } = await supabase.auth.signInWithPassword(dataForm);
   if (error) {
+    console.error("Sign in error:", error);
     throw new Error(error.message || "Error signing in");
   }
 
@@ -40,12 +36,12 @@ export async function signInWithGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${BASE_URL}/api/auth/callback`,
+      redirectTo: `${BASE_URL}/auth/callback`,
     },
   });
 
   if (error) {
-    console.error("Error signing in with Google:", error);
+    console.error("Google sign in error:", error);
     throw new Error(error.message || "Error signing in with Google");
   }
 

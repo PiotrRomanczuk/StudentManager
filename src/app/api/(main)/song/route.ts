@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { SongInputSchema } from "@/schemas/SongSchema";
 import { NextRequest, NextResponse } from "next/server";
+import { getSongsHandler } from "./handlers";
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,72 +12,50 @@ export async function GET(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     // Check if user is admin
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
-      .eq("user_id", user.id)
+      .select("isAdmin")
+      .eq("user_id", user?.id)
       .single();
 
-    if (!profile || profile.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     // Parse query parameters
-    const level = searchParams.get("level");
-    const key = searchParams.get("key");
-    const author = searchParams.get("author");
-    const search = searchParams.get("search");
+    const level = searchParams.get("level") || undefined;
+    const key = searchParams.get("key") || undefined;
+    const author = searchParams.get("author") || undefined;
+    const search = searchParams.get("search") || undefined;
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "50");
     const sortBy = searchParams.get("sortBy") || "created_at";
     const sortOrder = searchParams.get("sortOrder") || "desc";
 
-    // Build query
-    let query = supabase.from("songs").select("*", { count: "exact" });
+    const result = await getSongsHandler(supabase, user, profile, {
+      level,
+      key,
+      author,
+      search,
+      page,
+      limit,
+      sortBy,
+      sortOrder,
+    });
 
-    // Apply filters
-    if (level) query = query.eq("level", level);
-    if (key) query = query.eq("key", key);
-    if (author) query = query.ilike("author", `%${author}%`);
-    if (search) {
-      query = query.or(`title.ilike.%${search}%,author.ilike.%${search}%,chords.ilike.%${search}%`);
+    if ('error' in result) {
+      return NextResponse.json({ error: result.error }, { status: result.status });
     }
 
-    // Apply pagination
-    const offset = (page - 1) * limit;
-    query = query.range(offset, offset + limit - 1);
-
-    // Apply sorting
-    query = query.order(sortBy, { ascending: sortOrder === "asc" });
-
-    // Execute query
-    const { data: songs, error, count } = await query;
-
-    if (error) {
-      console.error("Error fetching songs:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({
-      songs: songs || [],
+    // Calculate pagination info
+    const totalPages = Math.ceil((result.count || 0) / limit);
+    
+    return NextResponse.json({ 
+      songs: result.songs, 
       pagination: {
         page,
         limit,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / limit),
-      },
-      filters: {
-        level,
-        key,
-        author,
-        search,
-      },
-    });
+        total: result.count || 0,
+        totalPages
+      }
+    }, { status: 200 });
   } catch (error) {
     console.error("Error in songs API:", error);
     return NextResponse.json(
@@ -102,11 +81,11 @@ export async function POST(request: NextRequest) {
     // Check if user has permission to create songs
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("isAdmin, isTeacher")
       .eq("user_id", user.id)
       .single();
 
-    if (!profile || (profile.role !== "admin" && profile.role !== "teacher")) {
+    if (!profile || (!profile.isAdmin && !profile.isTeacher)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -177,11 +156,11 @@ export async function PUT(request: NextRequest) {
     // Check user role
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("isAdmin")
       .eq("user_id", user.id)
       .single();
 
-    if (profile?.role !== "admin" && song.userId !== user.id) {
+    if (!profile?.isAdmin && song.userId !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

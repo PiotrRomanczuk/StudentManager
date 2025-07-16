@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 import { NextRequest } from 'next/server';
 import { POST } from '@/app/api/(main)/song/route';
 import { createClient } from '@/utils/supabase/clients/server';
+import { expect } from '@jest/globals';
 
 // Mock Supabase client
 const mockSupabase = {
@@ -15,17 +16,6 @@ jest.mock('@/utils/supabase/clients/server', () => ({
   createClient: jest.fn(() => mockSupabase),
 }));
 
-const createChainedMock = (returnValue: any) => {
-  const chain = {} as any;
-  chain.select = jest.fn(() => chain);
-  chain.insert = jest.fn(() => chain);
-  chain.eq = jest.fn(() => chain);
-  chain.single = jest.fn(() => Promise.resolve(returnValue));
-  chain.maybeSingle = jest.fn(() => Promise.resolve(returnValue));
-  chain.then = (onFulfilled: any) => Promise.resolve(onFulfilled(returnValue)); // for await
-  return chain;
-};
-
 describe('Songs API POST Operations', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -33,7 +23,7 @@ describe('Songs API POST Operations', () => {
 
   it('should create a new song successfully', async () => {
     const mockUser = { id: 'user123', email: 'test@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true, isTeacher: false };
     const songData = {
       title: 'Test Song',
       author: 'Test Artist',
@@ -42,31 +32,24 @@ describe('Songs API POST Operations', () => {
       ultimate_guitar_link: 'https://example.com',
     };
 
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
-      error: null,
+    mockSupabase.auth.getUser.mockResolvedValue({ data: { user: mockUser }, error: null });
+    mockSupabase.from.mockImplementation((table) => {
+      if (table === 'profiles') {
+        return {
+          select: jest.fn().mockReturnThis(),
+          eq: jest.fn().mockReturnThis(),
+          single: jest.fn().mockResolvedValue({ data: mockProfile, error: null }),
+        };
+      }
+      if (table === 'songs') {
+        return {
+          insert: jest.fn().mockReturnThis(),
+          select: jest.fn().mockReturnThis(),
+          single: jest.fn().mockResolvedValue({ data: { id: 'song123', ...songData }, error: null }),
+        };
+      }
+      return {};
     });
-
-    // Mock profile query to return admin role
-    const mockProfileQuery = {
-      select: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ data: mockProfile, error: null }),
-    };
-
-    // Mock songs table operations
-    const mockSongsQuery = {
-      insert: jest.fn().mockReturnThis(),
-      select: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ 
-        data: { id: 'song123', ...songData, created_at: new Date(), updated_at: new Date() }, 
-        error: null 
-      }),
-    };
-
-    mockSupabase.from
-      .mockReturnValueOnce(mockProfileQuery) // First call for profile check
-      .mockReturnValueOnce(mockSongsQuery); // Second call for song insert
 
     const request = new NextRequest('http://localhost:3000/api/song', {
       method: 'POST',
@@ -82,10 +65,7 @@ describe('Songs API POST Operations', () => {
   });
 
   it('should return 401 when user is not authenticated', async () => {
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: null },
-      error: null,
-    });
+    mockSupabase.auth.getUser.mockResolvedValue({ data: { user: null }, error: null });
 
     const request = new NextRequest('http://localhost:3000/api/song', {
       method: 'POST',
@@ -101,21 +81,19 @@ describe('Songs API POST Operations', () => {
 
   it('should return 403 when user is not admin or teacher', async () => {
     const mockUser = { id: 'user123', email: 'test@example.com' };
-    const mockProfile = { role: 'student' }; // Student role - not allowed
+    const mockProfile = { isAdmin: false, isTeacher: false };
 
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
-      error: null,
+    mockSupabase.auth.getUser.mockResolvedValue({ data: { user: mockUser }, error: null });
+    mockSupabase.from.mockImplementation((table) => {
+      if (table === 'profiles') {
+        return {
+          select: jest.fn().mockReturnThis(),
+          eq: jest.fn().mockReturnThis(),
+          single: jest.fn().mockResolvedValue({ data: mockProfile, error: null }),
+        };
+      }
+      return {};
     });
-
-    // Mock profile query to return student role
-    const mockProfileQuery = {
-      select: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ data: mockProfile, error: null }),
-    };
-
-    mockSupabase.from.mockReturnValueOnce(mockProfileQuery);
 
     const request = new NextRequest('http://localhost:3000/api/song', {
       method: 'POST',
@@ -131,21 +109,19 @@ describe('Songs API POST Operations', () => {
 
   it('should return 400 for invalid song data', async () => {
     const mockUser = { id: 'user123', email: 'test@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true, isTeacher: false };
 
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
-      error: null,
+    mockSupabase.auth.getUser.mockResolvedValue({ data: { user: mockUser }, error: null });
+    mockSupabase.from.mockImplementation((table) => {
+      if (table === 'profiles') {
+        return {
+          select: jest.fn().mockReturnThis(),
+          eq: jest.fn().mockReturnThis(),
+          single: jest.fn().mockResolvedValue({ data: mockProfile, error: null }),
+        };
+      }
+      return {};
     });
-
-    // Mock profile query to return admin role
-    const mockProfileQuery = {
-      select: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ data: mockProfile, error: null }),
-    };
-
-    mockSupabase.from.mockReturnValueOnce(mockProfileQuery);
 
     const request = new NextRequest('http://localhost:3000/api/song', {
       method: 'POST',
@@ -161,7 +137,7 @@ describe('Songs API POST Operations', () => {
 
   it('should return 500 when database insert fails', async () => {
     const mockUser = { id: 'user123', email: 'test@example.com' };
-    const mockProfile = { role: 'admin' };
+    const mockProfile = { isAdmin: true, isTeacher: false };
     const songData = {
       title: 'Test Song',
       author: 'Test Artist',
@@ -170,31 +146,24 @@ describe('Songs API POST Operations', () => {
       ultimate_guitar_link: 'https://example.com',
     };
 
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
-      error: null,
+    mockSupabase.auth.getUser.mockResolvedValue({ data: { user: mockUser }, error: null });
+    mockSupabase.from.mockImplementation((table) => {
+      if (table === 'profiles') {
+        return {
+          select: jest.fn().mockReturnThis(),
+          eq: jest.fn().mockReturnThis(),
+          single: jest.fn().mockResolvedValue({ data: mockProfile, error: null }),
+        };
+      }
+      if (table === 'songs') {
+        return {
+          insert: jest.fn().mockReturnThis(),
+          select: jest.fn().mockReturnThis(),
+          single: jest.fn().mockResolvedValue({ data: null, error: { message: 'Database error' } }),
+        };
+      }
+      return {};
     });
-
-    // Mock profile query to return admin role
-    const mockProfileQuery = {
-      select: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ data: mockProfile, error: null }),
-    };
-
-    // Mock songs table operations with error
-    const mockSongsQuery = {
-      insert: jest.fn().mockReturnThis(),
-      select: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ 
-        data: null, 
-        error: { message: 'Database error' } 
-      }),
-    };
-
-    mockSupabase.from
-      .mockReturnValueOnce(mockProfileQuery) // First call for profile check
-      .mockReturnValueOnce(mockSongsQuery); // Second call for song insert
 
     const request = new NextRequest('http://localhost:3000/api/song', {
       method: 'POST',

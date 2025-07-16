@@ -146,7 +146,7 @@ export const parseDate = (dateString: string): Date => {
   return new Date(dateString);
 };
 
-export const isValidDate = (date: any): date is Date => {
+export const isValidDate = (date: unknown): date is Date => {
   return date instanceof Date && !isNaN(date.getTime());
 };
 

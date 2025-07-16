@@ -23,7 +23,7 @@ export const updateLesson = async (formData: FormData) => {
       notes: notes || undefined,
       date: date ? new Date(date).toISOString() : undefined,
       time: time || undefined,
-      status: status as any || undefined,
+      status: (status as "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "RESCHEDULED") || undefined,
     };
 
     // Validate the data using the schema
