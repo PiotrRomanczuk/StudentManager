@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+
+For every file created in any @/app directory, there must be a corresponding test file in the @/**tests** directory with the same relative path and filename (but under @/**tests**).
