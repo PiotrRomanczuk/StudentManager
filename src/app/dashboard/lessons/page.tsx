@@ -1,103 +1,59 @@
-import type { Lesson } from "@/types/Lesson";
-import type { User } from "@/types/User";
-import { createClient } from "@/utils/supabase/clients/server";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
 import { cookies } from "next/headers";
+import { getAllLessons } from "./lesson-api-helpers";
+import { createClient } from "@/utils/supabase/clients/server";
+import { LessonsHeader } from "./@components/LessonsHeader";
+import { LessonsFiltersCard } from "./@components/LessonsFiltersCard";
+import { LessonsContent } from "./@components/LessonsContent";
+import { LessonsPaginationInfo } from "./@components/LessonsPaginationInfo";
+import { transformLessonsData } from "./@components/LessonsDataTransformer";
+import { checkAdminStatus } from "./@components/AdminChecker";
+import { LessonStatus } from "@/schemas";
 
-import { Button } from "@/components/ui/button";
-import { LessonsTable } from "./LessonsTable";
-import { LessonsTableMobile } from "./LessonsTableMobile";
-import { getUserAndAdmin } from "../utils/getUserAndAdmin";
-import SearchBar from "@/app/dashboard/@components/SearchBar";
-import NoLesson from "./[slug]/@components/NoLesson";
-import { Skeleton } from "@/components/ui/skeleton";
-import { LessonFilters } from "./@components/LessonFilters";
-import { fetchLessonsData } from "./api/fetchLessons";
-import { fetchProfilesData } from "../songs/api/fetchProfiles";
-import { ErrorComponent } from "@/app/dashboard/@components/ErrorComponent";
-
-type Params = { user_id: string; sort?: string; filter?: string };
-
-export default async function Page({
+export default async function LessonsPage({
   searchParams,
 }: {
-  searchParams: Promise<Params>;
+  searchParams: Promise<{ sort?: string; filter?: string; studentId?: string }>;
 }) {
-  try {
-    const { user_id, sort = "created_at", filter } = await searchParams;
-    const supabase = await createClient();
-    const { isAdmin } = await getUserAndAdmin(supabase);
-    const cookieHeader = (await cookies()).toString();
+  const { sort = "created_at", filter, studentId } = await searchParams;
+  const cookieHeader = (await cookies()).toString();
 
-    const { lessons } = await fetchLessonsData(user_id, sort, filter, cookieHeader);
-    const { profiles } = await fetchProfilesData(cookieHeader);
+  // Get user and lessons data
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  // Check admin status
+  const isAdmin = await checkAdminStatus(user?.id);
 
-    const lessonsWithProfiles = lessons?.map((lesson: Lesson) => ({
-      ...lesson,
-      profile: profiles?.find((p: User) => p.user_id === lesson.student_id),
-      teacher_profile: profiles?.find(
-        (p: User) => p.user_id === lesson.teacher_id,
-      ),
-    }));
+  // Get lessons data
+  const lessonsData = await getAllLessons({
+    userId: user?.id,
+    sort: sort as "date" | "lesson_number" | "created_at",
+    filter: filter as LessonStatus | undefined,
+    studentId: studentId,
+    cookieHeader
+  });
 
-    return (
-      <div className="container mx-auto py-6">
-        <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <h1 className="text-3xl font-bold">Lessons</h1>
-          {isAdmin && (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
-              <LessonFilters currentSort={sort} currentFilter={filter || null} />
-              <div className="flex items-center gap-4 w-full sm:w-auto">
-                <SearchBar profiles={profiles} />
-                <Button
-                  asChild
-                  className="bg-primary hover:bg-primary/90 text-white font-medium transition-all duration-200 shadow-md hover:shadow-lg"
-                >
-                  <Link
-                    href="/dashboard/lessons/create"
-                    className="flex items-center gap-2 px-4 py-2"
-                  >
-                    <Plus className="h-5 w-5 text-black" />
-                    <span className="hidden md:block text-black">
-                      Create Lesson
-                    </span>
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-        <Suspense
-          fallback={
-            <div className="space-y-4">
-              {[...Array(3)].map((_, i) => (
-                <Skeleton key={i} className="h-24 w-full" />
-              ))}
-            </div>
-          }
-        >
-          {!lessons?.length ? (
-            <NoLesson />
-          ) : (
-            <>
-              <div className="block sm:hidden">
-                <LessonsTableMobile lessons={lessonsWithProfiles} />
-              </div>
-              <div className="hidden sm:block">
-                <LessonsTable lessons={lessonsWithProfiles} />
-              </div>
-            </>
-          )}
-        </Suspense>
-      </div>
-    );
-  } catch (error: unknown) {
-    return (
-      <ErrorComponent
-        error={error instanceof Error ? error.message : "An error occurred"}
+  const { lessons = [], pagination } = lessonsData;
+  
+  // Transform lessons data
+  const transformedLessons = transformLessonsData(lessons);
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <LessonsHeader isAdmin={isAdmin} />
+      
+      <LessonsFiltersCard 
+        currentSort={sort} 
+        currentFilter={filter || null} 
+        isAdmin={isAdmin}
       />
-    );
-  }
+      
+      <LessonsContent lessons={transformedLessons} isAdmin={isAdmin} />
+      
+      <LessonsPaginationInfo 
+        currentCount={transformedLessons.length} 
+        totalCount={pagination?.total || 0} 
+      />
+    </div>
+  );
 }

@@ -80,7 +80,12 @@ describe("GET /api/song/user-songs", () => {
           { id: "song-1", title: "Song 1", author: "Author 1", status: "learning" },
           { id: "song-2", title: "Song 2", author: "Author 2", status: "completed" },
         ],
-        total: 2,
+        pagination: {
+          total: 2,
+          page: 1,
+          limit: 50,
+          totalPages: 1,
+        },
       });
     });
 
@@ -102,7 +107,15 @@ describe("GET /api/song/user-songs", () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data).toEqual({ songs: [], total: 0 });
+      expect(data).toEqual({ 
+        songs: [], 
+        pagination: {
+          total: 0,
+          page: 1,
+          limit: 50,
+          totalPages: 0,
+        }
+      });
     });
 
     it("should return empty array when lessons have no songs", async () => {
@@ -134,7 +147,15 @@ describe("GET /api/song/user-songs", () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data).toEqual({ songs: [], total: 0 });
+      expect(data).toEqual({ 
+        songs: [], 
+        pagination: {
+          total: 0,
+          page: 1,
+          limit: 50,
+          totalPages: 0,
+        }
+      });
     });
 
     it("should handle error when fetching lessons", async () => {
@@ -257,7 +278,12 @@ describe("GET /api/song/user-songs", () => {
       expect(response.status).toBe(200);
       expect(data).toEqual({
         songs: mockSongs,
-        total: 2,
+        pagination: {
+          total: 2,
+          page: 1,
+          limit: 50,
+          totalPages: 1,
+        },
       });
     });
 

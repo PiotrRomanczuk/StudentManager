@@ -105,7 +105,7 @@ export default function AccountForm({ user }: { user: User | null }) {
         </div>
 
         <div className="pt-2">
-          <form action="/api/auth/signout" method="post">
+          <form action="/api/auth/session/signout" method="post">
             <button
               className="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
               type="submit"

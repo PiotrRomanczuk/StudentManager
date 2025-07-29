@@ -22,8 +22,8 @@ export const LessonSchema = z.object({
   date: z.string().datetime().optional(), // ISO date string from database
   time: z.string().optional(), // time without time zone
   status: LessonStatusEnum.default("SCHEDULED"),
-  created_at: z.string().datetime().optional(), // ISO date string from database
-  updated_at: z.string().datetime().optional(), // ISO date string from database
+  created_at: z.union([z.string().datetime(), z.date()]).optional(), // ISO date string from database
+  updated_at: z.union([z.string().datetime(), z.date()]).optional(), // ISO date string from database
 });
 
 // Lesson input schema for creating/updating lessons
@@ -40,17 +40,19 @@ export const LessonInputSchema = z.object({
 // Lesson with profile information
 export const LessonWithProfilesSchema = LessonSchema.extend({
   profile: z.object({
-    user_id: z.string().uuid(),
-    email: z.string().email(),
+    user_id: z.string().uuid().optional(),
+    id: z.string().uuid().optional(),
+    email: z.string().email().optional(),
     firstName: z.string().optional(),
     lastName: z.string().optional(),
-  }).optional(),
+  }).optional().nullable(),
   teacher_profile: z.object({
-    user_id: z.string().uuid(),
-    email: z.string().email(),
+    user_id: z.string().uuid().optional(),
+    id: z.string().uuid().optional(),
+    email: z.string().email().optional(),
     firstName: z.string().optional(),
     lastName: z.string().optional(),
-  }).optional(),
+  }).optional().nullable(),
 });
 
 // Lesson song status enum

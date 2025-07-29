@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get("userId");
     const sort = searchParams.get("sort") || "created_at";
     const filter = searchParams.get("filter");
+    const studentId = searchParams.get("studentId");
 
     let query = supabase
       .from("lessons")
@@ -35,6 +36,16 @@ export async function GET(request: NextRequest) {
 
     if (userId) {
       query = query.or(`student_id.eq.${userId},teacher_id.eq.${userId}`);
+    }
+
+    // Add student filter for admin users
+    if (studentId) {
+      // Validate that studentId is a valid UUID
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(studentId)) {
+        return NextResponse.json({ error: "Invalid student ID format" }, { status: 400 });
+      }
+      query = query.eq("student_id", studentId);
     }
 
     if (filter && filter !== "all") {
@@ -65,15 +76,57 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Validate the response data
+    // Validate the response data with more flexible handling
     const validatedLessons: LessonWithProfiles[] = [];
     for (const lesson of lessons || []) {
       try {
-        const validatedLesson = LessonWithProfilesSchema.parse(lesson);
+        // Pre-process the lesson data to handle null values and missing fields
+        const processedLesson = {
+          ...lesson,
+          // Handle null values for optional fields
+          title: lesson.title || undefined,
+          notes: lesson.notes || undefined,
+          date: lesson.date || undefined,
+          lesson_teacher_number: lesson.lesson_teacher_number || undefined,
+          // Ensure datetime strings are properly formatted
+          created_at: lesson.created_at ? new Date(lesson.created_at).toISOString() : undefined,
+          updated_at: lesson.updated_at ? new Date(lesson.updated_at).toISOString() : undefined,
+          // Handle profile objects with missing user_id or null profiles
+          profile: lesson.profile && Object.keys(lesson.profile).length > 0 ? {
+            ...lesson.profile,
+            user_id: lesson.profile.user_id || lesson.profile.id || undefined,
+          } : null,
+          teacher_profile: lesson.teacher_profile && Object.keys(lesson.teacher_profile).length > 0 ? {
+            ...lesson.teacher_profile,
+            user_id: lesson.teacher_profile.user_id || lesson.teacher_profile.id || undefined,
+          } : null,
+        };
+
+        const validatedLesson = LessonWithProfilesSchema.parse(processedLesson);
         validatedLessons.push(validatedLesson);
       } catch (validationError) {
         console.error("Lesson validation error:", validationError);
         // Continue with other lessons even if one fails validation
+        // Add the lesson with basic validation to prevent complete failure
+        if (lesson.id && lesson.student_id && lesson.teacher_id) {
+          // Create a minimal valid lesson object
+          const fallbackLesson: LessonWithProfiles = {
+            id: lesson.id,
+            student_id: lesson.student_id,
+            teacher_id: lesson.teacher_id,
+            lesson_number: lesson.lesson_number || undefined,
+            title: lesson.title || undefined,
+            notes: lesson.notes || undefined,
+            date: lesson.date || undefined,
+            time: lesson.time || undefined,
+            status: lesson.status || "SCHEDULED",
+            created_at: lesson.created_at ? new Date(lesson.created_at).toISOString() : undefined,
+            updated_at: lesson.updated_at ? new Date(lesson.updated_at).toISOString() : undefined,
+            profile: lesson.profile || null,
+            teacher_profile: lesson.teacher_profile || null,
+          };
+          validatedLessons.push(fallbackLesson);
+        }
       }
     }
 

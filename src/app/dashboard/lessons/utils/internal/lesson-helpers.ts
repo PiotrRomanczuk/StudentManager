@@ -1,7 +1,6 @@
-import { Lesson } from "@/types/Lesson";
-import { LessonSchema, type Lesson as SchemaLesson } from "@/schemas";
+import { LessonSchema, type Lesson as SchemaLesson, type LessonWithProfiles } from "@/schemas";
 
-export const createSerializableLesson = (lesson: Lesson) => {
+export const createSerializableLesson = (lesson: LessonWithProfiles) => {
   // Validate the lesson against the schema
   try {
     const validatedLesson = LessonSchema.parse(lesson);
@@ -15,8 +14,8 @@ export const createSerializableLesson = (lesson: Lesson) => {
       date: validatedLesson.date,
       time: validatedLesson.time,
       status: validatedLesson.status,
-      created_at: validatedLesson.created_at || '',
-      updated_at: validatedLesson.updated_at || '',
+      created_at: String(validatedLesson.created_at || ''),
+      updated_at: String(validatedLesson.updated_at || ''),
     };
   } catch (error) {
     console.error("Lesson validation error:", error);
@@ -31,8 +30,8 @@ export const createSerializableLesson = (lesson: Lesson) => {
       date: lesson.date,
       time: lesson.time,
       status: lesson.status,
-      created_at: lesson.created_at || '',
-      updated_at: lesson.updated_at || '',
+      created_at: String(lesson.created_at || ''),
+      updated_at: String(lesson.updated_at || ''),
     };
   }
 };

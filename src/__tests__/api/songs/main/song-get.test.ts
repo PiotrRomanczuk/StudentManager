@@ -75,16 +75,36 @@ describe('Songs API GET Operations', () => {
     expect(result.error).toBe('Unauthorized');
   });
 
-  it('should return 403 when user profile is not found', async () => {
+  it('should create profile and return songs when user profile is not found', async () => {
     const mockUser = { id: 'user123', email: 'user@example.com' };
+    const mockSongs = [{ id: 'song1', title: 'User Song 1', userId: 'user123' }];
+    
     mockSupabase.auth.getUser.mockResolvedValue({ data: { user: mockUser }, error: null });
     mockSupabase.from.mockImplementation((table) => {
       if (table === 'profiles') {
-        return {
+        // First call: profile not found (PGRST116 error)
+        const firstCall = {
           select: jest.fn().mockReturnThis(),
           eq: jest.fn().mockReturnThis(),
-          single: jest.fn().mockResolvedValue({ data: null, error: null }),
+          single: jest.fn().mockResolvedValue({ 
+            data: null, 
+            error: { code: 'PGRST116', message: 'No rows returned' } 
+          }),
         };
+        // Second call: profile creation
+        const secondCall = {
+          select: jest.fn().mockReturnThis(),
+          eq: jest.fn().mockReturnThis(),
+          single: jest.fn().mockResolvedValue({ 
+            data: { isAdmin: false }, 
+            error: null 
+          }),
+          insert: jest.fn().mockReturnThis(),
+        };
+        return mockSupabase.from.mock.calls.length === 1 ? firstCall : secondCall;
+      }
+      if (table === 'songs') {
+        return createChainedMock({ data: mockSongs, error: null, count: 1 });
       }
       return {};
     });
@@ -93,8 +113,8 @@ describe('Songs API GET Operations', () => {
     const response = await GET(request);
     const result = await response.json();
 
-    expect(response.status).toBe(403);
-    expect(result.error).toBe('Forbidden');
+    expect(response.status).toBe(200);
+    expect(result.songs).toHaveLength(1);
   });
 
   it('should handle database errors', async () => {

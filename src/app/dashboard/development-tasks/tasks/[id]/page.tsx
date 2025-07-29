@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/clients/server";
-import { getUserAndAdmin } from "@/app/dashboard/utils/getUserAndAdmin";
+import { getUserAndAdminStatus } from "@/utils/auth-helpers";
 import { ErrorComponent } from "@/app/dashboard/@components/ErrorComponent";
 import { TaskEditClient } from "./TaskEditClient";
 import { notFound } from "next/navigation";
@@ -13,7 +13,7 @@ export default async function TaskEditPage({ params }: TaskEditPageProps) {
   const supabase = await createClient();
   
   try {
-    const { user, isAdmin } = await getUserAndAdmin(supabase);
+    const { user, isAdmin } = await getUserAndAdminStatus();
 
     if (!user?.id) {
       return <ErrorComponent error="Please sign in to access task management" />;

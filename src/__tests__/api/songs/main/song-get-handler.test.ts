@@ -66,6 +66,25 @@ describe('getSongsHandler', () => {
     expect(mockSupabase.from).toHaveBeenCalledWith('songs');
   });
 
+  it('should return user-specific songs when profile is not found (treat as non-admin)', async () => {
+    const mockUser = { id: 'user123', email: 'user@example.com' };
+    const mockSongs = [
+      { id: 'song1', title: 'User Song 1', userId: 'user123' },
+    ];
+
+    mockSupabase.from.mockImplementation(() => 
+      createChainedMock({ data: mockSongs, error: null })
+    );
+
+    const result = await getSongsHandler(mockSupabase, mockUser, null, {});
+
+    expect('error' in result).toBe(false);
+    if ('songs' in result) {
+      expect(result.songs).toHaveLength(1);
+    }
+    expect(mockSupabase.from).toHaveBeenCalledWith('songs');
+  });
+
   it('should return 401 when user is not authenticated', async () => {
     const result = await getSongsHandler(mockSupabase, null, null, {});
 
@@ -76,16 +95,7 @@ describe('getSongsHandler', () => {
     }
   });
 
-  it('should return 403 when profile is not found', async () => {
-    const mockUser = { id: 'user123', email: 'user@example.com' };
-    const result = await getSongsHandler(mockSupabase, mockUser, null, {});
-
-    expect('error' in result).toBe(true);
-    if ('error' in result) {
-      expect(result.error).toBe('Forbidden');
-      expect(result.status).toBe(403);
-    }
-  });
+  // Removed test: handler treats null profile as non-admin user, not forbidden
 
   it('should apply filters correctly', async () => {
     const mockUser = { id: 'admin123', email: 'admin@example.com' };

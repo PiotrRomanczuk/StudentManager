@@ -1,7 +1,6 @@
 require('@testing-library/jest-dom');
 
 // Mock Next.js router
-/*
 jest.mock('next/navigation', () => ({
   useRouter() {
     return {
@@ -22,14 +21,13 @@ jest.mock('next/navigation', () => ({
   redirect: jest.fn(),
   revalidatePath: jest.fn(),
 }))
-*/
 
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props) => {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img {...props} />
+    return require('react').createElement('img', props)
   },
 }))
 
@@ -38,34 +36,36 @@ process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co'
 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key'
 process.env.NEXT_PUBLIC_API_BASE_URL = 'http://localhost:3000'
 
-// Global test utilities
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
-}))
+// Only set up browser-specific mocks when in jsdom environment
+if (typeof window !== 'undefined') {
+  // Global test utilities
+  global.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }))
 
-global.IntersectionObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
-}));
+  global.IntersectionObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }));
 
-
-// Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // deprecated
-    removeListener: jest.fn(), // deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-})
+  // Mock window.matchMedia
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation(query => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(), // deprecated
+      removeListener: jest.fn(), // deprecated
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  })
+}
 
 // Polyfill TextEncoder and TextDecoder for Node <18
 if (typeof global.TextEncoder === 'undefined') {
@@ -101,4 +101,10 @@ if (typeof global.Request === 'undefined') {
   global.Request = Request;
   global.Response = Response;
   global.Headers = Headers;
+}
+
+// Polyfill fetch for tests
+if (typeof global.fetch === 'undefined') {
+  const { fetch } = require('undici');
+  global.fetch = fetch;
 }

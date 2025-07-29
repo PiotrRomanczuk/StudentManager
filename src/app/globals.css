@@ -13,3 +13,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  [data-radix-dialog-content] {
+    background-color: white !important;
+    background: white !important;
+  }
+}

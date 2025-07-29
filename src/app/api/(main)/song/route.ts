@@ -12,12 +12,50 @@ export async function GET(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    // Check if user is admin
-    const { data: profile } = await supabase
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Check if user is admin - handle missing profile by creating one
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("isAdmin")
-      .eq("user_id", user?.id)
+      .eq("user_id", user.id)
       .single();
+
+    let userProfile = profile;
+
+    // If no profile exists, create one with default values
+    if (profileError && profileError.code === 'PGRST116') {
+      const { data: newProfile, error: createError } = await supabase
+        .from("profiles")
+        .insert({
+          user_id: user.id,
+          email: user.email,
+          isAdmin: false,
+          isStudent: true,
+          isTeacher: false,
+          canEdit: false
+        })
+        .select("isAdmin")
+        .single();
+
+      if (createError) {
+        console.error("Error creating profile:", createError);
+        return NextResponse.json(
+          { error: "Error creating user profile" },
+          { status: 500 }
+        );
+      }
+
+      userProfile = newProfile;
+    } else if (profileError) {
+      console.error("Error checking permissions:", profileError);
+      return NextResponse.json(
+        { error: "Error checking user permissions" },
+        { status: 500 }
+      );
+    }
 
     // Parse query parameters
     const level = searchParams.get("level") || undefined;
@@ -29,7 +67,7 @@ export async function GET(request: NextRequest) {
     const sortBy = searchParams.get("sortBy") || "created_at";
     const sortOrder = searchParams.get("sortOrder") || "desc";
 
-    const result = await getSongsHandler(supabase, user, profile, {
+    const result = await getSongsHandler(supabase, user, userProfile, {
       level,
       key,
       author,
@@ -78,14 +116,48 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if user has permission to create songs
-    const { data: profile } = await supabase
+    // Check if user has permission to create songs - handle missing profile
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("isAdmin, isTeacher")
       .eq("user_id", user.id)
       .single();
 
-    if (!profile || (!profile.isAdmin && !profile.isTeacher)) {
+    let userProfile = profile;
+
+    // If no profile exists, create one with default values
+    if (profileError && profileError.code === 'PGRST116') {
+      const { data: newProfile, error: createError } = await supabase
+        .from("profiles")
+        .insert({
+          user_id: user.id,
+          email: user.email,
+          isAdmin: false,
+          isStudent: true,
+          isTeacher: false,
+          canEdit: false
+        })
+        .select("isAdmin, isTeacher")
+        .single();
+
+      if (createError) {
+        console.error("Error creating profile:", createError);
+        return NextResponse.json(
+          { error: "Error creating user profile" },
+          { status: 500 }
+        );
+      }
+
+      userProfile = newProfile;
+    } else if (profileError) {
+      console.error("Error checking permissions:", profileError);
+      return NextResponse.json(
+        { error: "Error checking user permissions" },
+        { status: 500 }
+      );
+    }
+
+    if (!userProfile || (!userProfile.isAdmin && !userProfile.isTeacher)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -153,14 +225,48 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Song not found" }, { status: 404 });
     }
 
-    // Check user role
-    const { data: profile } = await supabase
+    // Check user role - handle missing profile
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("isAdmin")
       .eq("user_id", user.id)
       .single();
 
-    if (!profile?.isAdmin && song.userId !== user.id) {
+    let userProfile = profile;
+
+    // If no profile exists, create one with default values
+    if (profileError && profileError.code === 'PGRST116') {
+      const { data: newProfile, error: createError } = await supabase
+        .from("profiles")
+        .insert({
+          user_id: user.id,
+          email: user.email,
+          isAdmin: false,
+          isStudent: true,
+          isTeacher: false,
+          canEdit: false
+        })
+        .select("isAdmin")
+        .single();
+
+      if (createError) {
+        console.error("Error creating profile:", createError);
+        return NextResponse.json(
+          { error: "Error creating user profile" },
+          { status: 500 }
+        );
+      }
+
+      userProfile = newProfile;
+    } else if (profileError) {
+      console.error("Error checking permissions:", profileError);
+      return NextResponse.json(
+        { error: "Error checking user permissions" },
+        { status: 500 }
+      );
+    }
+
+    if (!userProfile?.isAdmin && song.userId !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -221,14 +327,48 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Song not found" }, { status: 404 });
     }
 
-    // Check user role
-    const { data: profile } = await supabase
+    // Check user role - handle missing profile
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("role")
+      .select("isAdmin")
       .eq("user_id", user.id)
       .single();
 
-    if (profile?.role !== "admin" && song.userId !== user.id) {
+    let userProfile = profile;
+
+    // If no profile exists, create one with default values
+    if (profileError && profileError.code === 'PGRST116') {
+      const { data: newProfile, error: createError } = await supabase
+        .from("profiles")
+        .insert({
+          user_id: user.id,
+          email: user.email,
+          isAdmin: false,
+          isStudent: true,
+          isTeacher: false,
+          canEdit: false
+        })
+        .select("isAdmin")
+        .single();
+
+      if (createError) {
+        console.error("Error creating profile:", createError);
+        return NextResponse.json(
+          { error: "Error creating user profile" },
+          { status: 500 }
+        );
+      }
+
+      userProfile = newProfile;
+    } else if (profileError) {
+      console.error("Error checking permissions:", profileError);
+      return NextResponse.json(
+        { error: "Error checking user permissions" },
+        { status: 500 }
+      );
+    }
+
+    if (!userProfile?.isAdmin && song.userId !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

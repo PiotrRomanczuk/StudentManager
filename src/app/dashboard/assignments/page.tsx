@@ -11,8 +11,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { fetchAssignmentsData } from "./api/fetchAssignments";
-import { getUserAndAdmin } from "../utils/getUserAndAdmin";
-import { createClient } from "@/utils/supabase/clients/server";
+import { getUserAndAdminStatus } from "@/utils/auth-helpers";
 import { ErrorComponent } from "@/app/dashboard/@components/ErrorComponent";
 
 // Enhanced Task type with profile information
@@ -44,8 +43,7 @@ export default async function AssignmentsPage({
 }) {
   try {
     const { user_id, sort = "created_at", filter } = await searchParams;
-    const supabase = await createClient();
-    const { isAdmin } = await getUserAndAdmin(supabase);
+    const { isAdmin } = await getUserAndAdminStatus();
     const cookieHeader = (await cookies()).toString();
 
     const { tasks } = await fetchAssignmentsData(user_id, sort, filter, cookieHeader);

@@ -42,7 +42,7 @@ export default async function GoogleLogin() {
             Logged in with Google
           </div>
           <a
-            href="/api/auth/signout"
+            href="/api/auth/session/signout"
             className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 transition-colors font-medium"
           >
             <FaGoogle /> Sign Out

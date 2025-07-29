@@ -1,7 +1,6 @@
 import { createClient } from "@/utils/supabase/clients/server";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { getUserAndAdmin } from "@/app/dashboard/utils/getUserAndAdmin";
 
 export async function GET(request: Request) {
   try {
@@ -11,8 +10,23 @@ export async function GET(request: Request) {
     const includeSongs = searchParams.get('includeSongs') === 'true';
     const adminMode = searchParams.get('admin') === 'true';
 
-    // Get user and admin status using the utility function
-    const { user, isAdmin } = await getUserAndAdmin(supabase);
+    // Get user and admin status using the API endpoint
+    const userResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/auth/admin/user-and-admin`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!userResponse.ok) {
+      const errorData = await userResponse.json().catch(() => ({}));
+      return NextResponse.json(
+        { error: errorData.error || "Authentication error" },
+        { status: userResponse.status }
+      );
+    }
+
+    const { user, isAdmin } = await userResponse.json();
 
     // Check admin access for admin mode
     if (adminMode && !isAdmin) {
@@ -70,129 +84,96 @@ export async function GET(request: Request) {
       }
     }
 
-    // If songs data is requested (only for non-admin users)
-    if (includeSongs && !isAdmin) {
-      // Get the user's songs (reuse logic from profiles route)
-      // 1. Find lessons where user is student or teacher
-      const { data: lessons, error: lessonsError } = await supabase
-        .from("lessons")
-        .select("id")
-        .or(`student_id.eq.${user.id},teacher_id.eq.${user.id}`);
-      if (lessonsError) {
-        return NextResponse.json(
-          { error: "Error fetching lessons" },
-          { status: 500 },
-        );
-      }
-      if (!lessons || lessons.length === 0) {
-        response.songs = [];
+    // If songs data is requested
+    if (includeSongs) {
+      if (isAdmin) {
+        // For admins, return all songs
+        const { data: songs, error } = await supabase
+          .from("songs")
+          .select("*")
+          .order("title");
+        if (error) {
+          return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+        response.songs = songs;
       } else {
-        const lessonIds = lessons.map((lesson: { id: string }) => lesson.id);
-        // 2. Get lesson_songs for those lessons
-        const { data: lessonSongs, error: lessonSongsError } = await supabase
-          .from("lesson_songs")
-          .select("song_id, song_status")
-          .in("lesson_id", lessonIds);
-        if (lessonSongsError) {
+        // For regular users, return their own songs
+        const { data: songs, error: songsError } = await supabase
+          .from("user_songs")
+          .select(`
+            *,
+            song:songs(*)
+          `)
+          .eq("user_id", user.id);
+        if (songsError) {
           return NextResponse.json(
-            { error: "Error fetching lesson songs" },
+            { error: songsError.message },
             { status: 500 },
           );
         }
-        if (!lessonSongs || lessonSongs.length === 0) {
-          response.songs = [];
-        } else {
-          const songIdToStatus = lessonSongs.reduce(
-            (
-              acc: Record<string, string>,
-              ls: { song_id: string; song_status: string },
-            ) => {
-              acc[ls.song_id] = ls.song_status;
-              return acc;
-            },
-            {},
-          );
-          const songIds = lessonSongs.map((ls: { song_id: string }) => ls.song_id);
-          // 3. Get song details
-          const { data: songs, error: songsError } = await supabase
-            .from("songs")
-            .select("*")
-            .in("id", songIds);
-          if (songsError) {
-            return NextResponse.json(
-              { error: "Error fetching user songs" },
-              { status: 500 },
-            );
-          }
-          // Combine song details with their status as a property on each song
-          const songsWithStatus = songs.map((song: Record<string, unknown>) => ({
-            ...song,
-            status: songIdToStatus[(song as { id: string }).id] || null,
-          }));
-          response.songs = songsWithStatus;
-        }
+        response.songs = songs;
       }
     }
 
     return NextResponse.json(response);
-  } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : "Unknown error";
-    if (
-      errorMessage === "Authentication error" ||
-      errorMessage === "No authenticated user found"
-    ) {
-      return NextResponse.json({ error: errorMessage }, { status: 401 });
-    }
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch (error) {
+    console.error("Error in user API:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
 export async function PATCH(request: NextRequest) {
-  const supabase = await createClient();
-  
   try {
-    const { isAdmin } = await getUserAndAdmin(supabase);
-    
-    if (!isAdmin) {
+    const supabase = await createClient();
+    const body = await request.json();
+
+    // Get user and admin status using the API endpoint
+    const userResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/auth/admin/user-and-admin`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!userResponse.ok) {
+      const errorData = await userResponse.json().catch(() => ({}));
       return NextResponse.json(
-        { error: "Unauthorized: Admin access required" },
+        { error: errorData.error || "Authentication error" },
+        { status: userResponse.status }
+      );
+    }
+
+    const { user, isAdmin } = await userResponse.json();
+
+    // Check if user is updating their own profile or is admin
+    if (body.userId && body.userId !== user.id && !isAdmin) {
+      return NextResponse.json(
+        { error: "Unauthorized: Can only update own profile" },
         { status: 403 }
       );
     }
 
-    const body = await request.json();
-    const { userId, isActive } = body;
-
-    if (userId === undefined || isActive === undefined) {
-      return NextResponse.json(
-        { error: "Missing required fields: userId and isActive" },
-        { status: 400 }
-      );
-    }
-
-    // Update the user's isActive status
-    const { data, error } = await supabase
+    const { data: profile, error } = await supabase
       .from("profiles")
-      .update({ isActive })
-      .eq("user_id", userId)
+      .update(body)
+      .eq("user_id", body.userId || user.id)
       .select()
       .single();
 
     if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      );
+      console.error("Error updating profile:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      user: data,
-      message: `User ${isActive ? 'activated' : 'deactivated'} successfully` 
-    });
-
-  } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json(profile);
+  } catch (error) {
+    console.error("Error in user update API:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

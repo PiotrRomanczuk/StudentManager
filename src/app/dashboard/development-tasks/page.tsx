@@ -1,13 +1,10 @@
-import { createClient } from "@/utils/supabase/clients/server";
-import { getUserAndAdmin } from "@/app/dashboard/utils/getUserAndAdmin";
+import { getUserAndAdminStatus } from "@/utils/auth-helpers";
 import { ErrorComponent } from "@/app/dashboard/@components/ErrorComponent";
 import { TaskManagementClient } from "./TaskManagementClient";
 
 export default async function DevelopmentTasksPage() {
-  const supabase = await createClient();
-  
   try {
-    const { user, isAdmin } = await getUserAndAdmin(supabase);
+    const { user, isAdmin } = await getUserAndAdminStatus();
 
     if (!user?.id) {
       return <ErrorComponent error="Please sign in to access task management" />;

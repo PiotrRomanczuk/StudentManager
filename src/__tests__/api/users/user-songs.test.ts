@@ -75,7 +75,7 @@ describe('/api/song/user-songs', () => {
 
       expect(response.status).toBe(200);
       expect(data.songs).toHaveLength(2);
-      expect(data.total).toBe(2);
+      expect(data.pagination.total).toBe(2);
       expect(data.songs[0]).toEqual({
         ...mockSongs[0],
         status: 'active',
@@ -108,7 +108,7 @@ describe('/api/song/user-songs', () => {
 
       expect(response.status).toBe(200);
       expect(data.songs).toEqual([]);
-      expect(data.total).toBe(0);
+      expect(data.pagination.total).toBe(0);
     });
 
     it('should return empty songs array when user has lessons but no lesson songs', async () => {
@@ -141,7 +141,7 @@ describe('/api/song/user-songs', () => {
 
       expect(response.status).toBe(200);
       expect(data.songs).toEqual([]);
-      expect(data.total).toBe(0);
+      expect(data.pagination.total).toBe(0);
     });
 
     it('should handle lessons fetch error', async () => {
@@ -255,7 +255,7 @@ describe('/api/song/user-songs', () => {
 
       expect(response.status).toBe(200);
       expect(data.songs).toEqual(mockSongs);
-      expect(data.total).toBe(2);
+      expect(data.pagination.total).toBe(2);
       expect(songsSelectMock).toHaveBeenCalledWith('*', { count: 'exact' });
     });
 
@@ -292,7 +292,7 @@ describe('/api/song/user-songs', () => {
 
       expect(response.status).toBe(200);
       expect(data.songs).toEqual([]);
-      expect(data.total).toBe(0);
+      expect(data.pagination.total).toBe(0);
     });
   });
 

@@ -11,7 +11,7 @@ import { tabList } from "../admin/data";
 //   songs: Song[];
 // }
 
-const AdminPage = () => {
+export default function AdminPage() {
   const [activeTab, setActiveTab] = useState(0);
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -82,5 +82,3 @@ const AdminPage = () => {
     </div>
   );
 };
-
-export default AdminPage;

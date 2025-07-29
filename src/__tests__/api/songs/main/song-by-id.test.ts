@@ -6,6 +6,9 @@ import { createClient } from '@/utils/supabase/clients/server';
 // Mock Supabase client
 const mockSupabase = {
   from: jest.fn(),
+  auth: {
+    getUser: jest.fn(),
+  },
 };
 
 jest.mock('@/utils/supabase/clients/server', () => ({
@@ -35,6 +38,12 @@ describe('Song by ID API GET Operations', () => {
       chords: 'C, F, G',
     };
 
+    // Mock authentication
+    mockSupabase.auth.getUser.mockResolvedValue({
+      data: { user: { id: 'user123', email: 'test@example.com' } },
+      error: null,
+    });
+
     mockSupabase.from.mockImplementation(() => 
       createChainedMock({ data: mockSong, error: null })
     );
@@ -50,6 +59,12 @@ describe('Song by ID API GET Operations', () => {
   });
 
   it('should return 404 when song is not found', async () => {
+    // Mock authentication
+    mockSupabase.auth.getUser.mockResolvedValue({
+      data: { user: { id: 'user123', email: 'test@example.com' } },
+      error: null,
+    });
+
     mockSupabase.from.mockImplementation(() => 
       createChainedMock({ data: null, error: { message: 'No rows returned' } })
     );
@@ -64,6 +79,12 @@ describe('Song by ID API GET Operations', () => {
   });
 
   it('should return 404 when database returns error', async () => {
+    // Mock authentication
+    mockSupabase.auth.getUser.mockResolvedValue({
+      data: { user: { id: 'user123', email: 'test@example.com' } },
+      error: null,
+    });
+
     mockSupabase.from.mockImplementation(() => 
       createChainedMock({ data: null, error: { message: 'Database error' } })
     );
@@ -78,17 +99,32 @@ describe('Song by ID API GET Operations', () => {
   });
 
   it('should handle database connection errors', async () => {
+    // Mock authentication
+    mockSupabase.auth.getUser.mockResolvedValue({
+      data: { user: { id: 'user123', email: 'test@example.com' } },
+      error: null,
+    });
+
     mockSupabase.from.mockImplementation(() => {
       throw new Error('Database connection failed');
     });
 
     const request = new NextRequest('http://localhost:3000/api/song/song123');
     const params = Promise.resolve({ id: 'song123' });
+    const response = await GET(request, { params });
+    const result = await response.json();
 
-    await expect(GET(request, { params })).rejects.toThrow('Database connection failed');
+    expect(response.status).toBe(500);
+    expect(result.error).toBe('Internal server error');
   });
 
   it('should handle empty song data', async () => {
+    // Mock authentication
+    mockSupabase.auth.getUser.mockResolvedValue({
+      data: { user: { id: 'user123', email: 'test@example.com' } },
+      error: null,
+    });
+
     mockSupabase.from.mockImplementation(() => 
       createChainedMock({ data: null, error: null })
     );
@@ -103,6 +139,12 @@ describe('Song by ID API GET Operations', () => {
   });
 
   it('should handle malformed song data', async () => {
+    // Mock authentication
+    mockSupabase.auth.getUser.mockResolvedValue({
+      data: { user: { id: 'user123', email: 'test@example.com' } },
+      error: null,
+    });
+
     const malformedSong = {
       id: 'song123',
       // Missing required fields

@@ -7,10 +7,10 @@ interface UserPageProps {
   songs: Song[];
 }
 
-const UserPage = ({ songs }: UserPageProps) => {
+function UserPage({ songs }: UserPageProps) {
   const [activeTab, setActiveTab] = useState(0);
   const today = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
+    weekday: "long", 
     year: "numeric",
     month: "long",
     day: "numeric",

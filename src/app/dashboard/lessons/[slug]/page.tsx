@@ -4,8 +4,8 @@ import LessonInformation from "./@components/LessonInformation";
 import SongInformation from "./@components/SongInformation";
 import NoLesson from "./@components/NoLesson";
 import LessonError from "./@components/LessonError";
-import { formatLessonDate, formatLessonTime } from "../utils/date-formatters";
-import { createSerializableLesson } from "../utils/lesson-helpers";
+import { formatLessonDate, formatLessonTime } from "../utils/internal/date-formatters";
+import { createSerializableLesson } from "../utils/internal/lesson-helpers";
 import { fetchLessonData } from "../api/fetchLessons";
 import { cookies } from "next/headers";
 
@@ -49,14 +49,14 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             <div className="bg-white rounded-lg shadow-sm border border-lesson-blue-border p-6">
               <LessonInformation
                 lesson={createSerializableLesson(lesson)}
-                formattedDate={formatLessonDate(lesson.date)}
-                formattedTime={formatLessonTime(lesson.time)}
+                formattedDate={formatLessonDate(lesson.date || '')}
+                formattedTime={formatLessonTime(lesson.time || '')}
                 studentUsername={lesson.profile?.email || "Unknown"}
                 teacherUsername={lesson.teacher_profile?.email || "Unknown"}
               />
             </div>
             <div className="bg-white rounded-lg shadow-sm border border-lesson-blue-border p-6">
-              <SongInformation lesson={lesson} />
+              <SongInformation lesson={{ id: String(lesson.id || ''), songs: [] }} />
             </div>
           </div>
         </div>

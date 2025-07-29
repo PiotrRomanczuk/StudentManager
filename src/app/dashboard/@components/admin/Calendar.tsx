@@ -93,7 +93,7 @@ export function Calendar() {
           {authError || "Connect your Google Calendar to view and manage your events"}
         </p>
         <Link
-          href="/api/auth/google"
+          href="/api/auth/oauth/google"
           className="inline-flex items-center gap-2 px-4 py-2 bg-admin-blue-DEFAULT hover:bg-admin-blue-dark text-white rounded-lg shadow transition-colors"
         >
           <FaGoogle /> Connect Calendar

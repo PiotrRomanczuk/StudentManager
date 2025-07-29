@@ -1,20 +1,26 @@
+/**
+ * @jest-environment node
+ */
 import '@testing-library/jest-dom';
 import { GET } from '@/app/api/(main)/user/route';
 import { expect } from '@jest/globals';
 
-// Mock Supabase client with method chaining for profiles
-const mockSupabase: any = {
-  auth: {
-    getUser: jest.fn(),
-  },
-  from: jest.fn(() => mockSupabase),
-  select: jest.fn(() => mockSupabase),
-  eq: jest.fn(() => mockSupabase),
-  single: jest.fn(),
-};
+// Mock fetch globally
+global.fetch = jest.fn();
 
+// Mock the Supabase client to avoid cookies() error
 jest.mock('@/utils/supabase/clients/server', () => ({
-  createClient: jest.fn(() => mockSupabase),
+  createClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      select: jest.fn(() => ({
+        order: jest.fn(() => ({
+          eq: jest.fn(() => ({
+            single: jest.fn(),
+          })),
+        })),
+      })),
+    })),
+  })),
 }));
 
 describe('/api/user - GET', () => {
@@ -30,16 +36,13 @@ describe('/api/user - GET', () => {
         user_metadata: { role: 'admin' },
       };
 
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: mockUser },
-        error: null,
-      });
-      mockSupabase.from.mockReturnValue(mockSupabase);
-      mockSupabase.select.mockReturnValue(mockSupabase);
-      mockSupabase.eq.mockReturnValue(mockSupabase);
-      mockSupabase.single.mockResolvedValue({
-        data: { isAdmin: true },
-        error: null,
+      // Mock the fetch call to the user-and-admin endpoint
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          user: mockUser,
+          isAdmin: true,
+        }),
       });
 
       const response = await GET(new Request('http://localhost:3000/api/user'));
@@ -48,7 +51,15 @@ describe('/api/user - GET', () => {
       expect(response.status).toBe(200);
       expect(data.user).toEqual(mockUser);
       expect(data.isAdmin).toBe(true);
-      expect(mockSupabase.auth.getUser).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/auth/admin/user-and-admin',
+        expect.objectContaining({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      );
     });
 
     it('should return user data and isAdmin: false when admin check fails', async () => {
@@ -58,16 +69,13 @@ describe('/api/user - GET', () => {
         user_metadata: { role: 'user' },
       };
 
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: mockUser },
-        error: null,
-      });
-      mockSupabase.from.mockReturnValue(mockSupabase);
-      mockSupabase.select.mockReturnValue(mockSupabase);
-      mockSupabase.eq.mockReturnValue(mockSupabase);
-      mockSupabase.single.mockResolvedValue({
-        data: { isAdmin: false },
-        error: null,
+      // Mock the fetch call to the user-and-admin endpoint
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          user: mockUser,
+          isAdmin: false,
+        }),
       });
 
       const response = await GET(new Request('http://localhost:3000/api/user'));
@@ -76,13 +84,25 @@ describe('/api/user - GET', () => {
       expect(response.status).toBe(200);
       expect(data.user).toEqual(mockUser);
       expect(data.isAdmin).toBe(false);
-      expect(mockSupabase.auth.getUser).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/auth/admin/user-and-admin',
+        expect.objectContaining({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      );
     });
 
     it('should return 401 when authentication fails', async () => {
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: null },
-        error: { message: 'Authentication error' },
+      // Mock the fetch call to return an error
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        json: async () => ({
+          error: 'Authentication error',
+        }),
       });
 
       const response = await GET(new Request('http://localhost:3000/api/user'));
@@ -90,13 +110,25 @@ describe('/api/user - GET', () => {
 
       expect(response.status).toBe(401);
       expect(data.error).toBe('Authentication error');
-      expect(mockSupabase.auth.getUser).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/auth/admin/user-and-admin',
+        expect.objectContaining({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      );
     });
 
     it('should return 401 when no user is found', async () => {
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: null },
-        error: null,
+      // Mock the fetch call to return an error
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        json: async () => ({
+          error: 'No authenticated user found',
+        }),
       });
 
       const response = await GET(new Request('http://localhost:3000/api/user'));
@@ -104,11 +136,20 @@ describe('/api/user - GET', () => {
 
       expect(response.status).toBe(401);
       expect(data.error).toBe('No authenticated user found');
-      expect(mockSupabase.auth.getUser).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/auth/admin/user-and-admin',
+        expect.objectContaining({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      );
     });
 
     it('should handle unexpected errors gracefully', async () => {
-      mockSupabase.auth.getUser.mockRejectedValue(new Error('Unexpected error'));
+      // Mock the fetch call to throw an error
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Unexpected error'));
 
       const response = await GET(new Request('http://localhost:3000/api/user'));
       const data = await response.json();
@@ -124,29 +165,35 @@ describe('/api/user - GET', () => {
         user_metadata: { role: 'user' },
       };
 
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: mockUser },
-        error: null,
-      });
-      mockSupabase.from.mockReturnValue(mockSupabase);
-      mockSupabase.select.mockReturnValue(mockSupabase);
-      mockSupabase.eq.mockReturnValue(mockSupabase);
-      mockSupabase.single.mockResolvedValue({
-        data: null,
-        error: { message: 'Admin service unavailable' },
+      // Mock the fetch call to return user with isAdmin: false
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          user: mockUser,
+          isAdmin: false,
+        }),
       });
 
       const response = await GET(new Request('http://localhost:3000/api/user'));
       const data = await response.json();
 
-      expect(response.status).toBe(200); // The handler should treat admin check error as isAdmin: false
+      expect(response.status).toBe(200);
       expect(data.user).toEqual(mockUser);
       expect(data.isAdmin).toBe(false);
-      expect(mockSupabase.auth.getUser).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/auth/admin/user-and-admin',
+        expect.objectContaining({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      );
     });
 
     it('should handle non-Error exceptions', async () => {
-      mockSupabase.auth.getUser.mockRejectedValue('String error');
+      // Mock the fetch call to throw a string error
+      (global.fetch as jest.Mock).mockRejectedValueOnce('String error');
 
       const response = await GET(new Request('http://localhost:3000/api/user'));
       const data = await response.json();
