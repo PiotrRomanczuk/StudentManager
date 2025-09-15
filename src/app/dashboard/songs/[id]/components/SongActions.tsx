@@ -1,10 +1,8 @@
 'use client';
 
 import { Song } from '@/types/Song';
-import { NavigationActions } from './NavigationActions';
-import { QuickActions } from './QuickActions';
-import { AdminActions } from './AdminActions';
-import { SongMetadata } from './SongMetadata';
+import { NavigationActions, QuickActions, AdminActions } from './actions';
+import { SongMetadata } from './display/SongMetadata';
 
 interface SongActionsProps {
   song: Song;

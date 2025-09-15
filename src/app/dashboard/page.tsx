@@ -1,7 +1,7 @@
 
 import { ErrorComponent } from "./@components/ErrorComponent";
-import AdminPage from "./@components/main/AdminPage";
-import UserPage from "./@components/main/UserPage";
+import AdminPage from "./@components/main/adminPage";
+import UserPage from "./@components/main/userPage";
 import  NoSongsFound  from "./@components/NoSongsFound";
 import { getUserAndAdminStatus } from "@/utils/auth-helpers";
 

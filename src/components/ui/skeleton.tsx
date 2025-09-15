@@ -1,15 +1,2 @@
-import { cn } from "@/lib/utils";
-
-function Skeleton({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("animate-pulse rounded-md bg-muted", className)}
-      {...props}
-    />
-  );
-}
-
-export { Skeleton };
+// Re-export Skeleton component from layout directory
+export { Skeleton } from './layout/skeleton'; 

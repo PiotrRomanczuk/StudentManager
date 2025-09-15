@@ -1,12 +1,2 @@
-import React from "react";
-
-interface ContainerProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-export function Container({ children, className = "" }: ContainerProps) {
-  return (
-    <div className={`container mx-auto px-4 ${className}`}>{children}</div>
-  );
-}
+// Re-export Container component from layout directory
+export { Container } from './layout/container'; 

@@ -73,9 +73,14 @@ export function StudentsCard({ data: initialData, sortField, sortDir, isAdmin = 
   const handleSaveUser = async () => {
     if (!selectedUser) return;
 
+    // Debug: Log selected user before making the PATCH request
+    console.log('[DEBUG] Attempting to update user:', selectedUser);
+    console.log('[DEBUG] PATCH URL:', `/api/admin/users/${selectedUser.user_id}`);
+    console.log('[DEBUG] PATCH Body:', { user_id: selectedUser.user_id, ...editForm });
+
     try {
       setSaving(true);
-      const updatedUser = await fetchApi<Profile>("/api/admin/user-management", {
+      const updatedUser = await fetchApi<Profile>(`/api/admin/users/${selectedUser.user_id}`, {
         method: "PATCH",
         body: JSON.stringify({
           user_id: selectedUser.user_id,
@@ -95,7 +100,11 @@ export function StudentsCard({ data: initialData, sortField, sortDir, isAdmin = 
       setSelectedUser(null);
       setEditForm({});
     } catch (error) {
-      console.error("Error updating user:", error);
+      // Debug: Log error details
+      console.error('[DEBUG] Error updating user:', error);
+      if (error instanceof Error && 'status' in error && error.status === 404) {
+        console.error('[DEBUG] 404 Not Found: User does not exist in the database.');
+      }
       toast.error(error instanceof Error ? error.message : "Failed to update user");
     } finally {
       setSaving(false);
@@ -104,7 +113,7 @@ export function StudentsCard({ data: initialData, sortField, sortDir, isAdmin = 
 
   const handleToggleActive = async (user: Profile) => {
     try {
-      const updatedUser = await fetchApi<Profile>("/api/admin/user-management", {
+      const updatedUser = await fetchApi<Profile>(`/api/admin/users/${user.user_id}`, {
         method: "PATCH",
         body: JSON.stringify({
           user_id: user.user_id,

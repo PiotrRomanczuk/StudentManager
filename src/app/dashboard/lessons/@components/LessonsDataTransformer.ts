@@ -11,8 +11,9 @@ export function transformLessonsData(lessons: LessonWithProfiles[]): Lesson[] {
       teacher_id: lesson.teacher_id,
       created_at: lesson.created_at?.toString() || new Date().toISOString(),
       updated_at: lesson.updated_at?.toString() || new Date().toISOString(),
-      date: new Date(lesson.date || new Date()),
-      time: {} as TimeRanges,
+      date: lesson.date ? new Date(lesson.date) : new Date(),
+      // Fix: Only set time if it's a non-empty string, otherwise set to ""
+      time: typeof lesson.time === "string" && lesson.time.trim() !== "" ? lesson.time : "",
       profile: lesson.profile,
       teacher_profile: lesson.teacher_profile,
       songs: [], // Initialize with empty songs array since API doesn't include songs
@@ -20,4 +21,4 @@ export function transformLessonsData(lessons: LessonWithProfiles[]): Lesson[] {
       title: lesson.title,
       status: lesson.status || "SCHEDULED"
     } as Lesson));
-} 
+}

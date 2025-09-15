@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 // import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
@@ -17,10 +18,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className={`antialiased h-full`}>
-        {children}
-        <Toaster />
-        <Analytics />
-        {/* <SpeedInsights /> */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+          <Analytics />
+          {/* <SpeedInsights /> */}
+        </ThemeProvider>
       </body>
     </html>
   );

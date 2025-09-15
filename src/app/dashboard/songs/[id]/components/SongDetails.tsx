@@ -1,12 +1,8 @@
 'use client';
 
 import { Song } from '@/types/Song';
-import { SongBasicInfo } from './SongBasicInfo';
-import { SongChords } from './SongChords';
-import { SongAudioFiles } from './SongAudioFiles';
-import { SongComments } from './SongComments';
-import { SongExternalLinks } from './SongExternalLinks';
-import { SongStatus } from './SongStatus';
+import { SongBasicInfo } from './display/SongBasicInfo';
+import { SongChords, SongAudioFiles, SongComments, SongExternalLinks, SongStatus } from './details';
 
 interface SongDetailsProps {
   song: Song;

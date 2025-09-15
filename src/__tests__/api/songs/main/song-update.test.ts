@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { NextRequest } from "next/server";
-import { PUT } from "@/app/api/(main)/song/update/route";
+import { PUT } from "@/app/api/(main)/song/update/[id]/route";
 import { createClient } from "@/utils/supabase/clients/server";
 
 // Mock the Supabase client

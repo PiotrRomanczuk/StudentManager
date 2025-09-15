@@ -99,13 +99,106 @@ describe('Students User Management', () => {
         />
       );
       
+      // Click the first edit button
       const editButtons = screen.getAllByText('Edit');
       fireEvent.click(editButtons[0]);
       
+      // Check if modal opens
       expect(screen.getByText('Edit Student Profile')).toBeInTheDocument();
       expect(screen.getByDisplayValue('John')).toBeInTheDocument();
       expect(screen.getByDisplayValue('Doe')).toBeInTheDocument();
       expect(screen.getByDisplayValue('student1@example.com')).toBeInTheDocument();
+    });
+
+    it('should successfully update user when save is clicked', async () => {
+      const { fetchApi } = require('@/utils/api-helpers');
+      const { toast } = require('react-hot-toast');
+      
+      // Mock successful API response
+      fetchApi.mockResolvedValue({
+        id: '1',
+        user_id: 'user1',
+        email: 'student1@example.com',
+        firstName: 'John Updated',
+        lastName: 'Doe',
+        bio: 'Updated bio',
+        isStudent: true,
+        isActive: true,
+      });
+
+      render(
+        <StudentsCard 
+          data={mockProfiles} 
+          sortField="email" 
+          sortDir="asc"
+          isAdmin={true}
+        />
+      );
+      
+      // Open edit modal
+      const editButtons = screen.getAllByText('Edit');
+      fireEvent.click(editButtons[0]);
+      
+      // Update form fields
+      const firstNameInput = screen.getByDisplayValue('John');
+      const bioInput = screen.getByDisplayValue('Test bio');
+      
+      fireEvent.change(firstNameInput, { target: { value: 'John Updated' } });
+      fireEvent.change(bioInput, { target: { value: 'Updated bio' } });
+      
+      // Click save button
+      const saveButton = screen.getByText('Save Changes');
+      fireEvent.click(saveButton);
+      
+      // Wait for API call and success message
+      await waitFor(() => {
+        expect(fetchApi).toHaveBeenCalledWith('/api/admin/users/user1', {
+          method: 'PATCH',
+          body: JSON.stringify({
+            user_id: 'user1',
+            firstName: 'John Updated',
+            lastName: 'Doe',
+            email: 'student1@example.com',
+            bio: 'Updated bio',
+            isStudent: true,
+            isTeacher: false,
+            isAdmin: false,
+            canEdit: true,
+            isActive: true,
+          }),
+        });
+        expect(toast.success).toHaveBeenCalledWith('User updated successfully');
+      });
+    });
+
+    it('should handle API errors when updating user', async () => {
+      const { fetchApi } = require('@/utils/api-helpers');
+      const { toast } = require('react-hot-toast');
+      
+      // Mock API error
+      fetchApi.mockRejectedValue(new Error('Update failed'));
+
+      render(
+        <StudentsCard 
+          data={mockProfiles} 
+          sortField="email" 
+          sortDir="asc"
+          isAdmin={true}
+        />
+      );
+      
+      // Open edit modal
+      const editButtons = screen.getAllByText('Edit');
+      fireEvent.click(editButtons[0]);
+      
+      // Click save button
+      const saveButton = screen.getByText('Save Changes');
+      fireEvent.click(saveButton);
+      
+      // Wait for error handling
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Update failed');
+      });
     });
 
     it('should allow editing user properties in modal', () => {
@@ -185,7 +278,7 @@ describe('Students User Management', () => {
       
       // Check if API was called
       await waitFor(() => {
-        expect(mockFetchApi).toHaveBeenCalledWith('/api/admin/user-management', {
+        expect(mockFetchApi).toHaveBeenCalledWith('/api/admin/users/user1', {
           method: 'PATCH',
           body: JSON.stringify({
             user_id: 'user1',
@@ -323,7 +416,7 @@ describe('Students User Management', () => {
       fireEvent.click(toggleButtons[0]);
       
       await waitFor(() => {
-        expect(mockFetchApi).toHaveBeenCalledWith('/api/admin/user-management', {
+        expect(mockFetchApi).toHaveBeenCalledWith('/api/admin/users/user1', {
           method: 'PATCH',
           body: JSON.stringify({
             user_id: 'user1',

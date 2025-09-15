@@ -18,12 +18,13 @@ import {
   getUserTestSongs,
   getAdminFavorites,
   getAdminUserSongs,
+  getStudentsBySong,
   handleSongApiError,
   type FavoritesResponse,
   type SongStats,
   type BulkImportResult,
   type ValidationResult
-} from '../song-api-helpers';
+} from '../@helpers';
 import { Song } from '@/types/Song';
 
 interface UseSongApiOptions {
@@ -78,6 +79,24 @@ export function useSongApi(options: UseSongApiOptions = {}) {
       setLoading(false);
     }
   }, [isAdmin]);
+
+  // Helper function to convert API song to local song format
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const convertApiSongToLocalSong = (song: any): Song => ({
+    id: song.id as string,
+    title: song.title as string,
+    author: song.author as string,
+    level: song.level as "beginner" | "intermediate" | "advanced",
+    key: song.key as string,
+    chords: song.chords as string | undefined,
+    audio_files: song.audio_files as string | undefined,
+    ultimate_guitar_link: song.ultimate_guitar_link as string | undefined,
+    comments: song.comments as string | undefined,
+    short_title: song.short_title as string | undefined,
+    created_at: new Date(song.created_at as string),
+    updated_at: new Date(song.updated_at as string),
+    is_favorite: song.is_favorite || false,
+  });
 
   // Fetch user songs
   const fetchUserSongs = useCallback(async (targetUserId?: string) => {
@@ -430,6 +449,28 @@ export function useSongApi(options: UseSongApiOptions = {}) {
     }
   }, [isAdmin, userId]);
 
+  // Get students who have a specific song
+  const fetchStudentsBySong = useCallback(async (targetSongId: string) => {
+    if (!isAdmin) {
+      toast.error("You don't have permission to view students by song");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await getStudentsBySong(targetSongId);
+      return response;
+    } catch (err) {
+      const errorMessage = handleSongApiError(err);
+      setError(errorMessage);
+      toast.error(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [isAdmin]);
+
   // Auto-fetch on mount
   useEffect(() => {
     if (autoFetch && userId) {
@@ -468,6 +509,7 @@ export function useSongApi(options: UseSongApiOptions = {}) {
     fetchUserTestSongs,
     fetchAdminFavorites,
     fetchAdminUserSongs,
+    fetchStudentsBySong,
     
     // Utilities
     clearError: () => setError(null),
