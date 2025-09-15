@@ -5,7 +5,7 @@ import { FilterSelect } from './FilterSelect';
 
 interface FilterControlsProps {
   level: string;
-  key: string;
+  selectedKey: string;
   author: string;
   uniqueLevels: string[];
   uniqueKeys: string[];
@@ -17,7 +17,7 @@ interface FilterControlsProps {
 
 export function FilterControls({
   level,
-  key,
+  selectedKey,
   author,
   uniqueLevels,
   uniqueKeys,
@@ -41,7 +41,7 @@ export function FilterControls({
       />
 
       <FilterSelect
-        value={key}
+        value={selectedKey}
         onValueChange={onKeyChange}
         placeholder="Key"
         options={uniqueKeys}

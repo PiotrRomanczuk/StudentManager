@@ -86,11 +86,40 @@ export async function GET(request: NextRequest) {
           // Handle null values for optional fields
           title: lesson.title || undefined,
           notes: lesson.notes || undefined,
-          date: lesson.date || undefined,
+          // Ensure date is always a valid ISO string
+          date: (() => {
+            if (lesson.date) {
+              try {
+                return new Date(lesson.date).toISOString();
+              } catch {
+                // If lesson.date is invalid, try created_at
+              }
+            }
+            if (lesson.created_at) {
+              try {
+                return new Date(lesson.created_at).toISOString();
+              } catch {
+                // If created_at is also invalid, use current date
+              }
+            }
+            return new Date().toISOString();
+          })(),
           lesson_teacher_number: lesson.lesson_teacher_number || undefined,
           // Ensure datetime strings are properly formatted
-          created_at: lesson.created_at ? new Date(lesson.created_at).toISOString() : undefined,
-          updated_at: lesson.updated_at ? new Date(lesson.updated_at).toISOString() : undefined,
+          created_at: lesson.created_at ? (() => {
+            try {
+              return new Date(lesson.created_at).toISOString();
+            } catch {
+              return undefined;
+            }
+          })() : undefined,
+          updated_at: lesson.updated_at ? (() => {
+            try {
+              return new Date(lesson.updated_at).toISOString();
+            } catch {
+              return undefined;
+            }
+          })() : undefined,
           // Handle profile objects with missing user_id or null profiles
           profile: lesson.profile && Object.keys(lesson.profile).length > 0 ? {
             ...lesson.profile,
@@ -117,11 +146,39 @@ export async function GET(request: NextRequest) {
             lesson_number: lesson.lesson_number || undefined,
             title: lesson.title || undefined,
             notes: lesson.notes || undefined,
-            date: lesson.date || undefined,
+            date: (() => {
+              if (lesson.date) {
+                try {
+                  return new Date(lesson.date).toISOString();
+                } catch {
+                  // If lesson.date is invalid, try created_at
+                }
+              }
+              if (lesson.created_at) {
+                try {
+                  return new Date(lesson.created_at).toISOString();
+                } catch {
+                  // If created_at is also invalid, use current date
+                }
+              }
+              return new Date().toISOString();
+            })(),
             time: lesson.time || undefined,
             status: lesson.status || "SCHEDULED",
-            created_at: lesson.created_at ? new Date(lesson.created_at).toISOString() : undefined,
-            updated_at: lesson.updated_at ? new Date(lesson.updated_at).toISOString() : undefined,
+            created_at: lesson.created_at ? (() => {
+              try {
+                return new Date(lesson.created_at).toISOString();
+              } catch {
+                return undefined;
+              }
+            })() : undefined,
+            updated_at: lesson.updated_at ? (() => {
+              try {
+                return new Date(lesson.updated_at).toISOString();
+              } catch {
+                return undefined;
+              }
+            })() : undefined,
             profile: lesson.profile || null,
             teacher_profile: lesson.teacher_profile || null,
           };

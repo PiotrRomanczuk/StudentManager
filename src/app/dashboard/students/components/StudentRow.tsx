@@ -26,10 +26,10 @@ export function StudentRow({ user, onEdit, onToggleActive }: StudentRowProps) {
   };
 
   return (
-    <TableRow key={user.id}>
+    <TableRow key={user.user_id}>
       <TableCell>
         <Link
-          href={`/dashboard/students/${user.id}`}
+          href={`/dashboard/students/${user.user_id}`}
           className="text-blue-600 hover:underline"
         >
           {user.email || "-"}

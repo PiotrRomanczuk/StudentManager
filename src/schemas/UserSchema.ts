@@ -43,7 +43,33 @@ export const UserInputSchema = z.object({
 
 // User update schema (for partial updates)
 export const UserUpdateSchema = UserInputSchema.partial().extend({
-  id: z.number().int().positive("User ID is required"),
+  user_id: z.string().uuid("User ID is required"),
+});
+
+// User edit schema (for admin editing)
+export const UserEditSchema = z.object({
+  user_id: z.string().uuid("User ID is required"),
+  email: z.string().email("Valid email is required").optional(),
+  username: z.string().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  bio: z.string().optional(),
+  isStudent: z.boolean().optional(),
+  isTeacher: z.boolean().optional(),
+  isAdmin: z.boolean().optional(),
+  canEdit: z.boolean().optional(),
+  isTest: z.boolean().optional(),
+  isActive: z.boolean().optional(),
+});
+
+// User profile update schema (for self-editing)
+export const UserProfileUpdateSchema = z.object({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  username: z.string().optional(),
+  bio: z.string().optional(),
+  website: z.string().url().optional(),
+  avatar_url: z.string().url().optional(),
 });
 
 // User registration schema (for signup)
@@ -139,6 +165,8 @@ export const hasPermission = (
 export type User = z.infer<typeof UserSchema>;
 export type UserInput = z.infer<typeof UserInputSchema>;
 export type UserUpdate = z.infer<typeof UserUpdateSchema>;
+export type UserEdit = z.infer<typeof UserEditSchema>;
+export type UserProfileUpdate = z.infer<typeof UserProfileUpdateSchema>;
 export type UserRegistration = z.infer<typeof UserRegistrationSchema>;
 export type UserProfile = z.infer<typeof UserProfileSchema>;
 export type UserFilter = z.infer<typeof UserFilterSchema>;

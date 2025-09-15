@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/clients/server";
+import { createServiceClient } from "@/utils/supabase/clients/service";
 // import { redirect } from "next/navigation";
 
 import { validateSignUpForm } from "@/lib/auth-validation";
@@ -27,8 +28,9 @@ export async function signup(formData: FormData) {
     // Step 2: Retrieve the user ID
     const userId = user.id;
 
-    // Step 3: Insert profile information
-    const { error: profileError } = await supabase
+    // Step 3: Insert profile information using service role client to bypass RLS
+    const serviceClient = await createServiceClient();
+    const { error: profileError } = await serviceClient
       .from("profiles")
       .insert([
         {

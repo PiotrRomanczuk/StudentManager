@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSongApi } from "../hooks/useSongApi";
-import { SongsTable } from "./SongsTable";
+import { SongsTable } from "./display/SongsTable";
 import { SimplePagination } from "./SimplePagination";
 import { ServerSideSearch } from "./ServerSideSearch";
 import { Song } from "@/types/Song";

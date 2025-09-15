@@ -15,7 +15,7 @@ export interface SongQueryParams {
 
 export interface SongResponse {
   songs: Song[];
-  count?: number;
+  count: number;
 }
 
 export interface SongError {
@@ -36,7 +36,6 @@ export async function getSongsHandler(
     return { error: 'Unauthorized', status: 401 };
   }
 
-  // If no profile exists, treat as non-admin user
   const isAdmin = profile?.isAdmin || false;
 
   const {
@@ -54,8 +53,13 @@ export async function getSongsHandler(
   const validSortFields = ['created_at', 'updated_at', 'title', 'author', 'level', 'key'];
   const validatedSortBy = validSortFields.includes(sortBy) ? sortBy : 'created_at';
 
+  // Normalize sort order
+  const normalizedSortOrder = sortOrder === 'asc' ? 'asc' : 'desc';
+  const ascending = normalizedSortOrder === 'asc';
+
   let dbQuery = supabase.from('songs').select('*', { count: 'exact' });
 
+  // TODO: confirm the column name for user reference in songs table is 'userId' or 'user_id'
   if (!isAdmin) {
     dbQuery = dbQuery.eq('userId', user.id);
   }
@@ -64,26 +68,18 @@ export async function getSongsHandler(
   if (author) dbQuery = dbQuery.eq('author', author);
   if (search) dbQuery = dbQuery.ilike('title', `%${search}%`);
 
-  console.log('Sorting by:', validatedSortBy, 'Order:', sortOrder, 'Page:', page, 'Limit:', limit);
-  console.log('Range:', (page - 1) * limit, 'to', page * limit - 1);
-  
-  // Apply the actual sorting parameters
-  const ascending = sortOrder === 'asc';
   dbQuery = dbQuery.order(validatedSortBy, { ascending });
-  dbQuery = dbQuery.range((page - 1) * limit, page * limit - 1);
+
+  // Range calculation moved to route via clamped values; fallback here if provided
+  const from = (page - 1) * limit;
+  const to = page * limit - 1;
+  dbQuery = dbQuery.range(from, to);
 
   const { data: songs, error, count } = await dbQuery;
-  
-  if (songs && songs.length > 0) {
-    console.log('First song:', songs[0].title, 'created_at:', songs[0].created_at);
-    console.log('Last song:', songs[songs.length - 1].title, 'created_at:', songs[songs.length - 1].created_at);
-    console.log('Total songs returned:', songs.length);
-    console.log('Expected range:', (page - 1) * limit + 1, 'to', page * limit);
-  }
 
   if (error) {
     return { error: error.message, status: 500 };
   }
 
-  return { songs, count, status: 200 };
-} 
+  return { songs: songs ?? [], count: count ?? 0 };
+}

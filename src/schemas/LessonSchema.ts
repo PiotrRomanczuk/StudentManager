@@ -15,15 +15,15 @@ export const LessonSchema = z.object({
   student_id: z.string().uuid("Student ID is required"),
   teacher_id: z.string().uuid("Teacher ID is required"),
   creator_user_id: z.string().uuid().optional(),
-  lesson_number: z.number().int().positive().optional(),
-  lesson_teacher_number: z.number().int().positive().optional(),
+  lesson_number: z.number().int().positive().nullable().optional(),
+  lesson_teacher_number: z.number().int().positive().nullable().optional(),
   title: z.string().min(1, "Title is required").optional(),
   notes: z.string().optional(),
-  date: z.string().datetime().optional(), // ISO date string from database
+  date: z.string().nullable(), // Accepts string or null
   time: z.string().optional(), // time without time zone
   status: LessonStatusEnum.default("SCHEDULED"),
-  created_at: z.union([z.string().datetime(), z.date()]).optional(), // ISO date string from database
-  updated_at: z.union([z.string().datetime(), z.date()]).optional(), // ISO date string from database
+  created_at: z.string().nullable().optional(), // Accepts string or null
+  updated_at: z.string().nullable().optional(), // Accepts string or null
 });
 
 // Lesson input schema for creating/updating lessons
@@ -32,7 +32,7 @@ export const LessonInputSchema = z.object({
   teacher_id: z.string().uuid("Teacher ID is required"),
   title: z.string().min(1, "Title is required").optional(),
   notes: z.string().optional(),
-  date: z.string().datetime().optional(), // ISO date string
+  date: z.string().datetime("Date is required"), // ISO date string
   time: z.string().optional(), // HH:MM format
   status: LessonStatusEnum.optional(),
 });

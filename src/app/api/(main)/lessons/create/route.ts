@@ -20,13 +20,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has permission to create lessons
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("role")
+      .select("isAdmin, isTeacher")
       .eq("user_id", user.id)
       .single();
 
-    if (!profile || (profile.role !== "admin" && profile.role !== "teacher")) {
+    console.log("User ID:", user.id);
+    console.log("Profile fetch error:", profileError);
+    console.log("Fetched profile:", profile);
+
+    if (!profile || (!profile.isAdmin && !profile.isTeacher)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -48,7 +52,6 @@ export async function POST(request: NextRequest) {
         teacher_id: validatedData.teacher_id,
         student_id: validatedData.student_id,
         date: validatedData.date,
-        time: validatedData.time,
         title: validatedData.title || null,
         notes: validatedData.notes || null,
         status: validatedData.status || "SCHEDULED",
@@ -57,10 +60,13 @@ export async function POST(request: NextRequest) {
       .select()
       .single();
 
+    // ...existing code...
     if (error) {
       console.error("Error creating lesson:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    console.log("Inserted lesson:", lesson); // <-- Add this line
 
     // Validate the created lesson
     try {
@@ -70,11 +76,8 @@ export async function POST(request: NextRequest) {
       console.error("Created lesson validation error:", validationError);
       return NextResponse.json({ error: "Invalid lesson data" }, { status: 500 });
     }
-  } catch (error) {
-    console.error("Error in lesson creation API:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

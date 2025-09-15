@@ -9,7 +9,7 @@ export const SongSchema = z.object({
   level: DifficultyLevelEnum,
   key: MusicKeyEnum,
   chords: z.string().optional(),
-  audio_files: z.record(z.any()).optional(), // JSONB field
+  audio_files: z.any().optional(), // JSONB field - can be any JSON value
   ultimate_guitar_link: URLField,
   short_title: z.string().max(50, "Short title too long").optional(),
   created_at: z.date().optional(),
@@ -24,7 +24,7 @@ export const SongInputSchema = z.object({
   key: MusicKeyEnum,
   chords: z.string().optional(),
   ultimate_guitar_link: URLField,
-  audio_files: z.record(z.any()).optional(),
+  audio_files: z.any().optional(),
   short_title: z.string().max(50, "Short title too long").optional(),
 });
 

@@ -9,7 +9,7 @@ export interface Lesson {
   created_at: string;
   updated_at: string;
   date: Date;
-  time: TimeRanges;
+  time: string;
   profile?: User;
   teacher_profile?: User;
   songs: Song[];

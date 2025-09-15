@@ -37,7 +37,7 @@ export function StudentsTable({ data, sortField, sortDir, onEditUser, onToggleAc
       <TableBody>
         {data.map((user) => (
           <StudentRow 
-            key={user.id} 
+            key={user.user_id} 
             user={user} 
             onEdit={onEditUser}
             onToggleActive={onToggleActive}
