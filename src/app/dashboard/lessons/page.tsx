@@ -4,7 +4,6 @@ import { createClient } from '@/utils/supabase/clients/server';
 import { LessonsHeader } from './@components/LessonsHeader';
 import { LessonsFiltersCard } from './@components/LessonsFiltersCard';
 import { LessonsContent } from './@components/LessonsContent';
-import { LessonsPaginationInfo } from './@components/LessonsPaginationInfo';
 import { transformLessonsData } from './@components/LessonsDataTransformer';
 import { checkAdminStatus } from './@components/AdminChecker';
 import { LessonStatus } from '@/schemas';
@@ -35,7 +34,7 @@ export default async function LessonsPage({
 		cookieHeader,
 	});
 
-	const { lessons = [], pagination } = lessonsData;
+	const { lessons = [] } = lessonsData;
 
 	// // Log lessons data on server side
 	// console.log('Lessons data fetched:', {
