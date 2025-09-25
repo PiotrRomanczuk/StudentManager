@@ -37,7 +37,6 @@ export async function getSongsHandler(
   }
 
   // If no profile exists, treat as non-admin user
-  const isAdmin = profile?.isAdmin || false;
 
   const {
     level,
@@ -55,10 +54,7 @@ export async function getSongsHandler(
   const validatedSortBy = validSortFields.includes(sortBy) ? sortBy : 'created_at';
 
   let dbQuery = supabase.from('songs').select('*', { count: 'exact' });
-
-  if (!isAdmin) {
-    dbQuery = dbQuery.eq('userId', user.id);
-  }
+  // Removed userId filter: all users see all songs, or apply other filters only
   if (level) dbQuery = dbQuery.eq('level', level);
   if (key) dbQuery = dbQuery.eq('key', key);
   if (author) dbQuery = dbQuery.eq('author', author);

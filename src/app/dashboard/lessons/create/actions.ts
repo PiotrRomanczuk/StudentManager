@@ -15,7 +15,7 @@ export async function createLesson(formData: FormData) {
     const teacherId = formData.get("teacher_id") as string;
     const studentId = formData.get("student_id") as string;
     const date = formData.get("date") as string;
-    const time = formData.get("time") as string;
+  const start_time = formData.get("start_time") as string;
     const title = formData.get("title") as string;
     const notes = formData.get("notes") as string;
     const status = formData.get("status") as string;
@@ -25,7 +25,7 @@ export async function createLesson(formData: FormData) {
       teacher_id: teacherId,
       student_id: studentId,
       date: date ? new Date(date).toISOString() : undefined,
-      time: time || undefined,
+      start_time: start_time || undefined,
       title: title || undefined,
       notes: notes || undefined,
       status: (status as "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "RESCHEDULED") || undefined,

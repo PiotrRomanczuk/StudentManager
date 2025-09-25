@@ -14,20 +14,24 @@ export async function POST(request: NextRequest) {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+    console.log("[LESSON CREATE] user:", user);
 
     if (!user) {
+      console.log("[LESSON CREATE] No user found, unauthorized");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if user has permission to create lessons
-    const { data: profile } = await supabase
+    // Check if user has permission to create lessons (using isAdmin or isTeacher fields)
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("role")
+      .select("isAdmin, isTeacher")
       .eq("user_id", user.id)
       .single();
+    console.log("[LESSON CREATE] profile:", profile, "profileError:", profileError);
 
-    if (!profile || (profile.role !== "admin" && profile.role !== "teacher")) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!profile || (!profile.isAdmin && !profile.isTeacher)) {
+      console.log("[LESSON CREATE] Forbidden: profile=", profile);
+      return NextResponse.json({ error: "Forbidden", debug: { user, profile, profileError } }, { status: 403 });
     }
 
     // Validate input data using the schema
@@ -41,6 +45,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
 
     const { data: lesson, error } = await supabase
       .from("lessons")
@@ -56,6 +61,7 @@ export async function POST(request: NextRequest) {
       })
       .select()
       .single();
+    console.log("[LESSON CREATE] Inserted lesson:", lesson);
 
     if (error) {
       console.error("Error creating lesson:", error);

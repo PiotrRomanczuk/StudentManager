@@ -32,7 +32,7 @@ export interface SongsForUserResponse {
  */
 export async function getSongsForUser(params: SongsForUserParams = {}): Promise<SongsForUserResponse> {
   const url = new URL(`${BASE_URL}/api/song`);
-  
+
   // Add query parameters
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined) {
@@ -41,6 +41,7 @@ export async function getSongsForUser(params: SongsForUserParams = {}): Promise<
   });
 
   try {
+    console.log("[getSongsForUser] Request URL:", url.toString());
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
@@ -48,17 +49,26 @@ export async function getSongsForUser(params: SongsForUserParams = {}): Promise<
       },
     });
 
+    let responseBody;
+    try {
+      responseBody = await response.clone().text();
+    } catch {
+      responseBody = '[Unable to read response body]';
+    }
+    console.log("[getSongsForUser] Response status:", response.status);
+    console.log("[getSongsForUser] Response body:", responseBody);
+
     if (!response.ok) {
       if (response.status === 401) {
         throw new Error('Authentication required');
       }
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP error! status: ${response.status} | body: ${responseBody}`);
     }
 
-    const data = await response.json();
+    const data = JSON.parse(responseBody);
     return data;
   } catch (error) {
-    console.error("Error getting songs for user:", error);
+    console.error("[getSongsForUser] Error:", error);
     throw error;
   }
 } 
