@@ -5,6 +5,8 @@ import UserPage from "./@components/main/UserPage";
 import  NoSongsFound  from "./@components/NoSongsFound";
 import { getUserAndAdminStatus } from "@/utils/auth-helpers";
 
+
+import { cookies } from "next/headers";
 import { BASE_URL } from "@/constants/BASE_URL";
 
 export default async function Page() {
@@ -19,9 +21,16 @@ export default async function Page() {
       return <AdminPage />;
     }
 
-    // Fetch songs for the user from the API
+    // Fetch songs for the user from the API, forwarding cookies for authentication
+    const cookieStore = cookies();
+    const cookieHeader = cookieStore.toString();
     const response = await fetch(
       `${BASE_URL}/api/song/user-songs?userId=${user.id}`,
+      {
+        headers: {
+          Cookie: cookieHeader,
+        },
+      }
     );
 
     const data = await response.json();
@@ -32,11 +41,11 @@ export default async function Page() {
 
     const songs = data;
 
-    if (!songs?.length) {
+    if (!songs.songs?.length) {
       return <NoSongsFound />;
     }
 
-    return <UserPage songs={songs} />;
+    return <UserPage songs={songs.songs} />;
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : "Please sign in to view your dashboard";
     return <ErrorComponent error={errorMessage} />;

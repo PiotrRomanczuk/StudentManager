@@ -214,17 +214,6 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if user owns the song or is admin
-    const { data: song } = await supabase
-      .from("songs")
-      .select("userId")
-      .eq("id", songId)
-      .single();
-
-    if (!song) {
-      return NextResponse.json({ error: "Song not found" }, { status: 404 });
-    }
-
     // Check user role - handle missing profile
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
@@ -266,7 +255,8 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    if (!userProfile?.isAdmin && song.userId !== user.id) {
+    // Only admins can update songs (since userId is not present)
+    if (!userProfile?.isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -316,17 +306,6 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if user owns the song or is admin
-    const { data: song } = await supabase
-      .from("songs")
-      .select("userId")
-      .eq("id", songId)
-      .single();
-
-    if (!song) {
-      return NextResponse.json({ error: "Song not found" }, { status: 404 });
-    }
-
     // Check user role - handle missing profile
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
@@ -368,7 +347,8 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    if (!userProfile?.isAdmin && song.userId !== user.id) {
+    // Only admins can delete songs (since userId is not present)
+    if (!userProfile?.isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

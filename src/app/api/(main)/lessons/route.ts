@@ -71,6 +71,13 @@ export async function GET(request: NextRequest) {
 
     const { data: lessons, error } = await query;
 
+    console.log("[lessons] lessons fetched for query:", lessons);
+    if (lessons && lessons.length > 0) {
+      console.log("[lessons] lesson IDs:", lessons.map(l => l.id));
+    } else {
+      console.log("[lessons] No lessons found for query.");
+    }
+
     if (error) {
       console.error("Error fetching lessons:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
@@ -86,7 +93,8 @@ export async function GET(request: NextRequest) {
           // Handle null values for optional fields
           title: lesson.title || undefined,
           notes: lesson.notes || undefined,
-          date: lesson.date || undefined,
+          // Ensure date is a valid ISO string if present
+          date: lesson.date ? new Date(lesson.date).toISOString() : undefined,
           lesson_teacher_number: lesson.lesson_teacher_number || undefined,
           // Ensure datetime strings are properly formatted
           created_at: lesson.created_at ? new Date(lesson.created_at).toISOString() : undefined,
@@ -118,7 +126,7 @@ export async function GET(request: NextRequest) {
             title: lesson.title || undefined,
             notes: lesson.notes || undefined,
             date: lesson.date || undefined,
-            time: lesson.time || undefined,
+            start_time: lesson.start_time || undefined,
             status: lesson.status || "SCHEDULED",
             created_at: lesson.created_at ? new Date(lesson.created_at).toISOString() : undefined,
             updated_at: lesson.updated_at ? new Date(lesson.updated_at).toISOString() : undefined,
@@ -182,7 +190,7 @@ export async function POST(request: NextRequest) {
         teacher_id: validatedData.teacher_id,
         student_id: validatedData.student_id,
         date: validatedData.date,
-        time: validatedData.time,
+        start_time: validatedData.start_time,
         title: validatedData.title || null,
         notes: validatedData.notes || null,
         status: validatedData.status || "SCHEDULED",
