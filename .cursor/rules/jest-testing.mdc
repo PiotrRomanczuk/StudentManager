@@ -1,0 +1,4 @@
+- Always use Jest as the testing framework for all tests in this project. Do not use other testing frameworks such as Mocha, Jasmine, or Vitest.
+  alwaysApply: true
+
+---

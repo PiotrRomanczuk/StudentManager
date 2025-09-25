@@ -1,0 +1,8 @@
+---
+title: Simple Responsibility
+---
+
+Components should be as small as possible and have a single responsibility, for better maintainability.
+alwaysApply: true
+
+---
