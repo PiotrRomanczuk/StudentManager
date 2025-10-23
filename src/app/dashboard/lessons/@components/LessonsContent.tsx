@@ -8,12 +8,10 @@ import type { Lesson } from '@/types/Lesson';
 interface LessonsContentProps {
 	lessons: Lesson[];
 	isAdmin: boolean;
-	currentSeason?: string;
 }
 export function LessonsContent({
 	lessons,
 	isAdmin,
-	currentSeason,
 }: LessonsContentProps) {
 	// Compute filtered lessons by season
 	let filteredLessons = lessons;

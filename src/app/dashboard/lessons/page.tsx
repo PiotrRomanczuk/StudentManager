@@ -8,20 +8,6 @@ import { LessonsPaginationInfo } from './@components/LessonsPaginationInfo';
 import { transformLessonsData } from './@components/LessonsDataTransformer';
 import { checkAdminStatus } from './@components/AdminChecker';
 
-// Helper to compute available seasons from lessons
-function getSeasons(lessonsArr: { date?: string | Date }[]): string[] {
-	if (!lessonsArr || lessonsArr.length === 0) return [];
-	const years = lessonsArr
-		.map((l) => {
-			if (!l.date) return undefined;
-			const d = new Date(l.date);
-			return d.getMonth() >= 8 ? d.getFullYear() : d.getFullYear() - 1;
-		})
-		.filter((y): y is number => typeof y === 'number' && !isNaN(y));
-	const uniqueYears = Array.from(new Set(years)).sort((a, b) => b - a);
-	return uniqueYears.map((y) => `${y}/${y + 1}`);
-}
-
 export default async function LessonsPage({
 	searchParams,
 }: {
@@ -87,7 +73,6 @@ export default async function LessonsPage({
 			<LessonsContent
 				lessons={transformedLessons}
 				isAdmin={isAdmin}
-				currentSeason={season || ''}
 			/>
 
 			<LessonsPaginationInfo

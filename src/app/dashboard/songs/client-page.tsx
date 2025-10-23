@@ -6,7 +6,6 @@ import {
 	SongsForUserResponse,
 } from '../utils/getSongsForUser';
 import { SongsTable } from './components/SongsTable';
-import { UserInfoCard } from './components/UserInfoCard';
 import { PageHeader } from './components/PageHeader';
 
 export default function SongsClientPage() {

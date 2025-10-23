@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
   const supabase = await createClient();
 
   // Helper to build filter for songs
-  function applySongFilters(query: any) {
+  function applySongFilters<T extends ReturnType<typeof supabase.from>>(query: T): T {
     if (search) {
       query = query.ilike("title", `%${search}%`);
       console.log("[user-songs][DEBUG] Applying search filter:", search);

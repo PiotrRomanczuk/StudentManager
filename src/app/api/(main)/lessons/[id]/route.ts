@@ -46,7 +46,7 @@ export async function GET(
     }
 
     // Sanitize lesson object before validation
-    function sanitizeLesson(raw: any) {
+    function sanitizeLesson(raw: Record<string, unknown>) {
       const now = new Date().toISOString();
       return {
         ...raw,
