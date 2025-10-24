@@ -50,6 +50,7 @@ export async function GET(
 			return NextResponse.json({ error: 'Lesson not found' }, { status: 404 });
 		}
 
+<<<<<<< HEAD
 		// Sanitize lesson object before validation
 		function sanitizeLesson(raw: Record<string, unknown>) {
 			const now = new Date().toISOString();
@@ -103,6 +104,51 @@ export async function GET(
 			{ status: 500 }
 		);
 	}
+=======
+    // Sanitize lesson object before validation
+    function sanitizeLesson(raw: Record<string, unknown>) {
+      const now = new Date().toISOString();
+      return {
+        ...raw,
+        lesson_teacher_number:
+          typeof raw.lesson_teacher_number === 'number' && raw.lesson_teacher_number > 0
+            ? raw.lesson_teacher_number
+            : 1,
+        title:
+          typeof raw.title === 'string' && raw.title.trim().length > 0
+            ? raw.title
+            : 'Untitled',
+        notes: typeof raw.notes === 'string' ? raw.notes : '',
+        date:
+          typeof raw.date === 'string' && !raw.date.startsWith('0000') && !isNaN(Date.parse(raw.date))
+            ? new Date(raw.date).toISOString()
+            : now,
+        created_at:
+          typeof raw.created_at === 'string' && !raw.created_at.startsWith('0000') && !isNaN(Date.parse(raw.created_at))
+            ? new Date(raw.created_at).toISOString()
+            : now,
+        updated_at:
+          typeof raw.updated_at === 'string' && !raw.updated_at.startsWith('0000') && !isNaN(Date.parse(raw.updated_at))
+            ? new Date(raw.updated_at).toISOString()
+            : now,
+      };
+    }
+    try {
+      const sanitizedLesson = sanitizeLesson(lesson);
+      const validatedLesson = LessonWithProfilesSchema.parse(sanitizedLesson);
+      return NextResponse.json(validatedLesson);
+    } catch (validationError) {
+      console.error("Lesson validation error:", validationError);
+      return NextResponse.json({ error: "Invalid lesson data" }, { status: 500 });
+    }
+  } catch (error) {
+    console.error("Error in lesson API:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+>>>>>>> 85d92d8bda768ff9e1ebf90e6ab781f42971ca9e
 }
 
 export async function PUT(

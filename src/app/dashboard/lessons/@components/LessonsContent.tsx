@@ -9,7 +9,14 @@ interface LessonsContentProps {
 	lessons: Lesson[];
 	isAdmin: boolean;
 }
+<<<<<<< HEAD
 export function LessonsContent({ lessons, isAdmin }: LessonsContentProps) {
+=======
+export function LessonsContent({
+	lessons,
+	isAdmin,
+}: LessonsContentProps) {
+>>>>>>> 85d92d8bda768ff9e1ebf90e6ab781f42971ca9e
 	// Compute filtered lessons by season
 	let filteredLessons = lessons;
 	if (typeof window !== 'undefined' && window.location) {

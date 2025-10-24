@@ -70,6 +70,7 @@ export async function GET(req: NextRequest) {
 		return query;
 	}
 
+<<<<<<< HEAD
 	if (userId) {
 		console.log('[user-songs][DEBUG] Fetching lessons for userId:', userId);
 		// 1. Find lessons where user is student or teacher
@@ -98,6 +99,28 @@ export async function GET(req: NextRequest) {
 		}
 		const lessonIds = lessons.map((lesson: { id: string }) => lesson.id);
 		console.log('[user-songs][DEBUG] lessonIds:', lessonIds);
+=======
+  // Helper to build filter for songs
+  function applySongFilters<T extends ReturnType<typeof supabase.from>>(query: T): T {
+    if (search) {
+      query = query.ilike("title", `%${search}%`);
+      console.log("[user-songs][DEBUG] Applying search filter:", search);
+    }
+    if (level) {
+      query = query.eq("level", level);
+      console.log("[user-songs][DEBUG] Applying level filter:", level);
+    }
+    if (key) {
+      query = query.eq("key", key);
+      console.log("[user-songs][DEBUG] Applying key filter:", key);
+    }
+    if (author) {
+      query = query.eq("author", author);
+      console.log("[user-songs][DEBUG] Applying author filter:", author);
+    }
+    return query;
+  }
+>>>>>>> 85d92d8bda768ff9e1ebf90e6ab781f42971ca9e
 
 		// 2. Get lesson_songs for those lessons
 		const { data: lessonSongs, error: lessonSongsError } = await supabase

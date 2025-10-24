@@ -70,7 +70,14 @@ export default async function LessonsPage({
 				currentSeason={season || ''}
 			/>
 
+<<<<<<< HEAD
 			<LessonsContent lessons={transformedLessons} isAdmin={isAdmin} />
+=======
+			<LessonsContent
+				lessons={transformedLessons}
+				isAdmin={isAdmin}
+			/>
+>>>>>>> 85d92d8bda768ff9e1ebf90e6ab781f42971ca9e
 
 			<LessonsPaginationInfo
 				currentCount={transformedLessons.length}
